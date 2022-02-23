@@ -24,8 +24,8 @@ extern "C"
         uint32_t size;
         uint32_t write; // 指向当前最新的数据
         uint32_t read;
-        //uint8_t writeMirror;
-        //uint8_t readMirror;
+        // uint8_t writeMirror;
+        // uint8_t readMirror;
         union
         {
             uint8_t allStatus;
@@ -47,11 +47,11 @@ extern "C"
     } RingBuffer;
 
     /**
-     * @brief 
-     * 
-     * @param queue 
-     * @param dataPtr 
-     * @param maxSize 
+     * @brief
+     *
+     * @param queue
+     * @param dataPtr
+     * @param maxSize
      */
     void ringbuffer_create(RingBuffer *queue, void *data, uint32_t dataWidth, uint32_t maxSize);
     bool ringbuffer_is_full(RingBuffer *queue);
