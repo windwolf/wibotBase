@@ -1,4 +1,4 @@
-#include "fsm/fsm.h"
+#include "../inc/fsm.h"
 
 #define EVENT_CHECK(flag, event, mode) (((mode) == FSM_EVENT_MODE_OR) ? (((flag) & (event)) != 0) : (((flag) & (event)) == (event)))
 

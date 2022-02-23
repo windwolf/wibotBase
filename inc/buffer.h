@@ -12,7 +12,7 @@ extern "C"
     {
         void *data;
         uint32_t size;
-        //uint32_t count;
+        // uint32_t count;
     } Buffer;
 
     // void Buffer_Init(Buffer *buffer, void *data, uint32_t size);

@@ -1,5 +1,5 @@
 #include "stdint.h"
-#include "common/ringbuffer.h"
+#include "../inc/ringbuffer.h"
 #include "stdlib.h"
 #include "string.h"
 //#include "portable.h"
@@ -37,7 +37,7 @@ inline bool ringbuffer_is_full(RingBuffer *queue)
 inline bool ringbuffer_is_empty(RingBuffer *queue)
 {
     return queue->write == queue->read;
-    //return (queue->write == queue->read) && (queue->readMirror == queue->writeMirror);
+    // return (queue->write == queue->read) && (queue->readMirror == queue->writeMirror);
 }
 
 inline bool ringbuffer_space_enough(RingBuffer *queue, uint32_t length)
