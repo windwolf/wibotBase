@@ -140,7 +140,7 @@ static void FSM_state_entry(FSM_t *fsm, FSM_State_t *state)
     {
         state->config->entry_action(fsm, state);
     }
-    LOG_I("FSM", "State entry: %s.%s", fsm->name, state->config->name);
+    LOG_I("FSM", "State entry: %s.%s", (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? NULL : state->config->name);
 }
 
 static void FSM_state_exit(FSM_t *fsm, FSM_State_t *state)
@@ -150,7 +150,7 @@ static void FSM_state_exit(FSM_t *fsm, FSM_State_t *state)
         state->config->exit_action(fsm, state);
     }
     state->exit_tick = fsm->current_tick;
-    LOG_I("FSM", "State exit: %s.%s", fsm->name, state->config->name);
+    LOG_I("FSM", "State exit: %s.%s", (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? NULL : state->config->name);
 }
 
 static void FSM_state_poll(FSM_t *fsm, FSM_State_t *state)
@@ -158,7 +158,7 @@ static void FSM_state_poll(FSM_t *fsm, FSM_State_t *state)
     if (state->config->poll_action != NULL)
     {
         state->config->poll_action(fsm, state);
-        // LOG_I("FSM", "State poll: %s.%s", fsm->name, state->config->name);
+        // LOG_I("FSM", "State poll: %s.%s", (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? NULL : state->config->name);
     }
 }
 
