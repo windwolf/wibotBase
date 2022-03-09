@@ -13,8 +13,9 @@ static void FSM_state_poll(FSM_t *fsm, FSM_State_t *state);
 
 static void FSM_transition_check(FSM_t *fsm, FSM_State_t *state, uint32_t tick);
 
-void FSM_init(FSM_t *fsm)
+void FSM_init(FSM_t *fsm, const char *name)
 {
+    fsm->name = name;
     fsm->state_count = 0;
     fsm->current_state = NULL;
     fsm->current_state_enter_tick = 0;
@@ -140,7 +141,7 @@ static void FSM_state_entry(FSM_t *fsm, FSM_State_t *state, uint32_t tick)
     {
         state->config->entry_action(fsm, state);
     }
-    LOG_I("FSM", "State entry: %d", state->config->state_no);
+    LOG_I("FSM", "State entry: %s.%s", fsm->name, state->config->name);
 }
 
 static void FSM_state_exit(FSM_t *fsm, FSM_State_t *state)
@@ -149,7 +150,7 @@ static void FSM_state_exit(FSM_t *fsm, FSM_State_t *state)
     {
         state->config->exit_action(fsm, state);
     }
-    LOG_I("FSM", "State exit: %d", state->config->state_no);
+    LOG_I("FSM", "State exit: %s.%s", fsm->name, state->config->name);
 }
 
 static void FSM_state_poll(FSM_t *fsm, FSM_State_t *state)
@@ -157,8 +158,8 @@ static void FSM_state_poll(FSM_t *fsm, FSM_State_t *state)
     if (state->config->poll_action != NULL)
     {
         state->config->poll_action(fsm, state);
+        // LOG_I("FSM", "State poll: %s.%s", fsm->name, state->config->name);
     }
-    LOG_I("FSM", "State poll: %d", state->config->state_no);
 }
 
 static void FSM_transition_check(FSM_t *fsm, FSM_State_t *state, uint32_t tick)

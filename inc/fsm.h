@@ -37,7 +37,7 @@ extern "C"
     typedef struct FSM_State_Config_t
     {
         uint32_t state_no;
-        char *name;
+        const char *name;
         // FSM_State_Mode mode;
         //  union
         //  {
@@ -66,7 +66,7 @@ extern "C"
 
     typedef struct FSM_Transition_Config_t
     {
-        char *name;
+        const char *name;
         FSM_Transition_Mode mode;
         union
         {
@@ -94,6 +94,7 @@ extern "C"
         struct FSM_State_t states[FSM_MAX_STATES_COUNT];
         uint32_t state_count;
         struct FSM_State_t *current_state;
+        const char *name;
 
         uint32_t events;
 
@@ -103,9 +104,10 @@ extern "C"
         uint32_t last_update_tick;
         uint32_t current_tick;
         void *user_data;
+
     } FSM_t;
 
-    void FSM_init(FSM_t *fsm);
+    void FSM_init(FSM_t *fsm, const char *name);
 
     void FSM_state_register(FSM_t *fsm, FSM_State_Config_t *config);
 

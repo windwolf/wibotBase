@@ -7,10 +7,9 @@ extern "C"
 {
 #endif
 
-#include "stdio.h"
-
 #ifdef DEBUG
-
+#include "stdio.h"
+#include "SEGGER_RTT.h"
 #define LOG(LEVEL, MODULE, MSG, ...) SEGGER_RTT_printf(0, "[" LEVEL "][" MODULE "] " MSG "\r\n", ##__VA_ARGS__)
 
 #else
