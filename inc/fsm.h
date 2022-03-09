@@ -54,6 +54,9 @@ extern "C"
         void *user_data;
         struct FSM_Transition_t *transitions[FSM_MAX_TRANSITIONS_COUNT_PRE_STATE];
         uint32_t transition_count;
+
+        uint32_t enter_tick;
+        uint32_t exit_tick;
     } FSM_State_t;
 
     typedef enum
@@ -100,7 +103,7 @@ extern "C"
 
         struct FSM_Transition_t transitions[FSM_MAX_TRANSITIONS_COUNT];
         uint32_t transition_count;
-        uint32_t current_state_enter_tick;
+        // uint32_t current_state_enter_tick;
         uint32_t last_update_tick;
         uint32_t current_tick;
         void *user_data;
