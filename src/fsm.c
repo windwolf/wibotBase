@@ -67,13 +67,6 @@ void FSM_transition_register(FSM_t *fsm, FSM_Transition_Config_t *config)
         //     return;
         // }
     }
-    else if (config->mode == FSM_TRANSITION_MODE_CONDITION && config->mode_parameters.condition == NULL)
-    {
-        if (config->mode_parameters.condition == NULL)
-        {
-            return;
-        }
-    }
 
     fsm->transitions[fsm->transition_count].config = config;
     fsm->transition_count++;
@@ -281,7 +274,9 @@ static void FSM_transition_check(FSM_t *fsm, FSM_State_t *state)
         for (uint32_t i = 0; i < curSta->transition_count; i++)
         {
             FSM_Transition_t *transition = curSta->transitions[i];
-            if (transition->config->mode == FSM_TRANSITION_MODE_EVENT && EVENT_CHECK(transition->config->mode_parameters.event.events, events, transition->config->mode_parameters.event.mode))
+            if (transition->config->mode == FSM_TRANSITION_MODE_EVENT &&
+                EVENT_CHECK(transition->config->mode_parameters.event.events, events, transition->config->mode_parameters.event.mode) &&
+                (transition->config->guard == NULL || transition->config->guard(fsm, state)))
             {
                 FSM_state_do_exit(fsm, state, transition->to);
                 if (transition->config->action != NULL)
@@ -291,17 +286,9 @@ static void FSM_transition_check(FSM_t *fsm, FSM_State_t *state)
                 FSM_state_do_entry(fsm, transition->to, fsm->current_state);
                 return;
             }
-            else if (transition->config->mode == FSM_TRANSITION_MODE_TIMEOUT && transition->config->mode_parameters.timeout <= duration)
-            {
-                FSM_state_do_exit(fsm, state, transition->to);
-                if (transition->config->action != NULL)
-                {
-                    transition->config->action(fsm, state);
-                }
-                FSM_state_do_entry(fsm, transition->to, fsm->current_state);
-                return;
-            }
-            else if (transition->config->mode == FSM_TRANSITION_MODE_CONDITION && transition->config->mode_parameters.condition(fsm, state))
+            else if (transition->config->mode == FSM_TRANSITION_MODE_TIMEOUT &&
+                     transition->config->mode_parameters.timeout <= duration &&
+                     (transition->config->guard == NULL || transition->config->guard(fsm, state)))
             {
                 FSM_state_do_exit(fsm, state, transition->to);
                 if (transition->config->action != NULL)

@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "stdbool.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -67,7 +68,7 @@ extern "C"
     {
         FSM_TRANSITION_MODE_TIMEOUT,
         FSM_TRANSITION_MODE_EVENT,
-        FSM_TRANSITION_MODE_CONDITION,
+        // FSM_TRANSITION_MODE_CONDITION,
         // FSM_TRANSITION_MODE_EVENT_OR_TIMEOUT,
     } FSM_Transition_Mode;
 
@@ -83,10 +84,11 @@ extern "C"
                 FSM_Event_Mode mode;
             } event;
             uint32_t timeout;
-            uint32_t (*condition)(struct FSM_t *, struct FSM_State_t *);
+
         } mode_parameters;
         uint32_t from;
         uint32_t to;
+        bool (*guard)(struct FSM_t *, struct FSM_State_t *);
         uint32_t (*action)(struct FSM_t *, struct FSM_State_t *);
     } FSM_Transition_Config_t;
 
