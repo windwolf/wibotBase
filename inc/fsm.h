@@ -36,7 +36,7 @@ extern "C"
 
     typedef struct FSM_State_Config_t
     {
-        uint32_t state_no;
+        uint32_t state_no; // 0 means not registered
         const char *name;
         // FSM_State_Mode mode;
         //  union
@@ -46,6 +46,8 @@ extern "C"
         void (*entry_action)(struct FSM_t *, struct FSM_State_t *);
         void (*poll_action)(struct FSM_t *, struct FSM_State_t *);
         void (*exit_action)(struct FSM_t *, struct FSM_State_t *);
+
+        uint32_t parent_state_no;
     } FSM_State_Config_t;
 
     typedef struct FSM_State_t
@@ -56,7 +58,9 @@ extern "C"
         uint32_t transition_count;
 
         uint32_t enter_tick;
-        uint32_t exit_tick;
+        // uint32_t exit_tick;
+
+        struct FSM_State_t *parent;
     } FSM_State_t;
 
     typedef enum
