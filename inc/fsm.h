@@ -45,9 +45,9 @@ extern "C"
         //      uint32_t interval;
         //  } mode_parameters;
         void (*entry_action)(struct FSM_t *, struct FSM_State_t *);
-        void (*poll_action)(struct FSM_t *, struct FSM_State_t *);
         void (*exit_action)(struct FSM_t *, struct FSM_State_t *);
-
+        uint32_t polling_interval;
+        void (*poll_action)(struct FSM_t *, struct FSM_State_t *);
         uint32_t parent_state_no;
     } FSM_State_Config_t;
 
@@ -60,7 +60,7 @@ extern "C"
 
         uint32_t enter_tick;
         // uint32_t exit_tick;
-
+        uint32_t last_polling_tick;
         struct FSM_State_t *parent;
     } FSM_State_t;
 

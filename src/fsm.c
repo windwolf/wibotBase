@@ -259,9 +259,11 @@ static void FSM_state_do_poll(FSM_t *fsm, FSM_State_t *state)
     FSM_State_t *sta = state;
     while (sta != NULL)
     {
-        if (sta->config->poll_action != NULL)
+        if ((sta->config->poll_action != NULL) &&
+                ((fsm->current_tick - state->last_polling_tick) >= state->config->polling_interval))
         {
             sta->config->poll_action(fsm, state);
+            state->last_polling_tick = fsm->current_tick;
             // LOG_I("FSM", "State poll: %s.%s", (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? NULL : state->config->name);
         }
         sta = sta->parent;
