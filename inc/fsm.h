@@ -116,6 +116,12 @@ extern "C"
 
     } FSM_t;
 
+    /**
+     * @brief Zero initializatoin
+     *
+     * @param fsm
+     * @param name
+     */
     void FSM_init(FSM_t *fsm, const char *name);
 
     void FSM_state_register(FSM_t *fsm, FSM_State_Config_t *config);
@@ -126,7 +132,7 @@ extern "C"
 
     void FSM_transitions_register(FSM_t *fsm, FSM_Transition_Config_t configs[], uint32_t count);
 
-    void FSM_start(FSM_t *fsm, uint32_t state_no, void *user_data, uint32_t initial_tick);
+    bool FSM_start(FSM_t *fsm, uint32_t state_no, void *user_data, uint32_t initial_tick);
 
     void FSM_event_set(FSM_t *fsm, uint32_t events);
 
