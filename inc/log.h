@@ -20,34 +20,34 @@ extern "C"
 
 #define LOG_I(MODULE, MSG, ...) LOG("I", MODULE, MSG, ##__VA_ARGS__)
 
-#define LOG_I_INTERVAL(MODULE, INTERVAL, DUMSG, ...) \
-    {                                                \
-        static uint32_t _log_count_ = 0;             \
-        if (_log_count_ == 0)                        \
-        {                                            \
-            LOG_I(MODULE, DUMSG, ##__VA_ARGS__);     \
-        }                                            \
-        _log_count_++;                               \
-        if (_log_count_ >= INTERVAL)                 \
-        {                                            \
-            _log_count_ = 0;                         \
-        }                                            \
+#define LOG_I_INTERVAL(MODULE, MSG, INTERVAL, ...) \
+    {                                              \
+        static uint32_t _log_count_ = 0;           \
+        if (_log_count_ == 0)                      \
+        {                                          \
+            LOG_I(MODULE, MSG, ##__VA_ARGS__);     \
+        }                                          \
+        _log_count_++;                             \
+        if (_log_count_ >= INTERVAL)               \
+        {                                          \
+            _log_count_ = 0;                       \
+        }                                          \
     }
 
 #define LOG_E(MODULE, MSG, ...) LOG("E", MODULE, MSG, ##__VA_ARGS__)
 
-#define LOG_E_INTERVAL(MODULE, INTERVAL, DUMSG, ...) \
-    {                                                \
-        static uint32_t _log_count_ = 0;             \
-        if (_log_count_ == 0)                        \
-        {                                            \
-            LOG_E(MODULE, DUMSG, ##__VA_ARGS__);     \
-        }                                            \
-        _log_count_++;                               \
-        if (_log_count_ >= INTERVAL)                 \
-        {                                            \
-            _log_count_ = 0;                         \
-        }                                            \
+#define LOG_E_INTERVAL(MODULE, MSG, INTERVAL, ...) \
+    {                                              \
+        static uint32_t _log_count_ = 0;           \
+        if (_log_count_ == 0)                      \
+        {                                          \
+            LOG_E(MODULE, MSG, ##__VA_ARGS__);     \
+        }                                          \
+        _log_count_++;                             \
+        if (_log_count_ >= INTERVAL)               \
+        {                                          \
+            _log_count_ = 0;                       \
+        }                                          \
     }
 
 #ifdef __cplusplus
