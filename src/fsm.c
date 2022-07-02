@@ -236,7 +236,7 @@ static void FSM_state_do_entry(FSM_t *fsm, FSM_State_t *state, FSM_State_t *from
         curSta = curSta->parent;
     }
 
-    LOG_I("FSM", "State entry: %s.%s", (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
+    LOG_I("FSM", "%d State entry: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
 }
 
 static void FSM_state_do_exit(FSM_t *fsm, FSM_State_t *state, FSM_State_t *to_state)
@@ -251,7 +251,7 @@ static void FSM_state_do_exit(FSM_t *fsm, FSM_State_t *state, FSM_State_t *to_st
         curSta = curSta->parent;
     }
 
-    LOG_I("FSM", "State exit: %s.%s", (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
+    LOG_I("FSM", "%d State exit: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
 }
 
 static void FSM_state_do_poll(FSM_t *fsm, FSM_State_t *state)
@@ -260,7 +260,7 @@ static void FSM_state_do_poll(FSM_t *fsm, FSM_State_t *state)
     while (sta != NULL)
     {
         if ((sta->config->poll_action != NULL) &&
-                ((fsm->current_tick - state->last_polling_tick) >= state->config->polling_interval))
+            ((fsm->current_tick - state->last_polling_tick) >= state->config->polling_interval))
         {
             sta->config->poll_action(fsm, state);
             state->last_polling_tick = fsm->current_tick;
