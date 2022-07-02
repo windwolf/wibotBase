@@ -148,6 +148,7 @@ bool FSM_start(FSM_t *fsm, uint32_t state_no, void *user_data, uint32_t initial_
     fsm->user_data = user_data;
     FSM_state_do_entry(fsm, state, NULL);
     fsm->last_update_tick = initial_tick;
+    LOG_I("FSM", "FSM %s started.", (fsm->name == NULL) ? "" : fsm->name);
     return true;
 }
 
@@ -292,7 +293,7 @@ static void FSM_transition_check(FSM_t *fsm, FSM_State_t *state)
         {
             FSM_Transition_t *transition = curSta->transitions[i];
             if (transition->config->mode == FSM_TRANSITION_MODE_EVENT &&
-                EVENT_CHECK(transition->config->mode_parameters.event.events, events, transition->config->mode_parameters.event.mode) &&
+                EVENT_CHECK(events, transition->config->mode_parameters.event.events, transition->config->mode_parameters.event.mode) &&
                 (transition->config->guard == NULL || transition->config->guard(fsm, state)))
             {
                 FSM_state_do_exit(fsm, state, transition->to);
