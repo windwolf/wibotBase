@@ -20,7 +20,7 @@ extern "C"
 
 #define LOG_I(MODULE, FMT, ...) LOG("I", RTT_CTRL_TEXT_BRIGHT_GREEN, MODULE, FMT, ##__VA_ARGS__)
 
-#define LOG_I_INTERVAL(MODULE, FMT, INTERVAL, ...) \
+#define LOG_I_INTERVAL(MODULE, INTERVAL, FMT, ...) \
     {                                              \
         static uint32_t _log_count_ = 0;           \
         if (_log_count_ == 0)                      \
@@ -36,7 +36,7 @@ extern "C"
 
 #define LOG_E(MODULE, FMT, ...) LOG("E", RTT_CTRL_TEXT_BRIGHT_RED, MODULE, FMT, ##__VA_ARGS__)
 
-#define LOG_E_INTERVAL(MODULE, FMT, INTERVAL, ...) \
+#define LOG_E_INTERVAL(MODULE, INTERVAL, FMT, ...) \
     {                                              \
         static uint32_t _log_count_ = 0;           \
         if (_log_count_ == 0)                      \
