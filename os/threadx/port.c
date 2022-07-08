@@ -1,4 +1,5 @@
-#include "os.h"
+#include "os/os.h"
+#include "tx_api.h"
 
 void driver_thread_sleep(uint32_t ms)
 {

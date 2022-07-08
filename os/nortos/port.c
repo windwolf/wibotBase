@@ -1,4 +1,4 @@
-#include "os.h"
+#include "os/os.h"
 #include "bsp_shared.h"
 
 void driver_thread_sleep(uint32_t ms)

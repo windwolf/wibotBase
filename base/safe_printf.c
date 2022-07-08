@@ -1,5 +1,5 @@
-#include "../inc/safe_printf.h"
-#include "os.h"
+#include "safe_printf.h"
+#include "os/os.h"
 
 static DRIVER_MUTEX _printfMutex;
 

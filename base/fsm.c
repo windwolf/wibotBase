@@ -1,4 +1,4 @@
-#include "../inc/fsm.h"
+#include "fsm.h"
 #include "log.h"
 #include "stdbool.h"
 
