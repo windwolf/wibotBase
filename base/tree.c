@@ -54,7 +54,7 @@ bool tree_child_remove(Tree *node)
 
 Tree *tree_child_find(const Tree *parent, const void *item, const CompareFunction compare)
 {
-    const Tree *child = parent->child;
+    Tree *child = parent->child;
     while (child != NULL)
     {
         if (compare(child, item) == 0)
