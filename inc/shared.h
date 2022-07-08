@@ -10,10 +10,6 @@ extern "C"
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define EVENTS_CLEAR_FLAGS(eg) (tx_event_flags_set(&eg, 0, TX_AND))
-#define EVENTS_SET_FLAGS(eg, flags) (tx_event_flags_set(&eg, flags, TX_OR))
-#define EVENTS_RESET_FLAGS(eg, flags) (tx_event_flags_set(&eg, ~flags, TX_AND))
-
 #define ALIGN32 __attribute__((aligned(32)))
 #define ALWAYS_INLINE __attribute__((always_inline)) inline
 #define min(a, b) (((a) <= (b)) ? (a) : (b))
@@ -26,6 +22,7 @@ extern "C"
 #define OP_RESULT_NOT_SUPPORT 0x00000040
 #define OP_RESULT_PARAMETER_ERROR 0x00000020
 #define OP_RESULT_NO_MATCH 0x00000010
+#define OP_RESULT_TIMEOUT 0x00000002
 #define OP_RESULT_GENERAL_ERROR 0x00000001
 
 #define OP_RESULT_USER_DEFINE_START 0x00010000
