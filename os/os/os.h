@@ -13,13 +13,13 @@ extern "C"
 #define DRIVER_TIMEOUT_FOREVER (uint32_t)(0xFFFFFFFFUL)
 #define DRIVER_TIMEOUT_NOWAIT (uint32_t)(0x00000000UL)
 
-    void driver_thread_sleep(uint32_t ms);
+    void ww_os_thread_sleep(uint32_t ms);
 
-    bool driver_mutex_create(DRIVER_MUTEX *mutex, const char *name);
+    bool ww_os_mutex_create(DRIVER_MUTEX *mutex, const char *name);
 
-    bool driver_mutex_get(DRIVER_MUTEX *mutex);
+    bool ww_os_mutex_get(DRIVER_MUTEX *mutex);
 
-    bool driver_mutex_put(DRIVER_MUTEX *mutex);
+    bool ww_os_mutex_put(DRIVER_MUTEX *mutex);
 
     typedef enum DRIVER_EVENTS_OPTION
     {
@@ -28,16 +28,17 @@ extern "C"
 
     } DRIVER_EVENTS_OPTION;
 
-    bool driver_events_create(DRIVER_EVENTS *events, const char *name);
+    bool ww_os_events_create(DRIVER_EVENTS *events, const char *name);
 
-    bool driver_events_get(DRIVER_EVENTS *events, uint32_t flags, DRIVER_EVENTS_OPTION option, uint32_t timeout);
+    bool ww_os_events_get(DRIVER_EVENTS *events, uint32_t flags, DRIVER_EVENTS_OPTION option, uint32_t timeout);
 
-    bool driver_events_set(DRIVER_EVENTS *events, uint32_t flags);
+    bool ww_os_events_set(DRIVER_EVENTS *events, uint32_t flags);
 
-    bool driver_events_reset(DRIVER_EVENTS *events, uint32_t flags);
+    bool ww_os_events_reset(DRIVER_EVENTS *events, uint32_t flags);
 
-    void driver_delay_ms(uint32_t ms);
-    void driver_delay_us(uint32_t us);
+    void ww_os_delay(uint32_t ms);
+
+    uint32_t ww_os_tick_get(void);
 
 #ifdef __cplusplus
 }
