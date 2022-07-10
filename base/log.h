@@ -32,10 +32,12 @@ extern "C"
 #define LOG_LEVEL_INFO 3
 #define LOG_LEVEL_DEBUG 4
 
-#ifdef DEBUG
+#ifdef USE_RTT
+
 #include "stdio.h"
 #include "SEGGER_RTT.h"
 #define LOG(MODULE, LEVEL, COLOR, FMT, ...) SEGGER_RTT_printf(0, COLOR "[" LEVEL "] [" MODULE "] " FMT "\r\n", ##__VA_ARGS__)
+
 #else
 #define LOG(MODULE, LEVEL, COLOR, FMT, ...)
 #endif
