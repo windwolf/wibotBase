@@ -39,10 +39,7 @@ extern "C"
 
 #include "stdio.h"
 #include "string.h"
-
-    void logprint(const char *fmt, ...);
-
-#define LOG(MODULE, LEVEL, COLOR, FMT, ...) logprint(COLOR "[" LEVEL "] [" MODULE "] " FMT "\r\n", ##__VA_ARGS__)
+#define LOG(MODULE, LEVEL, COLOR, FMT, ...) printf(COLOR "[" LEVEL "] [" MODULE "] " FMT "\r\n", ##__VA_ARGS__)
 
 #if (LOG_LEVEL__ >= LOG_LEVEL_ERROR)
 #define LOG_E(FMT, ...) LOG(LOG_MODULE__, "E", LOG_CTRL_TEXT_BRIGHT_RED, FMT, ##__VA_ARGS__)

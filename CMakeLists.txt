@@ -27,17 +27,7 @@ endif()
 
 if(${USE_RTT_PRINT})
     target_compile_definitions(${PROJECT_NAME} PUBLIC -DUSE_RTT_PRINT)
-endif()
-
-if(NOT DEFINED USE_UART_PRINT)
-    message(STATUS "USE_UART_PRINT: not set, use default value : OFF")
-    set(USE_UART_PRINT OFF)
-else()
-    message(STATUS "USE_UART_PRINT: ${USE_UART_PRINT}")
-endif()
-
-if(${USE_UART_PRINT})
-    target_compile_definitions(${PROJECT_NAME} PUBLIC -DUSE_UART_PRINT)
+    process_src_dir(${CMAKE_CURRENT_LIST_DIR}/rtt ${PROJECT_NAME})
 endif()
 
 process_src_dir(${CMAKE_CURRENT_LIST_DIR}/os/os ${PROJECT_NAME})

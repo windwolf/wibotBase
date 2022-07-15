@@ -8,12 +8,12 @@ void safe_printf_init()
     ww_os_mutex_create(&_printfMutex, "_printfMutex");
 }
 
-void _begin_safe_printf()
+inline void _begin_safe_printf()
 {
     ww_os_mutex_get(&_printfMutex);
 }
 
-void _end_safe_printf()
+inline void _end_safe_printf()
 {
     ww_os_mutex_put(&_printfMutex);
 }
