@@ -237,7 +237,7 @@ static void FSM_state_do_entry(FSM_t *fsm, FSM_State_t *state, FSM_State_t *from
         curSta = curSta->parent;
     }
 
-    LOG_I("FSM", "%d State entry: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
+    LOG_I("FSM", "%d S.entry: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
 }
 
 static void FSM_state_do_exit(FSM_t *fsm, FSM_State_t *state, FSM_State_t *to_state)
@@ -252,7 +252,7 @@ static void FSM_state_do_exit(FSM_t *fsm, FSM_State_t *state, FSM_State_t *to_st
         curSta = curSta->parent;
     }
 
-    LOG_I("FSM", "%d State exit: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
+    LOG_I("FSM", "%d S.exit: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
 }
 
 static void FSM_state_do_poll(FSM_t *fsm, FSM_State_t *state)
