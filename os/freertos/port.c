@@ -40,7 +40,7 @@ bool ww_os_events_create(DRIVER_EVENTS *events, const char *name)
 bool ww_os_events_get(DRIVER_EVENTS *events, uint32_t flags, DRIVER_EVENTS_OPTION option, uint32_t timeout)
 {
     return osEventFlagsWait(events, flags,
-                            (option == DRIVER_EVENTS_OPTION_AND) ? osWaitForever : 0,
+                            (option == DRIVER_EVENTS_OPTION_AND) ? osFlagsWaitAll : 0,
                             timeout) == osOK;
 }
 
