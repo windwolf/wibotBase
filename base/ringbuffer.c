@@ -1,5 +1,5 @@
 #include "stdint.h"
-#include "../inc/ringbuffer.h"
+#include "ringbuffer.h"
 #include "stdlib.h"
 #include "string.h"
 //#include "portable.h"

@@ -1,5 +1,5 @@
 
-#include "../inc/shared.h"
+#include "shared.h"
 
 char *strtrim(char *str, char delimit)
 {
