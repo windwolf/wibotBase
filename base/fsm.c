@@ -4,7 +4,9 @@
 #define LOG_MODULE "fsm"
 #include "log.h"
 
-#define EVENT_CHECK(flag, event, mode) (((mode) == FSM_EVENT_MODE_OR) ? (((flag) & (event)) != 0) : (((flag) & (event)) == (event)))
+#define EVENT_CHECK(flag, event, mode)                                                                                                                                                              \
+    ((((mode)&FSM_EVENT_PRESENTATION_MASK) == FSM_EVENT_PRESENTATION_SET) ? ((((mode)&FSM_EVENT_SELECT_MASK) == FSM_EVENT_SELECT_OR) ? (((flag) & (event)) != 0) : (((flag) & (event)) == (event))) \
+                                                                          : ((((mode)&FSM_EVENT_SELECT_MASK) == FSM_EVENT_SELECT_AND) ? (((flag) & (event)) == 0) : (((flag) & (event)) != (event))))
 
 static bool FSM_build(FSM_t *fsm);
 
@@ -299,6 +301,10 @@ static void FSM_transition_check(FSM_t *fsm, FSM_State_t *state)
                 (transition->config->guard == NULL || transition->config->guard(fsm, state)))
             {
                 FSM_state_do_exit(fsm, state, transition->to);
+                if ((transition->config->mode_parameters.event.mode & FSM_EVENT_ACTION_MASK) == FSM_EVENT_ACTION_CLEAR)
+                {
+                    FSM_event_reset(fsm, transition->config->mode_parameters.event.events);
+                }
                 if (transition->config->action != NULL)
                 {
                     transition->config->action(fsm, state);

@@ -29,11 +29,19 @@ extern "C"
         FSM_STATE_MODE_POLL
     } FSM_State_Mode;
 
-    typedef enum
-    {
-        FSM_EVENT_MODE_OR,
-        FSM_EVENT_MODE_AND
-    } FSM_Event_Mode;
+#define FSM_EVENT_MODE uint8_t
+#define FSM_EVENT_SELECT_MASK 0x01
+#define FSM_EVENT_SELECT_OR 0x00
+#define FSM_EVENT_SELECT_AND 0x01
+#define FSM_EVENT_ACTION_MASK 0x02
+#define FSM_EVENT_ACTION_KEEP 0x00
+#define FSM_EVENT_ACTION_CLEAR 0x02
+#define FSM_EVENT_PRESENTATION_MASK 0x04
+#define FSM_EVENT_PRESENTATION_SET 0x00
+#define FSM_EVENT_PRESENTATION_RESET 0x04
+
+    typedef void (*FSM_Action)(struct FSM_t *, struct FSM_State_t *);
+    typedef bool (*FSM_Guard)(struct FSM_t *, struct FSM_State_t *);
 
     typedef struct FSM_State_Config_t
     {
@@ -44,10 +52,10 @@ extern "C"
         //  {
         //      uint32_t interval;
         //  } mode_parameters;
-        void (*entry_action)(struct FSM_t *, struct FSM_State_t *);
-        void (*exit_action)(struct FSM_t *, struct FSM_State_t *);
+        FSM_Action entry_action;
+        FSM_Action exit_action;
         uint32_t polling_interval;
-        void (*poll_action)(struct FSM_t *, struct FSM_State_t *);
+        FSM_Action poll_action;
         uint32_t parent_state_no;
     } FSM_State_Config_t;
 
@@ -81,15 +89,15 @@ extern "C"
             struct
             {
                 uint32_t events;
-                FSM_Event_Mode mode;
+                FSM_EVENT_MODE mode;
             } event;
             uint32_t timeout;
 
         } mode_parameters;
         uint32_t from;
         uint32_t to;
-        bool (*guard)(struct FSM_t *, struct FSM_State_t *);
-        uint32_t (*action)(struct FSM_t *, struct FSM_State_t *);
+        FSM_Guard guard;
+        FSM_Action action;
     } FSM_Transition_Config_t;
 
     typedef struct FSM_Transition_t
