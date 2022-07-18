@@ -1,6 +1,8 @@
 #include "fsm.h"
-#include "log.h"
+
 #include "stdbool.h"
+#define LOG_MODULE "fsm"
+#include "log.h"
 
 #define EVENT_CHECK(flag, event, mode) (((mode) == FSM_EVENT_MODE_OR) ? (((flag) & (event)) != 0) : (((flag) & (event)) == (event)))
 
@@ -82,7 +84,7 @@ static bool FSM_build(FSM_t *fsm)
             FSM_State_t *pState = FSM_find_state(fsm, sta->config->parent_state_no);
             if (pState == NULL)
             {
-                LOG_E("FSM", "%s %s's parent not exsits.", (fsm->name == NULL) ? "" : fsm->name, (sta->config->name == NULL) ? "" : sta->config->name);
+                LOG_E("%s %s's parent not exsits.", (fsm->name == NULL) ? "" : fsm->name, (sta->config->name == NULL) ? "" : sta->config->name);
                 return false;
             }
             sta->parent = pState;
@@ -100,18 +102,18 @@ static bool FSM_build(FSM_t *fsm)
         FSM_State_t *toState = FSM_find_state(fsm, trans->config->to);
         if (fromState == NULL)
         {
-            LOG_E("FSM", "%s transition[%d]'s from not exsits.", (fsm->name == NULL) ? "" : fsm->name, (int)i);
+            LOG_E("%s transition[%d]'s from not exsits.", (fsm->name == NULL) ? "" : fsm->name, (int)i);
             return false;
         }
         if (toState == NULL)
         {
-            LOG_E("FSM", "%s transition[%d]'s to not exsits.", (fsm->name == NULL) ? "" : fsm->name, (int)i);
+            LOG_E("%s transition[%d]'s to not exsits.", (fsm->name == NULL) ? "" : fsm->name, (int)i);
             return false;
         }
 
         if (FSM_has_child(fsm, toState))
         {
-            LOG_E("FSM", "%s transition[%d] 's to state must be leaf node.", (fsm->name == NULL) ? "" : fsm->name, (int)i);
+            LOG_E("%s transition[%d] 's to state must be leaf node.", (fsm->name == NULL) ? "" : fsm->name, (int)i);
             return false;
         }
 
@@ -135,20 +137,20 @@ bool FSM_start(FSM_t *fsm, uint32_t state_no, void *user_data, uint32_t initial_
 {
     if (!FSM_build(fsm))
     {
-        LOG_E("FSM", "FSM %s build error.", (fsm->name == NULL) ? "" : fsm->name);
+        LOG_E("FSM %s build error.", (fsm->name == NULL) ? "" : fsm->name);
         return false;
     }
     fsm->current_tick = initial_tick;
     FSM_State_t *state = FSM_find_state(fsm, state_no);
     if (state == NULL)
     {
-        LOG_E("FSM", "start state: %s.%d not found.", (fsm->name == NULL) ? "" : fsm->name, state_no);
+        LOG_E("start state: %s.%lu not found.", (fsm->name == NULL) ? "" : fsm->name, state_no);
         return false;
     }
     fsm->user_data = user_data;
     FSM_state_do_entry(fsm, state, NULL);
     fsm->last_update_tick = initial_tick;
-    LOG_I("FSM", "FSM %s started.", (fsm->name == NULL) ? "" : fsm->name);
+    LOG_I("FSM %s started.", (fsm->name == NULL) ? "" : fsm->name);
     return true;
 }
 
@@ -237,7 +239,7 @@ static void FSM_state_do_entry(FSM_t *fsm, FSM_State_t *state, FSM_State_t *from
         curSta = curSta->parent;
     }
 
-    LOG_I("FSM", "%d S.entry: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
+    LOG_I("%lu S.entry: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
 }
 
 static void FSM_state_do_exit(FSM_t *fsm, FSM_State_t *state, FSM_State_t *to_state)
@@ -252,7 +254,7 @@ static void FSM_state_do_exit(FSM_t *fsm, FSM_State_t *state, FSM_State_t *to_st
         curSta = curSta->parent;
     }
 
-    LOG_I("FSM", "%d S.exit: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
+    LOG_I("%lu S.exit: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config->name == NULL) ? "" : state->config->name);
 }
 
 static void FSM_state_do_poll(FSM_t *fsm, FSM_State_t *state)
