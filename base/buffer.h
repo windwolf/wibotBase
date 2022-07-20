@@ -25,7 +25,7 @@ extern "C"
 #define BUFFER_DECLARE_STATIC(name, _size) \
     static uint8_t name##_##data[_size];   \
     static Buffer name = {.data = name##_##data, .size = _size};
-
+#define BUFFER_DATA_REF(name) (name##_##data)
 #ifdef __cplusplus
 }
 #endif
