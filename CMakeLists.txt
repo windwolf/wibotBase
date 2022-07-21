@@ -30,6 +30,18 @@ if(${USE_RTT_PRINT})
     process_src_dir(${CMAKE_CURRENT_LIST_DIR}/rtt ${PROJECT_NAME})
 endif()
 
+if(NOT DEFINED ENABLE_FSM_TRANSITION_PREFILTER)
+    message(STATUS "ENABLE_FSM_TRANSITION_PREFILTER: not set, use default value : ON")
+    set(ENABLE_FSM_TRANSITION_PREFILTER ON)
+else()
+    message(STATUS "ENABLE_FSM_TRANSITION_PREFILTER: ${ENABLE_FSM_TRANSITION_PREFILTER}")
+endif()
+
+if(${ENABLE_FSM_TRANSITION_PREFILTER})
+    target_compile_definitions(${PROJECT_NAME} PUBLIC -DFSM_TRANSITION_PREFILTER)
+endif()
+
 process_src_dir(${CMAKE_CURRENT_LIST_DIR}/os/os ${PROJECT_NAME})
 process_src_dir(${CMAKE_CURRENT_LIST_DIR}/base ${PROJECT_NAME})
+process_src_dir(${CMAKE_CURRENT_LIST_DIR}/temporal ${PROJECT_NAME})
 process_src_dir(${CMAKE_CURRENT_LIST_DIR}/test ${PROJECT_NAME})

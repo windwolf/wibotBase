@@ -10,9 +10,9 @@ extern "C"
 {
 #endif
 
-#define FSM_MAX_STATES_COUNT (8)
-#define FSM_MAX_TRANSITIONS_COUNT (8)
-#define FSM_MAX_TRANSITIONS_COUNT_PRE_STATE (4)
+#define FSM_MAX_STATES_COUNT (256)
+#define FSM_MAX_TRANSITIONS_COUNT (256)
+#define FSM_MAX_TRANSITIONS_COUNT_PRE_STATE (8)
 
 #define FSM_NO_EVENT (0x00000000)
 #define FSM_ALL_EVENT (0xFFFFFFFF)
@@ -23,11 +23,9 @@ extern "C"
     struct FSM_Transition_t;
     struct FSM_t;
 
-    typedef enum
-    {
-        FSM_STATE_MODE_INTERVAL,
-        FSM_STATE_MODE_POLL
-    } FSM_State_Mode;
+#define FSM_STATE_MODE uint8_t
+#define FSM_STATE_MODE_INTERVAL 1U
+#define FSM_STATE_MODE_POLL 2U
 
 #define FSM_EVENT_MODE uint8_t
 #define FSM_EVENT_SELECT_MASK 0x01
@@ -45,45 +43,35 @@ extern "C"
 
     typedef struct FSM_State_Config_t
     {
-        uint32_t state_no; // 0 means not registered
         const char *name;
-        // FSM_State_Mode mode;
-        //  union
-        //  {
-        //      uint32_t interval;
-        //  } mode_parameters;
         FSM_Action entry_action;
         FSM_Action exit_action;
         uint32_t polling_interval;
         FSM_Action poll_action;
-        uint32_t parent_state_no;
+        uint8_t parent_state_no;
+        uint8_t state_no; // 0 means not registered
     } FSM_State_Config_t;
 
     typedef struct FSM_State_t
     {
-        struct FSM_State_Config_t *config;
-        void *user_data;
-        struct FSM_Transition_t *transitions[FSM_MAX_TRANSITIONS_COUNT_PRE_STATE];
-        uint32_t transition_count;
-
+        struct FSM_State_Config_t config;
         uint32_t enter_tick;
-        // uint32_t exit_tick;
         uint32_t last_polling_tick;
         struct FSM_State_t *parent;
+#ifdef FSM_TRANSITION_PREFILTER
+        struct FSM_Transition_t *transitions[FSM_MAX_TRANSITIONS_COUNT_PRE_STATE];
+        uint8_t transition_count;
+#endif
     } FSM_State_t;
 
-    typedef enum
-    {
-        FSM_TRANSITION_MODE_TIMEOUT,
-        FSM_TRANSITION_MODE_EVENT,
-        // FSM_TRANSITION_MODE_CONDITION,
-        // FSM_TRANSITION_MODE_EVENT_OR_TIMEOUT,
-    } FSM_Transition_Mode;
+#define FSM_TRANSITION_MODE uint8_t
+#define FSM_TRANSITION_MODE_TIMEOUT 1U
+#define FSM_TRANSITION_MODE_EVENT 2U
 
     typedef struct FSM_Transition_Config_t
     {
         const char *name;
-        FSM_Transition_Mode mode;
+        FSM_TRANSITION_MODE mode;
         union
         {
             struct
@@ -94,29 +82,30 @@ extern "C"
             uint32_t timeout;
 
         } mode_parameters;
-        uint32_t from;
-        uint32_t to;
+        uint8_t from;
+        uint8_t to;
         FSM_Guard guard;
         FSM_Action action;
+
     } FSM_Transition_Config_t;
 
     typedef struct FSM_Transition_t
     {
-        struct FSM_Transition_Config_t *config;
+        struct FSM_Transition_Config_t config;
         struct FSM_State_t *to;
     } FSM_Transition_t;
 
     typedef struct FSM_t
     {
-        struct FSM_State_t states[FSM_MAX_STATES_COUNT];
-        uint32_t state_count;
+        struct FSM_State_t *states;
+        uint8_t state_count;
         struct FSM_State_t *current_state;
         const char *name;
 
         uint32_t events;
 
-        struct FSM_Transition_t transitions[FSM_MAX_TRANSITIONS_COUNT];
-        uint32_t transition_count;
+        struct FSM_Transition_t *transitions;
+        uint8_t transition_count;
         // uint32_t current_state_enter_tick;
         uint32_t last_update_tick;
         uint32_t current_tick;
@@ -132,13 +121,9 @@ extern "C"
      */
     void FSM_init(FSM_t *fsm, const char *name);
 
-    void FSM_state_register(FSM_t *fsm, FSM_State_Config_t *config);
+    void FSM_states_register(FSM_t *fsm, FSM_State_t *states, uint32_t count);
 
-    void FSM_states_register(FSM_t *fsm, FSM_State_Config_t configs[], uint32_t count);
-
-    void FSM_transition_register(FSM_t *fsm, FSM_Transition_Config_t *config);
-
-    void FSM_transitions_register(FSM_t *fsm, FSM_Transition_Config_t configs[], uint32_t count);
+    void FSM_transitions_register(FSM_t *fsm, FSM_Transition_t *transitions, uint32_t count);
 
     bool FSM_start(FSM_t *fsm, uint32_t state_no, void *user_data, uint32_t initial_tick);
 
