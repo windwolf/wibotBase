@@ -253,7 +253,7 @@ OP_RESULT ringbuffer_write_fill(RingBuffer *queue, uint8_t *value, uint32_t leng
     else
     {
         memset(POINTER_ADD(queue->data, write, queue->dataWidth), *value, spaceFromWriteToEnd * queue->dataWidth);
-        memcpy(queue->data, *value, (length - spaceFromWriteToEnd) * queue->dataWidth);
+        memcpy(queue->data, (void *)*value, (length - spaceFromWriteToEnd) * queue->dataWidth);
 
         write = length - spaceFromWriteToEnd;
     }
