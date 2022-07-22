@@ -62,12 +62,12 @@ inline uint32_t ringbuffer_count_get(RingBuffer *queue)
 
 inline void *ringbuffer_write_ptr_get(RingBuffer *queue)
 {
-    return queue->data + ((queue->write >= queue->size) ? (queue->write - queue->size) : queue->write);
+    return ((uint8_t *)queue->data) + ((queue->write >= queue->size) ? (queue->write - queue->size) : queue->write);
 }
 
 inline void *ringbuffer_read_ptr_get(RingBuffer *queue)
 {
-    return queue->data + ((queue->read >= queue->size) ? (queue->read - queue->size) : queue->read);
+    return ((uint8_t *)queue->data) + ((queue->read >= queue->size) ? (queue->read - queue->size) : queue->read);
 }
 
 OP_RESULT ringbuffer_write_index_sync(RingBuffer *queue, uint32_t newWrite)
@@ -253,7 +253,7 @@ OP_RESULT ringbuffer_write_fill(RingBuffer *queue, uint8_t *value, uint32_t leng
     else
     {
         memset(POINTER_ADD(queue->data, write, queue->dataWidth), *value, spaceFromWriteToEnd * queue->dataWidth);
-        memcpy(queue->data, (void *)*value, (length - spaceFromWriteToEnd) * queue->dataWidth);
+        memcpy(queue->data, (void *)value, (length - spaceFromWriteToEnd) * queue->dataWidth);
 
         write = length - spaceFromWriteToEnd;
     }
