@@ -1,5 +1,5 @@
-#ifndef __WWBASE_TEMPORAL_BDC_H__
-#define __WWBASE_TEMPORAL_BDC_H__
+#ifndef __WWBASE_TEMPORAL_H__
+#define __WWBASE_TEMPORAL_H__
 
 #ifdef __cplusplus
 extern "C"
@@ -59,4 +59,4 @@ extern "C"
 }
 #endif
 
-#endif // __WWBASE_TEMPORAL_BDC_H__
+#endif // __WWBASE_TEMPORAL_H__

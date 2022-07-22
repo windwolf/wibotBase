@@ -65,6 +65,7 @@ extern "C"
     OP_RESULT ringbuffer_read_index_sync(RingBuffer *queue, uint32_t newTail);
     OP_RESULT ringbuffer_read_offset_sync(RingBuffer *queue, uint32_t offset);
     OP_RESULT ringbuffer_write(RingBuffer *queue, void *valuePtr, uint32_t length, uint8_t allowCoverTail, uint32_t *actualLength);
+    OP_RESULT ringbuffer_write_fill(RingBuffer *queue, uint8_t *value, uint32_t length, uint8_t allowCoverTail, uint32_t *actualLength);
     OP_RESULT ringbuffer_read(RingBuffer *queue, void *valuePtr, uint32_t length, uint32_t *actualLength);
     OP_RESULT ringbuffer_peek(RingBuffer *queue, void **data);
     OP_RESULT ringbuffer_index_peek(RingBuffer *queue, uint32_t index, void **data);
@@ -74,7 +75,7 @@ extern "C"
     void *ringbuffer_index_peek_directly(RingBuffer *queue, uint32_t index);
     void *ringbuffer_offset_peek_directly(RingBuffer *queue, uint32_t offset);
     uint32_t ringbuffer_offset_to_index_convert(RingBuffer *queue, uint32_t offset);
-    uint32_t ringbuffer_index_wrap(RingBuffer *queue, uint32_t index);
+    uint32_t ringbuffer_index_wrap(RingBuffer *queue, int32_t index);
 
     // typedef struct RingBuffer32
     // {
