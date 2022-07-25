@@ -1,6 +1,6 @@
 #include "temporal.h"
 
-#define LOG_MODULE "bdc"
+#define LOG_MODULE "temporal"
 #include "log.h"
 
 static inline uint32_t _date_to_days(uint8_t year, uint8_t month, uint8_t day)

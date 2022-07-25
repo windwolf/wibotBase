@@ -17,13 +17,16 @@ extern "C"
         RINGBUFFER_OPERATION_TYPE_PEEK_TO_END,
     } RINGBUFFER_OPERATION_TYPE;
 
+    // capacity = size - 1;
+    // if head = tail, the buffer is empty;
+    // if head = tail + 1, the buffer is full;
     typedef struct RingBuffer
     {
         void *data;
         uint32_t dataWidth;
         uint32_t size;
-        uint32_t write; // 指向当前最新的数据
-        uint32_t read;
+        uint32_t write; // Points to the next available slot to write to.
+        uint32_t read;  //
         // uint8_t writeMirror;
         // uint8_t readMirror;
         union
