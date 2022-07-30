@@ -12,11 +12,11 @@ extern "C"
         uint32_t Value;
         struct
         {
-            uint8_t a;
-            uint8_t r;
-            uint8_t g;
             uint8_t b;
-        } ARGB;
+            uint8_t g;
+            uint8_t r;
+            uint8_t a;
+        } ARGB; 
     } Color;
 
 #define COLOR_WHITE ((Color)0x00FFFFFFUL)

@@ -288,6 +288,12 @@ static void FSM_transition_check(FSM_t *fsm, FSM_State_t *state)
                 continue;
             }
 #endif
+            // skip transit to self.
+            if (transition->config.to == state->config.state_no)
+            {
+                continue;
+            }
+
             if (transition->config.mode == FSM_TRANSITION_MODE_EVENT &&
                 EVENT_CHECK(events, transition->config.mode_parameters.event.events, transition->config.mode_parameters.event.mode) &&
                 (transition->config.guard == NULL || transition->config.guard(fsm, state)))
