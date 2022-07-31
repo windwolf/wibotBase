@@ -48,8 +48,14 @@ extern "C"
         FSM_Action exit_action;
         uint32_t polling_interval;
         FSM_Action poll_action;
-        uint8_t parent_state_no; // parent state is used to simplify transition configuration
-        uint8_t state_no;        // 0 means not registered
+        /**
+         * @brief parent state is used to simplify transition configuration.
+         * parent represents the template of the state,
+         * all the children states has the transitions and actions of the parent state.
+         */
+        uint8_t parent_state_no;
+
+        uint8_t state_no; // 0 means not registered
     } FSM_State_Config_t;
 
     typedef struct FSM_State_t

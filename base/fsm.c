@@ -187,7 +187,7 @@ static bool FSM_parent_of(FSM_State_t *targetState, FSM_State_t *patternState)
     FSM_State_t *sta = targetState->parent;
     while (sta != NULL)
     {
-        if (sta->config.state_no == patternState->config.parent_state_no)
+        if (sta->config.state_no == patternState->config.state_no)
         {
             return true;
         }
@@ -223,7 +223,7 @@ static void FSM_state_do_entry(FSM_t *fsm, FSM_State_t *state, FSM_State_t *from
         curSta = curSta->parent;
     }
 
-    LOG_I("%lu S.entry: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config.name == NULL) ? "" : state->config.name);
+    LOG_I("%lu %s.%s: entry", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config.name == NULL) ? "" : state->config.name);
 }
 
 static void FSM_state_do_exit(FSM_t *fsm, FSM_State_t *state, FSM_State_t *to_state)
@@ -238,7 +238,7 @@ static void FSM_state_do_exit(FSM_t *fsm, FSM_State_t *state, FSM_State_t *to_st
         curSta = curSta->parent;
     }
 
-    LOG_I("%lu S.exit: %s.%s", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config.name == NULL) ? "" : state->config.name);
+    LOG_I("%lu %s.%s: exit", fsm->current_tick, (fsm->name == NULL) ? "" : fsm->name, (state->config.name == NULL) ? "" : state->config.name);
 }
 
 static void FSM_state_do_poll(FSM_t *fsm, FSM_State_t *state)
