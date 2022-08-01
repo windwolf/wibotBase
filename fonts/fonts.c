@@ -1,35 +1,35 @@
 #include "fonts/fonts.h"
 #include "string.h"
 
-static inline void setPixel(uint8_t *buffer, uint32_t memOffset, uint32_t pixelSize, uint32_t color)
+static inline void setPixel(uint8_t *buffer, uint32_t memOffset, uint32_t pixelSize, Color color)
 {
     if (pixelSize == PIXEL_SIZE_8BIT)
     {
-        buffer[memOffset] = (uint8_t)(color);
+        buffer[memOffset] = (uint8_t)(color.Value);
     }
     else if (pixelSize == PIXEL_SIZE_16BIT)
     {
-        ((uint16_t *)buffer)[memOffset] = (uint16_t)(color);
+        ((uint16_t *)buffer)[memOffset] = (uint16_t)(color.Value);
     }
     else if (pixelSize == PIXEL_SIZE_32BIT)
     {
-        ((uint32_t *)buffer)[memOffset] = (uint32_t)(color);
+        ((uint32_t *)buffer)[memOffset] = (uint32_t)(color.Value);
     }
     else if (pixelSize == PIXEL_SIZE_24BIT)
     {
-        buffer[memOffset * 3] = (uint8_t)(color >> 16);
-        buffer[memOffset * 3 + 1] = (uint8_t)(color >> 8);
-        buffer[memOffset * 3 + 2] = (uint8_t)(color);
+        buffer[memOffset * 3] = (uint8_t)(color.Value >> 16);
+        buffer[memOffset * 3 + 1] = (uint8_t)(color.Value >> 8);
+        buffer[memOffset * 3 + 2] = (uint8_t)(color.Value);
     }
     else if (pixelSize == PIXEL_SIZE_1BIT)
     {
-        if (color == 1)
+        if (color.Value == 1)
         {
-            ((uint8_t *)buffer)[memOffset / 8] |= (uint8_t)(color) << (7 - (memOffset % 8));
+            ((uint8_t *)buffer)[memOffset / 8] |= (uint8_t)(color.Value) << (7 - (memOffset % 8));
         }
         else
         {
-            ((uint8_t *)buffer)[memOffset / 8] &= ~((uint8_t)(color) << (7 - (memOffset % 8)));
+            ((uint8_t *)buffer)[memOffset / 8] &= ~((uint8_t)(color.Value) << (7 - (memOffset % 8)));
         }
     }
 }
@@ -173,7 +173,7 @@ bool FONTS_FillData(uint8_t *buffer, CanvasInfo *canvas, uint16_t x, uint16_t y,
                 {
                     uint32_t x_index = memX + k;
                     uint32_t offset = y_index * canvasMemWidth + x_index;
-                    uint32_t color;
+                    Color color;
                     if (fontData[j * fontMemRowSize + k / 8] & (1 << (fontMemWidth - k - 1)))
                     {
                         color = fontDrawInfo->foreColor;
