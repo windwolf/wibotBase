@@ -1,9 +1,10 @@
-#ifndef ___FSM_H__
-#define ___FSM_H__
+#ifndef ___FSM_FSM2_H__
+#define ___FSM_FSM2_H__
 
 #include <stddef.h>
 #include <stdint.h>
 #include "stdbool.h"
+#include "eventgroup.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -14,9 +15,6 @@ extern "C"
 #define FSM_MAX_TRANSITIONS_COUNT (256)
 #define FSM_MAX_TRANSITIONS_COUNT_PRE_STATE (8)
 
-#define FSM_NO_EVENT (0x00000000)
-#define FSM_ALL_EVENT (0xFFFFFFFF)
-
     struct FSM_State_Config_t;
     struct FSM_State_t;
     struct FSM_Transition_Config_t;
@@ -26,17 +24,6 @@ extern "C"
 #define FSM_STATE_MODE uint8_t
 #define FSM_STATE_MODE_INTERVAL 1U
 #define FSM_STATE_MODE_POLL 2U
-
-#define FSM_EVENT_MODE uint8_t
-#define FSM_EVENT_SELECT_MASK 0x01
-#define FSM_EVENT_SELECT_OR 0x00
-#define FSM_EVENT_SELECT_AND 0x01
-#define FSM_EVENT_ACTION_MASK 0x02
-#define FSM_EVENT_ACTION_KEEP 0x00
-#define FSM_EVENT_ACTION_CLEAR 0x02
-#define FSM_EVENT_PRESENTATION_MASK 0x04
-#define FSM_EVENT_PRESENTATION_SET 0x00
-#define FSM_EVENT_PRESENTATION_RESET 0x04
 
     typedef void (*FSM_Action)(struct FSM_t *, struct FSM_State_t *);
     typedef bool (*FSM_Guard)(struct FSM_t *, struct FSM_State_t *);
@@ -80,19 +67,13 @@ extern "C"
         FSM_TRANSITION_MODE mode;
         union
         {
-            struct
-            {
-                uint32_t events;
-                FSM_EVENT_MODE mode;
-            } event;
+            EventFlag_t events;
             uint32_t timeout;
-
         } mode_parameters;
         uint8_t from;
         uint8_t to;
         FSM_Guard guard;
         FSM_Action action;
-
     } FSM_Transition_Config_t;
 
     typedef struct FSM_Transition_t
@@ -108,7 +89,7 @@ extern "C"
         struct FSM_State_t *current_state;
         const char *name;
 
-        uint32_t events;
+        EventGroup_t events;
 
         struct FSM_Transition_t *transitions;
         uint8_t transition_count;
@@ -125,7 +106,7 @@ extern "C"
      * @param fsm
      * @param name
      */
-    void FSM_init(FSM_t *fsm, const char *name);
+    void FSM_init(FSM_t *fsm, const char *name, uint32_t eventClearMask);
 
     void FSM_states_register(FSM_t *fsm, FSM_State_t *states, uint32_t count);
 
@@ -145,4 +126,4 @@ extern "C"
 }
 #endif
 
-#endif // ___FSM_H__
+#endif // ___FSM_FSM2_H__

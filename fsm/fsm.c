@@ -4,10 +4,6 @@
 #define LOG_MODULE "fsm"
 #include "log.h"
 
-#define EVENT_CHECK(flag, event, mode)                                                                                                                                                              \
-    ((((mode)&FSM_EVENT_PRESENTATION_MASK) == FSM_EVENT_PRESENTATION_SET) ? ((((mode)&FSM_EVENT_SELECT_MASK) == FSM_EVENT_SELECT_OR) ? (((flag) & (event)) != 0) : (((flag) & (event)) == (event))) \
-                                                                          : ((((mode)&FSM_EVENT_SELECT_MASK) == FSM_EVENT_SELECT_AND) ? (((flag) & (event)) == 0) : (((flag) & (event)) != (event))))
-
 static bool FSM_build(FSM_t *fsm);
 
 static FSM_State_t *FSM_find_state(FSM_t *fsm, uint32_t state_no);
@@ -24,7 +20,7 @@ static bool FSM_has_child(FSM_t *fsm, FSM_State_t *state);
 
 static bool FSM_parent_of(FSM_State_t *targetState, FSM_State_t *patternState);
 
-void FSM_init(FSM_t *fsm, const char *name)
+void FSM_init(FSM_t *fsm, const char *name, uint32_t eventClearMask)
 {
     fsm->name = name;
     fsm->state_count = 0;
@@ -33,6 +29,7 @@ void FSM_init(FSM_t *fsm, const char *name)
     fsm->current_tick = 0;
     fsm->transition_count = 0;
     fsm->user_data = NULL;
+    EventGroup_init(&fsm->events, eventClearMask);
 }
 
 void FSM_states_register(FSM_t *fsm, FSM_State_t *states, uint32_t count)
@@ -49,19 +46,6 @@ void FSM_states_register(FSM_t *fsm, FSM_State_t *states, uint32_t count)
 
 void FSM_transitions_register(FSM_t *fsm, FSM_Transition_t *transitions, uint32_t count)
 {
-    for (uint8_t i = 0; i < count; i++)
-    {
-        FSM_Transition_t *tran = &transitions[i];
-        if (tran->config.mode == FSM_TRANSITION_MODE_EVENT)
-        {
-            if (tran->config.mode_parameters.event.events == FSM_NO_EVENT)
-            {
-                LOG_E("transition[%u] event is FSM_NO_EVENT", i);
-                return;
-            }
-        }
-    }
-
     fsm->transitions = transitions;
     fsm->transition_count = count;
 }
@@ -146,8 +130,12 @@ void FSM_update(FSM_t *fsm, uint32_t tick)
     {
         return;
     }
+
+    EventGroup_update_begin(&fsm->events);
     FSM_state_do_poll(fsm, state);
     FSM_transition_check(fsm, state);
+    EventGroup_update_end(&fsm->events);
+
     fsm->last_update_tick = tick;
 }
 
@@ -195,19 +183,6 @@ static bool FSM_parent_of(FSM_State_t *targetState, FSM_State_t *patternState)
     }
     return false;
 }
-
-// static FSM_State_t *FSM_find_state_by_no(FSM_t *fsm, uint32_t no)
-// {
-//     for (uint32_t i = 0; i < fsm->state_count; i++)
-//     {
-//         FSM_State_t *sta = &(fsm->states[i]);
-//         if (sta->config->state_no == no)
-//         {
-//             return sta;
-//         }
-//     }
-//     return NULL;
-// }
 
 static void FSM_state_do_entry(FSM_t *fsm, FSM_State_t *state, FSM_State_t *from_state)
 {
@@ -270,7 +245,6 @@ static void FSM_state_do_poll(FSM_t *fsm, FSM_State_t *state)
  */
 static void FSM_transition_check(FSM_t *fsm, FSM_State_t *state)
 {
-    uint32_t events = fsm->events;
     uint32_t duration = (fsm->current_tick - state->enter_tick);
     FSM_State_t *curSta = state;
     while (curSta != NULL)
@@ -295,14 +269,11 @@ static void FSM_transition_check(FSM_t *fsm, FSM_State_t *state)
             }
 
             if (transition->config.mode == FSM_TRANSITION_MODE_EVENT &&
-                EVENT_CHECK(events, transition->config.mode_parameters.event.events, transition->config.mode_parameters.event.mode) &&
+                EventGroup_check(&fsm->events, &transition->config.mode_parameters.events) &&
                 (transition->config.guard == NULL || transition->config.guard(fsm, state)))
             {
                 FSM_state_do_exit(fsm, state, transition->to);
-                if ((transition->config.mode_parameters.event.mode & FSM_EVENT_ACTION_MASK) == FSM_EVENT_ACTION_CLEAR)
-                {
-                    FSM_event_reset(fsm, transition->config.mode_parameters.event.events);
-                }
+
                 if (transition->config.action != NULL)
                 {
                     transition->config.action(fsm, state);
@@ -329,10 +300,10 @@ static void FSM_transition_check(FSM_t *fsm, FSM_State_t *state)
 
 void FSM_event_set(FSM_t *fsm, uint32_t events)
 {
-    fsm->events |= events;
+    EventGroup_set(&fsm->events, events);
 };
 
 void FSM_event_reset(FSM_t *fsm, uint32_t events)
 {
-    fsm->events &= ~events;
+    EventGroup_reset(&fsm->events, events);
 };
