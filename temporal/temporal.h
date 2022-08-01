@@ -38,12 +38,21 @@ extern "C"
         //    TEMPORAL_UNIT_TYPE_YEAR,
         //    TEMPORAL_UNIT_TYPE_MONTH,
         TEMPORAL_UNIT_TYPE_DAY,
-        //    TEMPORAL_UNIT_TYPE_HOUR,
+        TEMPORAL_UNIT_TYPE_HOUR,
         TEMPORAL_UNIT_TYPE_MINUTE,
-        //    TEMPORAL_UNIT_TYPE_SECOND,
+        TEMPORAL_UNIT_TYPE_SECOND,
         //    TEMPORAL_UNIT_TYPE_WEEK,
     } TEMPORAL_UNIT_TYPE;
 
+    /**
+     * @brief How many unit between start and end.
+     * This span only represent how many unit acrossed the start to end, will ignore temporal less than unitType.
+     * e.g. start is 2022-8-1 13:22:50, ed is 2022-8-1 13:23:10. If unitType is TEMPORAL_UNIT_TYPE_SECOND, span is 20; if TEMPORAL_UNIT_TYPE_MINUTE, span is 1.
+     * @param start
+     * @param end
+     * @param unitType
+     * @return int32_t
+     */
     int32_t date_span_get(const Date start, const Date end, TEMPORAL_UNIT_TYPE unitType);
     int32_t time_span_get(const Time start, const Time end, TEMPORAL_UNIT_TYPE unitType);
     int32_t datetime_span_get(const DateTime start, const DateTime end, TEMPORAL_UNIT_TYPE unitType);
