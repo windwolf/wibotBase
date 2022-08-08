@@ -68,6 +68,8 @@ extern "C"
 
     uint32_t fast_log2(uint32_t _val);
 
+#define UNUSED(X) (void)X /* To avoid gcc/g++ warnings */
+
 #ifdef __cplusplus
 }
 #endif
