@@ -281,9 +281,35 @@ static void FSM_transition_check(FSM_t *fsm, FSM_State_t *state)
                 FSM_state_do_entry(fsm, transition->to, fsm->current_state);
                 return;
             }
-            else if (transition->config.mode == FSM_TRANSITION_MODE_TIMEOUT &&
-                     transition->config.mode_parameters.timeout <= duration &&
-                     (transition->config.guard == NULL || transition->config.guard(fsm, state)))
+        }
+        curSta = curSta->parent;
+    }
+
+    curSta = state;
+    while (curSta != NULL)
+    {
+#ifdef FSM_TRANSITION_PREFILTER
+        for (uint8_t i = 0; i < curSta->transition_count; i++)
+        {
+            FSM_Transition_t *transition = curSta->transitions[i];
+#else
+        for (uint8_t i = 0; i < fsm->transition_count; i++)
+        {
+            FSM_Transition_t *transition = &(fsm->transitions[i]);
+            if (transition->config.from != curSta->config.state_no)
+            {
+                continue;
+            }
+#endif
+            // skip transit to self.
+            if (transition->config.to == state->config.state_no)
+            {
+                continue;
+            }
+
+            if (transition->config.mode == FSM_TRANSITION_MODE_TIMEOUT &&
+                transition->config.mode_parameters.timeout <= duration &&
+                (transition->config.guard == NULL || transition->config.guard(fsm, state)))
             {
                 FSM_state_do_exit(fsm, state, transition->to);
                 if (transition->config.action != NULL)
