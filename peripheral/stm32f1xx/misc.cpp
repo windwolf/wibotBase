@@ -26,4 +26,9 @@ void Misc::ms_delay(uint32_t ms)
 {
     HAL_Delay(ms);
 }
+
+uint32_t Misc::get_tick()
+{
+    return HAL_GetTick();
+};
 } // namespace ww::peripheral
