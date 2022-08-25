@@ -11,11 +11,27 @@ list_source_files(${CMAKE_CURRENT_LIST_DIR}/os/${OS_PORT} OS_PORT_SOURCE_FILES)
 message(STATUS "OS_PORT_SOURCE_FILES: ${OS_PORT_SOURCE_FILES}")
 target_sources(${PROJECT_NAME}
     PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/os/os.cpp
     ${OS_PORT_SOURCE_FILES}
 )
 target_include_directories(${PROJECT_NAME}
     PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/os
     ${CMAKE_CURRENT_LIST_DIR}/os/${OS_PORT}
+)
+
+# peripheral
+process_src_dir(${CMAKE_CURRENT_LIST_DIR}/peripheral ${PROJECT_NAME})
+list_source_files(${CMAKE_CURRENT_LIST_DIR}/peripheral/${BSP_PORT} _perip_SOURCE_FILES)
+target_sources(${PROJECT_NAME}
+    PRIVATE
+
+    ${_perip_SOURCE_FILES}
+)
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+
+    ${CMAKE_CURRENT_LIST_DIR}/peripheral/${BSP_PORT}
 )
 
 if(NOT DEFINED USE_RTT_PRINT)
@@ -41,7 +57,6 @@ if(${ENABLE_FSM_TRANSITION_PREFILTER})
     target_compile_definitions(${PROJECT_NAME} PUBLIC -DFSM_TRANSITION_PREFILTER)
 endif()
 
-process_src_dir(${CMAKE_CURRENT_LIST_DIR}/os/os ${PROJECT_NAME})
 process_src_dir(${CMAKE_CURRENT_LIST_DIR}/base ${PROJECT_NAME})
 process_src_dir(${CMAKE_CURRENT_LIST_DIR}/temporal ${PROJECT_NAME})
 process_src_dir(${CMAKE_CURRENT_LIST_DIR}/test ${PROJECT_NAME})
