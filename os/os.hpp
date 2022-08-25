@@ -24,7 +24,7 @@ class Thread
 class Mutex
 {
   public:
-    Mutex(const char *name) : _name(name){};
+    Mutex(const char *name);
     Result init();
     Result deinit();
     bool lock(uint32_t timeout);
@@ -46,7 +46,7 @@ class EventGroup
 {
 
   public:
-    EventGroup(const char *name) : _name(name){};
+    EventGroup(const char *name);
     Result init();
     Result deinit();
     Result set(uint32_t flags);

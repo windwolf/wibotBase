@@ -18,6 +18,8 @@ void Thread::sleep(uint32_t ms)
     osDelay(ms);
 };
 
+Mutex::Mutex(const char *name) : _name(name){};
+
 Result Mutex::init()
 {
     osMutexAttr_t attr = {
@@ -42,6 +44,8 @@ void Mutex::unlock()
 {
     osMutexRelease(&(this->_instance));
 };
+
+EventGroup::EventGroup(const char *name) : _name(name){};
 
 Result EventGroup::init()
 {
