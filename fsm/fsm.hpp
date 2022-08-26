@@ -34,20 +34,19 @@ typedef bool (*FSM_Guard)(FSM &, FSM_State *);
 
 struct FSM_State_Config
 {
+    uint8_t stateNo; // 0 means not registered
     const char *name;
-    FSM_Action entry_action;
-    FSM_Action exit_action;
-    uint32_t polling_interval;
-    FSM_Action poll_action;
+    uint8_t parentStateNo;
+    uint32_t pollingInterval;
+    FSM_Action entryAction;
+    FSM_Action exitAction;
+    FSM_Action pollAction;
     /**
      * @brief parent state is used to simplify transition configuration.
      * parent represents the template of the state,
      * all the children states has the transitions and actions of the parent
      * state.
      */
-    uint8_t parent_state_no;
-
-    uint8_t state_no; // 0 means not registered
 };
 
 class FSM_State
@@ -58,15 +57,16 @@ class FSM_State
     friend class FSM_Transition;
     FSM_State(){};
     FSM_State_Config &config_get();
+    uint32_t enterTick;
+    uint32_t lastPollingTick;
 
   private:
     FSM_State_Config _config;
-    uint32_t _enter_tick;
-    uint32_t _last_polling_tick;
+
     FSM_State *_parent;
 #ifdef FSM_TRANSITION_PREFILTER
     struct FSM_Transition *_transitions[FSM_MAX_TRANSITIONS_COUNT_PRE_STATE];
-    uint8_t _transition_count;
+    uint8_t _transitionCount;
 #endif
 
     Result _init(FSM &fsm);
@@ -77,20 +77,20 @@ class FSM_State
     void exit(FSM &fsm, FSM_State *toState);
     void do_exit(FSM &fsm);
     bool is_parent_of(FSM_State *state);
-
     bool transit_check(FSM &fsm);
 };
 
 struct FSM_Transition_Config
 {
     const char *name;
+    uint8_t from;
+    uint8_t to;
     FSM_TRANSITION_MODE mode;
     union {
         EventFlag events;
         uint32_t timeout;
-    } mode_parameters;
-    uint8_t from;
-    uint8_t to;
+    };
+
     FSM_Guard guard;
     FSM_Action action;
 };
@@ -133,19 +133,20 @@ class FSM
 
     void update_inc(uint32_t tickInc);
 
+  public:
+    void *userData;
+    uint32_t lastUpdateTick;
+    uint32_t currentTick;
+
   private:
     const char *_name;
     EventGroup _events;
     FSM_State (&_states)[];
     uint8_t _stateCount;
     FSM_Transition (&_transitions)[];
-    uint8_t transitionCount;
+    uint8_t _transitionCount;
 
     FSM_State *_currentState;
-    // uint32_t current_state_enter_tick;
-    uint32_t _lastUpdateTick;
-    uint32_t _currentTick;
-    void *_userData;
 
     FSM_State *_find_state_by_no(uint8_t stateNo);
     void _transition_check(FSM_State &state);

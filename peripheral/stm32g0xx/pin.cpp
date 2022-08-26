@@ -1,5 +1,5 @@
 #include "pin.hpp"
-#include "stm32f1xx_ll_gpio.h"
+#include "stm32g0xx_ll_gpio.h"
 
 namespace ww::peripheral
 {

@@ -2,16 +2,20 @@
 #define __WWBASE_FSM_EVENTGROUP_HPP__
 
 #include "stdint.h"
-namespace ww::fsm {
+namespace ww::fsm
+{
 
-struct EventFlag {
-    uint32_t value;
+struct EventFlag
+{
     uint32_t mask;
+    uint32_t value;
 };
 
-class EventGroup {
+class EventGroup
+{
   public:
-    EventGroup(uint32_t eventsClearMask): _eventsClearMask(eventsClearMask){};;
+    EventGroup(uint32_t eventsClearMask) : _eventsClearMask(eventsClearMask){};
+    ;
     bool check(EventFlag &eventFlags);
     void set(uint32_t events);
     void reset(uint32_t events);
