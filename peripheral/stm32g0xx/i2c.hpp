@@ -5,6 +5,10 @@
 #include "pin.hpp"
 #include "stm32g0xx_hal.h"
 
+#ifndef HAL_I2C_MODULE_ENABLED
+#define I2C_HandleTypeDef uint32_t
+#endif // HAL_I2C_MODULE_ENABLED
+
 namespace ww::peripheral
 {
 union I2cMasterConfig {

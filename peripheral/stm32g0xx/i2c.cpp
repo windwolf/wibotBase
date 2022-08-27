@@ -2,6 +2,8 @@
 #include "misc.hpp"
 #include "os.hpp"
 
+#ifdef HAL_I2C_MODULE_ENABLED
+
 namespace ww::peripheral
 {
 
@@ -174,3 +176,5 @@ void I2cMaster::_on_error_callback(I2C_HandleTypeDef *instance)
 };
 
 } // namespace ww::peripheral
+
+#endif
