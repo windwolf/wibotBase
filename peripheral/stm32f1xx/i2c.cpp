@@ -11,8 +11,8 @@ namespace ww::peripheral
 
 void I2cMaster::_start()
 {
-    _scl.mode_set(PinMode_Output);
     _sda.mode_set(PinMode_Output);
+    _scl.mode_set(PinMode_Output);
     SDA_SET();
     SCL_SET();
     Misc::us_delay(4);
