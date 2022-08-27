@@ -46,6 +46,17 @@ if(${USE_RTT_PRINT})
     process_src_dir(${CMAKE_CURRENT_LIST_DIR}/rtt ${PROJECT_NAME})
 endif()
 
+if(NOT DEFINED USE_UART_PRINT)
+    message(STATUS "USE_UART_PRINT: not set, use default value : OFF")
+    set(USE_UART_PRINT OFF)
+else()
+    message(STATUS "USE_UART_PRINT: ${USE_UART_PRINT}")
+endif()
+
+if(${USE_UART_PRINT})
+    target_compile_definitions(${PROJECT_NAME} PUBLIC -DUSE_UART_PRINT)
+endif()
+
 if(NOT DEFINED ENABLE_FSM_TRANSITION_PREFILTER)
     message(STATUS "ENABLE_FSM_TRANSITION_PREFILTER: not set, use default value : ON")
     set(ENABLE_FSM_TRANSITION_PREFILTER ON)
