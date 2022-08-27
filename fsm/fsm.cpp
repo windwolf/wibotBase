@@ -36,8 +36,8 @@ void FSM_State::poll(FSM &fsm)
     while (sta != NULL)
     {
         sta->do_poll(fsm);
+        sta = sta->_parent;
     }
-    sta = sta->_parent;
 };
 
 void FSM_State::do_poll(FSM &fsm)
