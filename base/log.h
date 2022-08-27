@@ -126,9 +126,10 @@ extern "C"
 #define LOG_D_INTERVAL(INTERVAL, FMT, ...)
 #endif
 
+    void log_init();
+
 #ifdef __cplusplus
 }
 #endif
 
-void log_init();
 #endif // ___LOG_H__

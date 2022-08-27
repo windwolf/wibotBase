@@ -1,5 +1,6 @@
 #include "log.h"
 #include "SEGGER_RTT.h"
+
 #ifdef USE_RTT_PRINT
 void log_init()
 {
