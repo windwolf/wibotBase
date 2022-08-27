@@ -4,6 +4,10 @@
 #include "peripheral.hpp"
 #include "stm32g0xx_hal.h"
 
+#ifndef HAL_UART_MODULE_ENABLED
+#define UART_HandleTypeDef uint32_t
+#endif // HAL_UART_MODULE_ENABLED
+
 namespace ww::peripheral
 {
 union UARTConfig {

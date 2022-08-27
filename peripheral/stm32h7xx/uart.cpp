@@ -3,6 +3,8 @@
 #include "stm32h7xx_ll_dma.h"
 #include "stm32h7xx_ll_usart.h"
 
+#ifdef HAL_UART_MODULE_ENABLED
+
 namespace ww::peripheral
 {
 
@@ -232,3 +234,5 @@ void uart_send_byte(const char *data, uint16_t len)
         LL_USART_TransmitData8(USART1, (uint8_t)*data++);
     }
 }
+
+#endif // HAL_UART_MODULE_ENABLED
