@@ -30,11 +30,11 @@ Result I2cMaster::deinit()
 Result I2cMaster::read(uint32_t address, void *data, uint32_t size,
                        WaitHandler &waitHandler)
 {
-
     if (_config.dataWidth > DATAWIDTH_16)
     {
         return Result_NotSupport;
     }
+    this->_waitHandler = &waitHandler;
     if (_config.useTxDma && (size > _config.txDmaThreshold))
     {
         _status.isWriteDmaEnabled = 1;
@@ -62,6 +62,11 @@ Result I2cMaster::write(uint32_t address, void *data, uint32_t size,
     {
         return Result_NotSupport;
     }
+    if (this->_waitHandler != nullptr)
+    {
+        return Result_Busy;
+    }
+    this->_waitHandler = &waitHandler;
     if (_config.useTxDma && (size > _config.txDmaThreshold))
     {
         _status.isWriteDmaEnabled = 1;
@@ -88,6 +93,7 @@ Result I2cMaster::read(void *data, uint32_t size, WaitHandler &waitHandler)
     {
         return Result_NotSupport;
     }
+    this->_waitHandler = &waitHandler;
     if (_config.useRxDma && (size > _config.rxDmaThreshold))
     {
         _status.isReadDmaEnabled = 1;
@@ -109,6 +115,7 @@ Result I2cMaster::write(void *data, uint32_t size, WaitHandler &waitHandler)
     {
         return Result_NotSupport;
     }
+    this->_waitHandler = &waitHandler;
     if (_config.useTxDma && (size > _config.txDmaThreshold))
     {
         _status.isWriteDmaEnabled = 1;
@@ -128,41 +135,41 @@ Result I2cMaster::write(void *data, uint32_t size, WaitHandler &waitHandler)
 
 void I2cMaster::_on_read_complete_callback(I2C_HandleTypeDef *instance)
 {
-    I2cMaster *i2c =
+    I2cMaster *perip =
         (I2cMaster *)Peripherals::peripheral_get_by_instance(instance);
-    auto wh = i2c->_rxWaitHandler;
+    auto wh = perip->_waitHandler;
     if (wh != nullptr)
     {
-        i2c->_rxWaitHandler = nullptr;
-        wh->done_set();
+        perip->_waitHandler = nullptr;
+        wh->done_set(perip);
     }
 };
 void I2cMaster::_on_write_complete_callback(I2C_HandleTypeDef *instance)
 {
-    I2cMaster *i2c =
+    I2cMaster *perip =
         (I2cMaster *)Peripherals::peripheral_get_by_instance(instance);
-    auto wh = i2c->_txWaitHandler;
+    auto wh = perip->_waitHandler;
     if (wh != nullptr)
     {
-        i2c->_txWaitHandler = nullptr;
-        wh->done_set();
+        perip->_waitHandler = nullptr;
+        wh->done_set(perip);
     }
 };
 void I2cMaster::_on_error_callback(I2C_HandleTypeDef *instance)
 {
-    I2cMaster *i2c =
+    I2cMaster *perip =
         (I2cMaster *)Peripherals::peripheral_get_by_instance(instance);
-    auto wh = i2c->_txWaitHandler;
+    auto wh = perip->_waitHandler;
     if (wh != nullptr)
     {
-        i2c->_txWaitHandler = nullptr;
-        wh->done_set();
+        perip->_waitHandler = nullptr;
+        wh->done_set(perip);
     }
-    wh = i2c->_rxWaitHandler;
+    wh = perip->_waitHandler;
     if (wh != nullptr)
     {
-        i2c->_rxWaitHandler = nullptr;
-        wh->done_set();
+        perip->_waitHandler = nullptr;
+        wh->done_set(perip);
     }
 };
 

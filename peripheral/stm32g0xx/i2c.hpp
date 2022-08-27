@@ -47,8 +47,7 @@ class I2cMaster
         };
         uint32_t value;
     } _status;
-    WaitHandler *_txWaitHandler;
-    WaitHandler *_rxWaitHandler;
+    WaitHandler *_waitHandler;
     static void _on_read_complete_callback(I2C_HandleTypeDef *instance);
     static void _on_write_complete_callback(I2C_HandleTypeDef *instance);
     static void _on_error_callback(I2C_HandleTypeDef *instance);

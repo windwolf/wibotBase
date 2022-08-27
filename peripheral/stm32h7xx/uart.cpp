@@ -14,7 +14,7 @@ void UART::_on_write_complete_callback(UART_HandleTypeDef *instance)
     if (wh != nullptr)
     {
         perip->_writeWaitHandler = nullptr;
-        wh->done_set();
+        wh->done_set(perip);
     }
 };
 
@@ -31,7 +31,7 @@ void UART::_on_read_complete_callback(UART_HandleTypeDef *instance)
     if (wh != nullptr)
     {
         perip->_readWaitHandler = nullptr;
-        wh->done_set();
+        wh->done_set(perip);
     }
 };
 
@@ -49,8 +49,8 @@ void UART::_on_circular_data_received_callback(UART_HandleTypeDef *instance,
     if (wh != nullptr)
     {
         wh->set_value((void *)(uint32_t)pos);
-        wh->done_set();
-        wh->reset(perip);
+        wh->done_set(perip);
+        wh->reset();
     }
 };
 
@@ -67,14 +67,14 @@ void UART::_on_error_callback(UART_HandleTypeDef *instance)
     {
         perip->_readWaitHandler = nullptr;
         wh->set_value((void *)instance->ErrorCode);
-        wh->error_set();
+        wh->error_set(perip);
     }
     wh = perip->_writeWaitHandler;
     if (wh != nullptr)
     {
         perip->_writeWaitHandler = nullptr;
         wh->set_value((void *)instance->ErrorCode);
-        wh->error_set();
+        wh->error_set(perip);
     }
 };
 
@@ -112,7 +112,6 @@ Result UART::read(void *data, uint32_t size, WaitHandler &waitHandler)
         return Result_Busy;
     }
 
-    rst = waitHandler.reset(this);
     if (rst != Result_OK)
     {
         return Result_Busy;
@@ -148,7 +147,6 @@ Result UART::write(void *data, uint32_t size, WaitHandler &waitHandler)
         return Result_Busy;
     }
 
-    rst = waitHandler.reset(this);
     if (rst != Result_OK)
     {
         return Result_Busy;
@@ -188,7 +186,6 @@ Result UART::start(uint8_t *data, uint32_t size, WaitHandler &waitHandler)
     {
         return Result_Busy;
     }
-    rst = waitHandler.reset(this);
     if (rst != Result_OK)
     {
         return Result_Busy;
@@ -215,7 +212,7 @@ Result UART::stop()
     if (wh != nullptr)
     {
         _readWaitHandler = nullptr;
-        wh->done_set();
+        wh->done_set(this);
     }
     return rst;
 };

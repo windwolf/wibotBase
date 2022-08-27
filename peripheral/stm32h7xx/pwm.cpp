@@ -1,5 +1,5 @@
 #include "pwm.hpp"
-#include "stm32f1xx_ll_tim.h"
+#include "stm32h7xx_ll_tim.h"
 
 namespace ww::peripheral
 {

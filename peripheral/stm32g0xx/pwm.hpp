@@ -2,7 +2,8 @@
 #define __WWDEVICE_PERIPHERAL_TIM_HPP__
 
 #include "base.hpp"
-#include "stm32f1xx_hal.h"
+#include "stm32g0xx_hal.h"
+#include "stm32g0xx_ll_tim.h"
 
 namespace ww::peripheral
 {

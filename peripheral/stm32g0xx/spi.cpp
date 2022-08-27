@@ -15,42 +15,42 @@ struct SizeInfo
 
 void Spi::_on_write_complete_callback(SPI_HandleTypeDef *instance)
 {
-    Spi *spi = (Spi *)Peripherals::peripheral_get_by_instance(instance);
-    auto wh = spi->_writeWaitHandler;
+    Spi *perip = (Spi *)Peripherals::peripheral_get_by_instance(instance);
+    auto wh = perip->_writeWaitHandler;
     if (wh != nullptr)
     {
-        spi->_writeWaitHandler = nullptr;
-        wh->done_set();
+        perip->_writeWaitHandler = nullptr;
+        wh->done_set(perip);
     }
 };
 
 void Spi::_on_read_complete_callback(SPI_HandleTypeDef *instance)
 {
-    Spi *spi = (Spi *)Peripherals::peripheral_get_by_instance(instance);
-    auto wh = spi->_readWaitHandler;
+    Spi *perip = (Spi *)Peripherals::peripheral_get_by_instance(instance);
+    auto wh = perip->_readWaitHandler;
     if (wh != nullptr)
     {
-        spi->_readWaitHandler = nullptr;
-        wh->done_set();
+        perip->_readWaitHandler = nullptr;
+        wh->done_set(perip);
     }
 };
 
 void Spi::_on_error_callback(SPI_HandleTypeDef *instance)
 {
-    Spi *spi = (Spi *)Peripherals::peripheral_get_by_instance(instance);
-    auto wh = spi->_readWaitHandler;
+    Spi *perip = (Spi *)Peripherals::peripheral_get_by_instance(instance);
+    auto wh = perip->_readWaitHandler;
     if (wh != nullptr)
     {
-        spi->_readWaitHandler = nullptr;
+        perip->_readWaitHandler = nullptr;
         wh->set_value((void *)instance->ErrorCode);
-        wh->error_set();
+        wh->error_set(perip);
     }
-    wh = spi->_writeWaitHandler;
+    wh = perip->_writeWaitHandler;
     if (wh != nullptr)
     {
-        spi->_writeWaitHandler = nullptr;
+        perip->_writeWaitHandler = nullptr;
         wh->set_value((void *)instance->ErrorCode);
-        wh->error_set();
+        wh->error_set(perip);
     }
 };
 
@@ -180,7 +180,6 @@ Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
     {
         return Result_Busy;
     }
-    rst = waitHandler.reset(this);
     if (rst != Result_OK)
     {
         return Result_Busy;
@@ -213,7 +212,6 @@ Result Spi::write(void *data, uint32_t size, WaitHandler &waitHandler)
     {
         return Result_Busy;
     }
-    rst = waitHandler.reset(this);
     if (rst != Result_OK)
     {
         return Result_Busy;
