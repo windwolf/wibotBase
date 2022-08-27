@@ -4,6 +4,10 @@
 #include "base.hpp"
 #include "stm32h7xx_hal.h"
 
+#ifndef HAL_TIM_MODULE_ENABLED
+#define TIM_HandleTypeDef uint32_t
+#endif // HAL_TIM_MODULE_ENABLED
+
 namespace ww::peripheral
 {
 

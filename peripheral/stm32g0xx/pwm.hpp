@@ -5,6 +5,10 @@
 #include "stm32g0xx_hal.h"
 #include "stm32g0xx_ll_tim.h"
 
+#ifndef HAL_TIM_MODULE_ENABLED
+#define TIM_HandleTypeDef uint32_t
+#endif // HAL_TIM_MODULE_ENABLED
+
 namespace ww::peripheral
 {
 
