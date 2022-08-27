@@ -7,6 +7,10 @@
 #include "stm32f1xx_hal.h"
 #include "wait_handler.hpp"
 
+#ifndef HAL_SPI_MODULE_ENABLED
+#define SPI_HandleTypeDef uint32_t
+#endif // HAL_SPI_MODULE_ENABLED
+
 namespace ww::peripheral
 {
 union SpiConfig {

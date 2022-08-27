@@ -39,22 +39,24 @@ extern "C"
 
 #include "stdio.h"
 #include "string.h"
-#define LOG(MODULE, LEVEL, COLOR, FMT, ...) printf(COLOR "[" LEVEL "] [" MODULE "] " FMT "\r\n", ##__VA_ARGS__)
+#define LOG(MODULE, LEVEL, COLOR, FMT, ...)                                    \
+    printf(COLOR "[" LEVEL "] [" MODULE "] " FMT "\r\n", ##__VA_ARGS__)
 
 #if (LOG_LEVEL__ >= LOG_LEVEL_ERROR)
-#define LOG_E(FMT, ...) LOG(LOG_MODULE__, "E", LOG_CTRL_TEXT_BRIGHT_RED, FMT, ##__VA_ARGS__)
-#define LOG_E_INTERVAL(INTERVAL, FMT, ...) \
-    {                                      \
-        static uint32_t _log_count_ = 0;   \
-        if (_log_count_ == 0)              \
-        {                                  \
-            LOG_E(FMT, ##__VA_ARGS__);     \
-        }                                  \
-        _log_count_++;                     \
-        if (_log_count_ >= INTERVAL)       \
-        {                                  \
-            _log_count_ = 0;               \
-        }                                  \
+#define LOG_E(FMT, ...)                                                        \
+    LOG(LOG_MODULE__, "E", LOG_CTRL_TEXT_BRIGHT_RED, FMT, ##__VA_ARGS__)
+#define LOG_E_INTERVAL(INTERVAL, FMT, ...)                                     \
+    {                                                                          \
+        static uint32_t _log_count_ = 0;                                       \
+        if (_log_count_ == 0)                                                  \
+        {                                                                      \
+            LOG_E(FMT, ##__VA_ARGS__);                                         \
+        }                                                                      \
+        _log_count_++;                                                         \
+        if (_log_count_ >= INTERVAL)                                           \
+        {                                                                      \
+            _log_count_ = 0;                                                   \
+        }                                                                      \
     }
 #else
 #define LOG_E(FMT, ...)
@@ -62,19 +64,20 @@ extern "C"
 #endif
 
 #if (LOG_LEVEL__ >= LOG_LEVEL_WARNING)
-#define LOG_W(FMT, ...) LOG(LOG_MODULE__, "W", LOG_CTRL_TEXT_BRIGHT_YELLOW, FMT, ##__VA_ARGS__)
-#define LOG_W_INTERVAL(INTERVAL, FMT, ...) \
-    {                                      \
-        static uint32_t _log_count_ = 0;   \
-        if (_log_count_ == 0)              \
-        {                                  \
-            LOG_W(FMT, ##__VA_ARGS__);     \
-        }                                  \
-        _log_count_++;                     \
-        if (_log_count_ >= INTERVAL)       \
-        {                                  \
-            _log_count_ = 0;               \
-        }                                  \
+#define LOG_W(FMT, ...)                                                        \
+    LOG(LOG_MODULE__, "W", LOG_CTRL_TEXT_BRIGHT_YELLOW, FMT, ##__VA_ARGS__)
+#define LOG_W_INTERVAL(INTERVAL, FMT, ...)                                     \
+    {                                                                          \
+        static uint32_t _log_count_ = 0;                                       \
+        if (_log_count_ == 0)                                                  \
+        {                                                                      \
+            LOG_W(FMT, ##__VA_ARGS__);                                         \
+        }                                                                      \
+        _log_count_++;                                                         \
+        if (_log_count_ >= INTERVAL)                                           \
+        {                                                                      \
+            _log_count_ = 0;                                                   \
+        }                                                                      \
     }
 #else
 #define LOG_W(FMT, ...)
@@ -82,19 +85,20 @@ extern "C"
 #endif
 
 #if (LOG_LEVEL__ >= LOG_LEVEL_INFO)
-#define LOG_I(FMT, ...) LOG(LOG_MODULE__, "I", LOG_CTRL_TEXT_BRIGHT_WHITE, FMT, ##__VA_ARGS__)
-#define LOG_I_INTERVAL(INTERVAL, FMT, ...) \
-    {                                      \
-        static uint32_t _log_count_ = 0;   \
-        if (_log_count_ == 0)              \
-        {                                  \
-            LOG_I(FMT, ##__VA_ARGS__);     \
-        }                                  \
-        _log_count_++;                     \
-        if (_log_count_ >= INTERVAL)       \
-        {                                  \
-            _log_count_ = 0;               \
-        }                                  \
+#define LOG_I(FMT, ...)                                                        \
+    LOG(LOG_MODULE__, "I", LOG_CTRL_TEXT_BRIGHT_WHITE, FMT, ##__VA_ARGS__)
+#define LOG_I_INTERVAL(INTERVAL, FMT, ...)                                     \
+    {                                                                          \
+        static uint32_t _log_count_ = 0;                                       \
+        if (_log_count_ == 0)                                                  \
+        {                                                                      \
+            LOG_I(FMT, ##__VA_ARGS__);                                         \
+        }                                                                      \
+        _log_count_++;                                                         \
+        if (_log_count_ >= INTERVAL)                                           \
+        {                                                                      \
+            _log_count_ = 0;                                                   \
+        }                                                                      \
     }
 #else
 #define LOG_I(FMT, ...)
@@ -102,19 +106,20 @@ extern "C"
 #endif
 
 #if (LOG_LEVEL__ >= LOG_LEVEL_DEBUG)
-#define LOG_D(FMT, ...) LOG(LOG_MODULE__, "D", LOG_CTRL_TEXT_BRIGHT_MAGENTA, FMT, ##__VA_ARGS__)
-#define LOG_D_INTERVAL(INTERVAL, FMT, ...) \
-    {                                      \
-        static uint32_t _log_count_ = 0;   \
-        if (_log_count_ == 0)              \
-        {                                  \
-            LOG_D(FMT, ##__VA_ARGS__);     \
-        }                                  \
-        _log_count_++;                     \
-        if (_log_count_ >= INTERVAL)       \
-        {                                  \
-            _log_count_ = 0;               \
-        }                                  \
+#define LOG_D(FMT, ...)                                                        \
+    LOG(LOG_MODULE__, "D", LOG_CTRL_TEXT_BRIGHT_MAGENTA, FMT, ##__VA_ARGS__)
+#define LOG_D_INTERVAL(INTERVAL, FMT, ...)                                     \
+    {                                                                          \
+        static uint32_t _log_count_ = 0;                                       \
+        if (_log_count_ == 0)                                                  \
+        {                                                                      \
+            LOG_D(FMT, ##__VA_ARGS__);                                         \
+        }                                                                      \
+        _log_count_++;                                                         \
+        if (_log_count_ >= INTERVAL)                                           \
+        {                                                                      \
+            _log_count_ = 0;                                                   \
+        }                                                                      \
     }
 #else
 #define LOG_D(FMT, ...)
@@ -125,4 +130,5 @@ extern "C"
 }
 #endif
 
+void log_init();
 #endif // ___LOG_H__

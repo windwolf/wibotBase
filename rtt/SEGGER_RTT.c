@@ -2094,3 +2094,9 @@ unsigned SEGGER_RTT_GetBytesInBuffer(unsigned BufferIndex) {
 }
 
 /*************************** End of file ****************************/
+
+
+void log_init()
+{
+    SEGGER_RTT_Init();
+}

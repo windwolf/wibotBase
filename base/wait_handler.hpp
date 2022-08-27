@@ -23,12 +23,12 @@ class WaitHandler
     void *get_value();
     void *get_sender();
 
-    virtual Result reset(void *sender) = 0;
+    virtual Result reset() = 0;
     virtual bool is_busy() = 0;
     Result wait();
     virtual Result wait(uint32_t timeout) = 0;
-    virtual void done_set() = 0;
-    virtual void error_set() = 0;
+    virtual void done_set(void *sender) = 0;
+    virtual void error_set(void *sender) = 0;
 
   protected:
     void *_sender;
@@ -45,22 +45,20 @@ typedef void (*Callback)(void *sender, void *event, void *receiver);
 class CallbackWaitHandler : public WaitHandler
 {
   public:
-    CallbackWaitHandler(void *receiver)
-        : _receiver(receiver){};
+    CallbackWaitHandler(void *receiver) : _receiver(receiver){};
 
-    CallbackWaitHandler(void *receiver, Callback onDone,
-                                             Callback onError)
+    CallbackWaitHandler(void *receiver, Callback onDone, Callback onError)
         : _receiver(receiver), _onDone(onDone), _onError(onError){};
 
     void done_callback_set(Callback onDone);
     void error_callback_set(Callback onError);
-    virtual Result reset(void *sender);
+    virtual Result reset();
     virtual bool is_busy();
 
     virtual Result wait(uint32_t timeout);
 
-    virtual void done_set();
-    virtual void error_set();
+    virtual void done_set(void *sender);
+    virtual void error_set(void *sender);
 
   private:
     void *_receiver;
@@ -81,13 +79,13 @@ class PollingWaitHandler : public WaitHandler
   public:
     PollingWaitHandler(){};
 
-    virtual Result reset(void *sender);
+    virtual Result reset();
     virtual bool is_busy();
 
     virtual Result wait(uint32_t timeout);
 
-    virtual void done_set();
-    virtual void error_set();
+    virtual void done_set(void *sender);
+    virtual void error_set(void *sender);
 
   private:
     union _status {
@@ -109,11 +107,11 @@ class EventGroupWaitHandler : public WaitHandler
                           uint32_t errorFlag);
     ~EventGroupWaitHandler();
 
-    virtual Result reset(void *sender);
+    virtual Result reset();
     virtual bool is_busy();
     virtual Result wait(uint32_t timeout);
-    virtual void done_set();
-    virtual void error_set();
+    virtual void done_set(void *sender);
+    virtual void error_set(void *sender);
 
   private:
     EventGroup &_eventGroup;

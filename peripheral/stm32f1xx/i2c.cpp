@@ -4,15 +4,15 @@
 
 namespace ww::peripheral
 {
-#define SCL_SET() _scl.write(Pin::Status::STATUS_SET)
-#define SCL_RESET() _scl.write(Pin::Status::STATUS_RESET)
-#define SDA_SET() _sda.write(Pin::Status::STATUS_SET)
-#define SDA_RESET() _sda.write(Pin::Status::STATUS_RESET)
+#define SCL_SET() _scl.write(PinStatus_Set)
+#define SCL_RESET() _scl.write(PinStatus_Reset)
+#define SDA_SET() _sda.write(PinStatus_Set)
+#define SDA_RESET() _sda.write(PinStatus_Reset)
 
 void I2cMaster::_start()
 {
-    _scl.mode_set(Pin::Mode::MODE_OUTPUT);
-    _sda.mode_set(Pin::Mode::MODE_OUTPUT);
+    _scl.mode_set(PinMode_Output);
+    _sda.mode_set(PinMode_Output);
     SDA_SET();
     SCL_SET();
     Misc::us_delay(4);
@@ -40,15 +40,15 @@ bool I2cMaster::_ack_wait(uint32_t timeout)
 
     SCL_RESET();
     Misc::us_delay(2);
-    _sda.mode_set(Pin::Mode::MODE_INPUT);
+    _sda.mode_set(PinMode_Input);
     Misc::us_delay(2);
     SCL_SET();
     Misc::us_delay(4);
     for (uint8_t i = 20; i > 0; i--)
     {
-        Pin::Status sta;
+        PinStatus sta;
         _sda.read(sta);
-        if (sta == Pin::Status::STATUS_RESET)
+        if (sta == PinStatus_Reset)
         {
             ack = true;
             break;
@@ -58,7 +58,7 @@ bool I2cMaster::_ack_wait(uint32_t timeout)
             break;
         }
     }
-    _sda.mode_set(Pin::Mode::MODE_OUTPUT);
+    _sda.mode_set(PinMode_Output);
     return ack;
 };
 
@@ -107,7 +107,6 @@ Result I2cMaster::write(uint32_t address, void *data, uint32_t size,
                         WaitHandler &waitHandler)
 {
     Result rst = Result_OK;
-    rst = waitHandler.reset(this);
     if (rst != Result_OK)
     {
         return rst;
@@ -162,12 +161,12 @@ Result I2cMaster::write(uint32_t address, void *data, uint32_t size,
 
     if (rst == Result_OK)
     {
-        waitHandler.done_set();
+        waitHandler.done_set(this);
     }
     else
     {
         waitHandler.set_value((void *)rst);
-        waitHandler.error_set();
+        waitHandler.error_set(this);
     }
     return Result_OK;
 };
@@ -178,7 +177,6 @@ Result I2cMaster::read(void *data, uint32_t size, WaitHandler &waitHandler)
 Result I2cMaster::write(void *data, uint32_t size, WaitHandler &waitHandler)
 {
     Result rst = Result_OK;
-    rst = waitHandler.reset(this);
     if (rst != Result_OK)
     {
         return rst;
@@ -205,12 +203,12 @@ Result I2cMaster::write(void *data, uint32_t size, WaitHandler &waitHandler)
 
     if (rst == Result_OK)
     {
-        waitHandler.done_set();
+        waitHandler.done_set(this);
     }
     else
     {
         waitHandler.set_value((void *)rst);
-        waitHandler.error_set();
+        waitHandler.error_set(this);
     }
     return Result_OK;
 };

@@ -6,6 +6,7 @@
 #include "pin.hpp"
 #include "spi.hpp"
 #include "uart.hpp"
+#include "pwm.hpp"
 
 #include "stm32h7xx_hal.h"
 

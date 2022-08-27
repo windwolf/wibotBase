@@ -33,13 +33,12 @@ void CallbackWaitHandler::error_callback_set(Callback onError)
 {
     _onError = onError;
 };
-Result CallbackWaitHandler::reset(void *sender)
+Result CallbackWaitHandler::reset()
 {
     if (is_busy())
     {
         return Result_Busy;
     }
-    _sender = sender;
     _status.value = 0;
     return Result_OK;
 };
@@ -49,29 +48,57 @@ bool CallbackWaitHandler::is_busy()
 };
 Result CallbackWaitHandler::wait(uint32_t timeout)
 {
-    if (_status.is_done)
+    if (timeout == TIMEOUT_NOWAIT)
     {
-        return Result_OK;
-    }
-    else if (_status.is_error)
-    {
-        return Result_GeneralError;
+        if (_status.is_done)
+        {
+            return Result_OK;
+        }
+        else if (_status.is_error)
+        {
+            return Result_GeneralError;
+        }
+        else
+        {
+            return Result_Timeout;
+        }
     }
     else
     {
-        return Result_Timeout;
+        uint32_t start = Utils::tick_get();
+        while (!_status.is_done && !_status.is_error)
+        {
+            if (Utils::tick_diff(start) > timeout)
+            {
+                return Result_Timeout;
+            }
+        }
+        if (_status.is_done)
+        {
+            return Result_OK;
+        }
+        else if (_status.is_error)
+        {
+            return Result_GeneralError;
+        }
+        else
+        {
+            return Result_StatusReserved;
+        }
     }
 };
-void CallbackWaitHandler::done_set()
+void CallbackWaitHandler::done_set(void *sender)
 {
+    _sender = sender;
     _status.is_done = true;
     if (_onDone)
     {
         _onDone(_sender, _value, _receiver);
     }
 };
-void CallbackWaitHandler::error_set()
+void CallbackWaitHandler::error_set(void *sender)
 {
+    _sender = sender;
     _status.is_error = true;
     if (_onError)
     {
@@ -79,21 +106,20 @@ void CallbackWaitHandler::error_set()
     }
 };
 
-Result PollingWaitHandler::reset(void *sender)
+Result PollingWaitHandler::reset()
 {
     if (is_busy())
     {
         return Result_Busy;
     }
-    _sender = sender;
     _status.value = 0;
     return Result_OK;
 };
+
 bool PollingWaitHandler::is_busy()
 {
     return !_status.is_done && !_status.is_error;
 };
-
 Result PollingWaitHandler::wait(uint32_t timeout)
 {
     if (timeout == TIMEOUT_NOWAIT)
@@ -135,13 +161,14 @@ Result PollingWaitHandler::wait(uint32_t timeout)
         }
     }
 };
-
-void PollingWaitHandler::done_set()
+void PollingWaitHandler::done_set(void *sender)
 {
+    _sender = sender;
     _status.is_done = true;
 };
-void PollingWaitHandler::error_set()
+void PollingWaitHandler::error_set(void *sender)
 {
+    _sender = sender;
     _status.is_error = true;
 };
 
@@ -156,13 +183,12 @@ EventGroupWaitHandler::EventGroupWaitHandler(EventGroup &eventGroup,
 
 EventGroupWaitHandler ::~EventGroupWaitHandler(){};
 
-Result EventGroupWaitHandler::reset(void *sender)
+Result EventGroupWaitHandler::reset()
 {
     if (is_busy())
     {
         return Result_Busy;
     }
-    _sender = sender;
     _eventGroup.reset(_doneFlag | _errorFlag);
     return Result_OK;
 };
@@ -182,12 +208,14 @@ bool EventGroupWaitHandler::is_busy()
     }
 };
 
-void EventGroupWaitHandler::done_set()
+void EventGroupWaitHandler::done_set(void *sender)
 {
+    _sender = sender;
     _eventGroup.set(_doneFlag);
 };
-void EventGroupWaitHandler::error_set()
+void EventGroupWaitHandler::error_set(void *sender)
 {
+    _sender = sender;
     _eventGroup.set(_errorFlag);
 };
 Result EventGroupWaitHandler::wait(uint32_t timeout)
