@@ -3,6 +3,8 @@
 #include "stm32g0xx_ll_dma.h"
 #include "stm32g0xx_ll_spi.h"
 
+#ifdef HAL_SPI_MODULE_ENABLED
+
 namespace ww::peripheral
 {
 struct SizeInfo
@@ -349,19 +351,24 @@ void SpiWithPins::_on_write_complete_callback(SPI_HandleTypeDef *instance)
 void SpiWithPins::cs_set(bool isEnable)
 {
     if (_cs != NULL)
-        _cs->write(isEnable ? PinStatus::PinStatus_Set : PinStatus::PinStatus_Reset);
+        _cs->write(isEnable ? PinStatus::PinStatus_Set
+                            : PinStatus::PinStatus_Reset);
 };
 
 void SpiWithPins::dc_set(bool isData)
 {
     if (_dc != NULL)
-        _dc->write(isData ? PinStatus::PinStatus_Set : PinStatus::PinStatus_Reset);
+        _dc->write(isData ? PinStatus::PinStatus_Set
+                          : PinStatus::PinStatus_Reset);
 };
 
 void SpiWithPins::rw_set(bool isRead)
 {
     if (_rw != NULL)
-        _rw->write(isRead ? PinStatus::PinStatus_Set : PinStatus::PinStatus_Reset);
+        _rw->write(isRead ? PinStatus::PinStatus_Set
+                          : PinStatus::PinStatus_Reset);
 };
 
 }; // namespace ww::peripheral
+
+#endif

@@ -3,6 +3,8 @@
 #include "stm32h7xx_ll_dma.h"
 #include "stm32h7xx_ll_spi.h"
 
+#ifdef HAL_SPI_MODULE_ENABLED
+
 namespace ww::peripheral
 {
 struct SizeInfo
@@ -385,3 +387,5 @@ void SpiWithPins::rw_set(bool isRead)
 };
 
 }; // namespace ww::peripheral
+
+#endif
