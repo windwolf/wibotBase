@@ -40,7 +40,7 @@ Result Pin::toggle()
 Result Pin::mode_set(PinMode mode)
 {
     LL_GPIO_SetPinMode(&_port, this->_pinMask,
-                       (mode == PinMode_Output) ? LL_GPIO_MODE_INPUT
+                       (mode == PinMode_Input) ? LL_GPIO_MODE_INPUT
                                                 : LL_GPIO_MODE_OUTPUT);
     return Result_OK;
 };
