@@ -44,11 +44,10 @@ typedef uint8_t EventOptions;
 
 class EventGroup
 {
-
   public:
     EventGroup(const char *name);
     Result init();
-    Result deinit();
+    void deinit();
     Result set(uint32_t flags);
     Result reset(uint32_t flags);
     Result wait(uint32_t flags, uint32_t &actualFlags, EventOptions options,
@@ -56,6 +55,7 @@ class EventGroup
 
   private:
     EVENTGROUP_TYPEDEF _instance;
+    bool _initialized;
 };
 } // namespace ww::os
 

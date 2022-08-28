@@ -76,10 +76,9 @@ Result EventGroup::init()
     this->_instance = 0;
     return Result_OK;
 };
-Result EventGroup::deinit()
+void EventGroup::deinit()
 {
     this->_instance = 0;
-    return Result_OK;
 };
 
 Result EventGroup::set(uint32_t flags)

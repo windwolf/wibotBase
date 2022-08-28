@@ -49,12 +49,23 @@ EventGroup::EventGroup(const char *name) : _name(name){};
 
 Result EventGroup::init()
 {
+
+    if (_initialized)
+    {
+        return Result_OK;
+    }
     osEventFlagsAttr_t attr = {
         .name = _name,
         .cb_mem = &(this->_instance),
         .cb_size = sizeof(this->_instance),
     };
-    return (osEventFlagsNew(&attr) != NULL) ? Result_OK : Result_NoResource;
+    if ((Result rst = (osEventFlagsNew(&attr) != NULL)
+                          ? Result_OK
+                          : Result_NoResource) == Result_OK)
+    {
+        _initialized = true;
+    };
+    return rst;
 };
 Result EventGroup::deinit()
 {
