@@ -2,22 +2,22 @@
 
 namespace ww::fsm
 {
-bool EventGroup::check(EventFlag &eventFlags)
+bool FSM_EventGroup::check(FSM_EventFlag &eventFlags)
 {
     return (_events & eventFlags.mask) == (eventFlags.value & eventFlags.mask);
 };
-void EventGroup::set(uint32_t events)
+void FSM_EventGroup::set(uint32_t events)
 {
     _events |= events;
 };
-void EventGroup::reset(uint32_t events)
+void FSM_EventGroup::reset(uint32_t events)
 {
     _events &= ~events;
 };
-void EventGroup::update_begin(){
+void FSM_EventGroup::update_begin(){
 
 };
-void EventGroup::update_end()
+void FSM_EventGroup::update_end()
 {
     _events &= ~_eventsClearMask;
 };

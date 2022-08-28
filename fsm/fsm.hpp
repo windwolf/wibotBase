@@ -87,7 +87,7 @@ struct FSM_Transition_Config
     uint8_t to;
     FSM_TRANSITION_MODE mode;
     union {
-        EventFlag events;
+        FSM_EventFlag events;
         uint32_t timeout;
     };
 
@@ -140,7 +140,7 @@ class FSM
 
   private:
     const char *_name;
-    EventGroup _events;
+    FSM_EventGroup _events;
     FSM_State (&_states)[];
     uint8_t _stateCount;
     FSM_Transition (&_transitions)[];

@@ -271,10 +271,10 @@ void FSM::_transition_check(FSM_State &state)
         {
             FSM_Transition *transition = curSta->_transitions[i];
 #else
-        for (uint8_t i = 0; i < transitionCount; i++)
+        for (uint8_t i = 0; i < _transitionCount; i++)
         {
-            FSM_Transition_t *transition = &(_transitions[i]);
-            if (transition->config.from != curSta->config.state_no)
+            FSM_Transition *transition = &(_transitions[i]);
+            if (transition->_config.from != curSta->_config.stateNo)
             {
                 continue;
             }
@@ -295,10 +295,10 @@ void FSM::_transition_check(FSM_State &state)
         {
             FSM_Transition *transition = curSta->_transitions[i];
 #else
-        for (uint8_t i = 0; i < transitionCount; i++)
+        for (uint8_t i = 0; i < _transitionCount; i++)
         {
-            FSM_Transition *transition = &(transitions[i]);
-            if (transition->config.from != curSta->config.state_no)
+            FSM_Transition *transition = &(_transitions[i]);
+            if (transition->_config.from != curSta->_config.stateNo)
             {
                 continue;
             }

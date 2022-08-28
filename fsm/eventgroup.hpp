@@ -5,18 +5,19 @@
 namespace ww::fsm
 {
 
-struct EventFlag
+struct FSM_EventFlag
 {
     uint32_t mask;
     uint32_t value;
 };
 
-class EventGroup
+class FSM_EventGroup
 {
   public:
-    EventGroup(uint32_t eventsClearMask) : _eventsClearMask(eventsClearMask){};
+    FSM_EventGroup(uint32_t eventsClearMask)
+        : _eventsClearMask(eventsClearMask){};
     ;
-    bool check(EventFlag &eventFlags);
+    bool check(FSM_EventFlag &eventFlags);
     void set(uint32_t events);
     void reset(uint32_t events);
     void update_begin();
