@@ -174,14 +174,14 @@ void PollingWaitHandler::error_set(void *sender)
 
 using namespace ww::os;
 
-EventGroupWaitHandler::EventGroupWaitHandler(EventGroup &eventGroup,
-                                             uint32_t doneFlag,
-                                             uint32_t errorFlag)
-    : _eventGroup(eventGroup), _doneFlag(doneFlag), _errorFlag(errorFlag){
-
-                                                    };
-
-EventGroupWaitHandler ::~EventGroupWaitHandler(){};
+Result EventGroupWaitHandler::init()
+{
+    return _eventGroup.init();
+};
+void EventGroupWaitHandler::deinit()
+{
+    _eventGroup.deinit();
+};
 
 Result EventGroupWaitHandler::reset()
 {

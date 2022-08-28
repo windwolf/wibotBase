@@ -104,9 +104,11 @@ class EventGroupWaitHandler : public WaitHandler
 {
   public:
     EventGroupWaitHandler(EventGroup &eventGroup, uint32_t doneFlag,
-                          uint32_t errorFlag);
-    ~EventGroupWaitHandler();
+                          uint32_t errorFlag)
+        : _eventGroup(eventGroup), _doneFlag(doneFlag), _errorFlag(errorFlag){};
 
+    Result init();
+    void deinit();
     virtual Result reset();
     virtual bool is_busy();
     virtual Result wait(uint32_t timeout);
