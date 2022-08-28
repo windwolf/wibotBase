@@ -2,6 +2,9 @@
 #define ___BASE_HPP__
 
 #include "stdint.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
 
 #define ALIGN(n) __attribute__((aligned(n)))
 #define ALIGN32 __attribute__((aligned(32)))
@@ -43,6 +46,21 @@ enum DataWidth
 char *strtrim(char *str, char delimit);
 
 uint32_t fast_log2(uint32_t _val);
+
+// class Initializable
+// {
+//   public:
+//     Initializable() : _initialized(false)
+//     {
+//     }
+//     Result init();
+//     void deinit();
+
+//   protected:
+//     bool _initialized;
+//     virtual Result _init() = 0;
+//     virtual void _deinit() = 0;
+// };
 
 } // namespace ww
 
