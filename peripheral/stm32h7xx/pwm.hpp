@@ -3,7 +3,7 @@
 
 #include "base.hpp"
 #include "stm32h7xx_hal.h"
-
+#include "stm32g7xx_ll_tim.h"
 #ifndef HAL_TIM_MODULE_ENABLED
 #define TIM_HandleTypeDef uint32_t
 #endif // HAL_TIM_MODULE_ENABLED

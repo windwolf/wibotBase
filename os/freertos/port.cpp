@@ -29,7 +29,7 @@ Mutex::Mutex(const char *name) : _name(name)
     initErrorCode = (osMutexNew(&attr) != NULL) ? Result_OK : Result_NoResource;
 };
 
-void Mutex::~Mutex()
+Mutex::~Mutex()
 {
     osMutexDelete(&(this->_instance));
 };

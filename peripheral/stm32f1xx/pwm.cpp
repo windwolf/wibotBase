@@ -1,5 +1,6 @@
 #include "pwm.hpp"
 
+
 #ifdef HAL_TIM_MODULE_ENABLED
 
 namespace ww::peripheral
