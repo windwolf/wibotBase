@@ -80,7 +80,7 @@ UART::~UART()
     Peripherals::peripheral_unregister("uart", this);
 };
 
-UARTConfig &config_get()
+UARTConfig &UART::config_get()
 {
     return _config;
 };
