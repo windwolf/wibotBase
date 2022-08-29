@@ -34,26 +34,4 @@ uint32_t fast_log2(uint32_t _val)
     return ret;
 }
 
-// Result Initializable::init()
-// {
-//     if (_initialized)
-//     {
-//         return Result_OK;
-//     }
-//     auto rst = _init();
-//     if (rst == Result_OK)
-//     {
-//         _initialized = true;
-//     }
-//     return rst;
-// };
-// void Initializable::deinit()
-// {
-//     if (_initialized)
-//     {
-//         _deinit();
-//         _initialized = false;
-//     }
-// };
-
 }; // namespace ww

@@ -27,15 +27,12 @@ union PinConfig {
     uint32_t value;
 };
 
-class Pin
+class Pin : public Initializable
 {
   public:
-    Pin(GPIO_TypeDef &port, uint16_t pinMask)
-        : _port(port), _pinMask(pinMask){};
-    ~Pin(){};
+    Pin(GPIO_TypeDef &port, uint16_t pinMask);
+    ~Pin();
     PinConfig &config_get();
-    Result init();
-    Result deinit();
 
     Result read(PinStatus &value);
     Result write(PinStatus value);

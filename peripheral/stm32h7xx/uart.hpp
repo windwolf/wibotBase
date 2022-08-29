@@ -24,14 +24,12 @@ union UARTConfig {
     uint32_t value;
 };
 
-class UART
+class UART : public Initializable
 {
   public:
-    UART(UART_HandleTypeDef &handle) : _handle(handle){};
-    ~UART(){};
+    UART(UART_HandleTypeDef &handle);
+    ~UART();
     UARTConfig &config_get();
-    Result init();
-    Result deinit();
     Result read(void *data, uint32_t size, WaitHandler &waitHandler);
     Result write(void *data, uint32_t size, WaitHandler &waitHandler);
     Result start(uint8_t *data, uint32_t size, WaitHandler &waitHandler);
@@ -56,8 +54,7 @@ class UART
   protected:
     static void _on_read_complete_callback(UART_HandleTypeDef *handle);
     static void _on_write_complete_callback(UART_HandleTypeDef *handle);
-    static void _on_circular_data_received_callback(UART_HandleTypeDef *handle,
-                                                    uint16_t pos);
+    static void _on_circular_data_received_callback(UART_HandleTypeDef *handle, uint16_t pos);
     static void _on_error_callback(UART_HandleTypeDef *handle);
 };
 

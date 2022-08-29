@@ -27,14 +27,12 @@ union SpiConfig {
     uint32_t value;
 };
 
-class Spi
+class Spi : public Initializable
 {
   public:
-    Spi(SPI_HandleTypeDef &handle) : _handle(handle){};
-    ~Spi(){};
+    Spi(SPI_HandleTypeDef &handle);
+    ~Spi();
     SpiConfig &config_get();
-    Result init();
-    Result deinit();
 
     Result read(void *data, uint32_t size, WaitHandler &waitHandler);
     Result write(void *data, uint32_t size, WaitHandler &waitHandler);
@@ -75,17 +73,12 @@ union SpiWithPinsConfig {
 class SpiWithPins : public Spi
 {
   public:
-    SpiWithPins(SPI_HandleTypeDef &handle, Pin *cs, Pin *rw, Pin *dc)
-        : Spi(handle), _handle(handle), _cs(cs), _rw(rw), _dc(dc){};
-    ~SpiWithPins(){};
+    SpiWithPins(SPI_HandleTypeDef &handle, Pin *cs, Pin *rw, Pin *dc);
+    ~SpiWithPins();
 
     SpiWithPinsConfig &pinconfig_get();
-    Result init();
-    Result deinit();
-    Result read(bool isData, void *data, uint32_t size,
-                WaitHandler &waitHandler);
-    Result write(bool isData, void *data, uint32_t size,
-                 WaitHandler &waitHandler);
+    Result read(bool isData, void *data, uint32_t size, WaitHandler &waitHandler);
+    Result write(bool isData, void *data, uint32_t size, WaitHandler &waitHandler);
     Result session_begin();
     Result session_end();
 

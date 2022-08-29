@@ -32,8 +32,7 @@ void Spi::_on_read_complete_callback(SPI_HandleTypeDef *instance)
     auto wh = perip->_readWaitHandler;
     if (perip->_status.isRxDmaEnabled)
     {
-        SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data,
-                                     perip->_rxBuffer.size);
+        SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data, perip->_rxBuffer.size);
     }
     if (wh != nullptr)
     {
@@ -48,8 +47,7 @@ void Spi::_on_error_callback(SPI_HandleTypeDef *instance)
     auto wh = perip->_readWaitHandler;
     if (perip->_status.isRxDmaEnabled)
     {
-        SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data,
-                                     perip->_rxBuffer.size);
+        SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data, perip->_rxBuffer.size);
     }
     if (wh != nullptr)
     {
@@ -66,19 +64,17 @@ void Spi::_on_error_callback(SPI_HandleTypeDef *instance)
     }
 };
 
-static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option,
-                        uint32_t size, ww::peripheral::SizeInfo &sizeInfo)
+static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option, uint32_t size,
+                        ww::peripheral::SizeInfo &sizeInfo)
 {
     uint32_t stream_number_tx =
-        (((uint32_t)((uint32_t *)handle.hdmatx->Instance) & 0xFFU) - 0x08UL) /
-        0x014UL;
-    uint32_t dma_base_tx = (uint32_t)((uint32_t *)handle.hdmatx->Instance) -
-                           stream_number_tx * 0x014UL - 0x08UL;
+        (((uint32_t)((uint32_t *)handle.hdmatx->Instance) & 0xFFU) - 0x08UL) / 0x014UL;
+    uint32_t dma_base_tx =
+        (uint32_t)((uint32_t *)handle.hdmatx->Instance) - stream_number_tx * 0x014UL - 0x08UL;
     uint32_t stream_number_rx =
-        (((uint32_t)((uint32_t *)handle.hdmarx->Instance) & 0xFFU) - 0x08UL) /
-        0x014UL;
-    uint32_t dma_base_rx = (uint32_t)((uint32_t *)handle.hdmarx->Instance) -
-                           stream_number_rx * 0x014UL - 0x08UL;
+        (((uint32_t)((uint32_t *)handle.hdmarx->Instance) & 0xFFU) - 0x08UL) / 0x014UL;
+    uint32_t dma_base_rx =
+        (uint32_t)((uint32_t *)handle.hdmarx->Instance) - stream_number_rx * 0x014UL - 0x08UL;
     switch (option.dataWidth)
     {
     case DATAWIDTH_8:
@@ -88,14 +84,10 @@ static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option,
         handle.hdmarx->Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
         handle.hdmatx->Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
         handle.hdmarx->Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_tx, stream_number_tx,
-                             LL_DMA_MDATAALIGN_BYTE);
-        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_rx, stream_number_rx,
-                             LL_DMA_MDATAALIGN_BYTE);
-        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_tx, stream_number_tx,
-                             LL_DMA_PDATAALIGN_BYTE);
-        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_rx, stream_number_rx,
-                             LL_DMA_PDATAALIGN_BYTE);
+        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_tx, stream_number_tx, LL_DMA_MDATAALIGN_BYTE);
+        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_rx, stream_number_rx, LL_DMA_MDATAALIGN_BYTE);
+        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_tx, stream_number_tx, LL_DMA_PDATAALIGN_BYTE);
+        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_rx, stream_number_rx, LL_DMA_PDATAALIGN_BYTE);
         sizeInfo.sizeInBytes = size;
         sizeInfo.sizeInDMADataWidth = size;
         sizeInfo.sizeInSPIDataWidth = size;
@@ -126,14 +118,10 @@ static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option,
         handle->hdmarx->Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
         handle->hdmatx->Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
         handle->hdmarx->Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_tx, stream_number_tx,
-                             LL_DMA_MDATAALIGN_WORD);
-        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_rx, stream_number_rx,
-                             LL_DMA_MDATAALIGN_WORD);
-        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_tx, stream_number_tx,
-                             LL_DMA_PDATAALIGN_WORD);
-        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_rx, stream_number_rx,
-                             LL_DMA_PDATAALIGN_WORD);
+        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_tx, stream_number_tx, LL_DMA_MDATAALIGN_WORD);
+        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_rx, stream_number_rx, LL_DMA_MDATAALIGN_WORD);
+        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_tx, stream_number_tx, LL_DMA_PDATAALIGN_WORD);
+        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_rx, stream_number_rx, LL_DMA_PDATAALIGN_WORD);
 
         sizeInfo.sizeInBytes = size * 3;
         sizeInfo.sizeInDMADataWidth = size * 3;
@@ -146,14 +134,10 @@ static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option,
         handle->hdmarx->Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
         handle->hdmatx->Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
         handle->hdmarx->Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_tx, stream_number_tx,
-                             LL_DMA_MDATAALIGN_WORD);
-        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_rx, stream_number_rx,
-                             LL_DMA_MDATAALIGN_WORD);
-        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_tx, stream_number_tx,
-                             LL_DMA_PDATAALIGN_WORD);
-        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_rx, stream_number_rx,
-                             LL_DMA_PDATAALIGN_WORD);
+        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_tx, stream_number_tx, LL_DMA_MDATAALIGN_WORD);
+        LL_DMA_SetMemorySize((DMA_TypeDef *)dma_base_rx, stream_number_rx, LL_DMA_MDATAALIGN_WORD);
+        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_tx, stream_number_tx, LL_DMA_PDATAALIGN_WORD);
+        LL_DMA_SetPeriphSize((DMA_TypeDef *)dma_base_rx, stream_number_rx, LL_DMA_PDATAALIGN_WORD);
 
         sizeInfo.sizeInBytes = size << 2;
         sizeInfo.sizeInDMADataWidth = size << 2;
@@ -165,12 +149,7 @@ static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option,
     // return;
 };
 
-SpiConfig &Spi::config_get()
-{
-    return _config;
-}
-
-Result Spi::init()
+Spi::Spi(SPI_HandleTypeDef &handle) : _handle(handle)
 {
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_TX_COMPLETE_CB_ID,
                              &ww::peripheral::Spi::_on_write_complete_callback);
@@ -179,13 +158,17 @@ Result Spi::init()
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
                              &ww::peripheral::Spi::_on_error_callback);
     Peripherals::peripheral_register("spi", this, &_handle);
-    return Result_OK;
+    initErrorCode = Result_OK;
 }
-Result Spi::deinit()
+Spi::~Spi()
 {
     Peripherals::peripheral_unregister("spi", this);
-    return Result_OK;
 };
+
+SpiConfig &Spi::config_get()
+{
+    return _config;
+}
 
 Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
 {
@@ -211,14 +194,12 @@ Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
         this->_status.isRxDmaEnabled = 1;
         _rxBuffer.data = data;
         _rxBuffer.size = size * (_config.dataWidth - 1);
-        return (Result)HAL_SPI_Receive_DMA(&_handle, (uint8_t *)data,
-                                           sizeInfo.sizeInDMADataWidth);
+        return (Result)HAL_SPI_Receive_DMA(&_handle, (uint8_t *)data, sizeInfo.sizeInDMADataWidth);
     }
     else
     {
         this->_status.isRxDmaEnabled = 0;
-        return (Result)HAL_SPI_Receive_IT(&_handle, (uint8_t *)data,
-                                          sizeInfo.sizeInSPIDataWidth);
+        return (Result)HAL_SPI_Receive_IT(&_handle, (uint8_t *)data, sizeInfo.sizeInSPIDataWidth);
     }
 };
 Result Spi::write(void *data, uint32_t size, WaitHandler &waitHandler)
@@ -245,33 +226,27 @@ Result Spi::write(void *data, uint32_t size, WaitHandler &waitHandler)
         this->_status.isTxDmaEnabled = 1;
         _txBuffer.data = data;
         _txBuffer.size = size * (_config.dataWidth - 1);
-        SCB_CleanDCache_by_Addr((uint32_t *)data,
-                                size * (_config.dataWidth - 1));
-        return (Result)HAL_SPI_Transmit_DMA(&_handle,
-                                            static_cast<uint8_t *>(data),
+        SCB_CleanDCache_by_Addr((uint32_t *)data, size * (_config.dataWidth - 1));
+        return (Result)HAL_SPI_Transmit_DMA(&_handle, static_cast<uint8_t *>(data),
                                             sizeInfo.sizeInDMADataWidth);
     }
     else
     {
         this->_status.isTxDmaEnabled = 0;
-        return (Result)HAL_SPI_Transmit_IT(&_handle,
-                                           static_cast<uint8_t *>(data),
+        return (Result)HAL_SPI_Transmit_IT(&_handle, static_cast<uint8_t *>(data),
                                            sizeInfo.sizeInSPIDataWidth);
     }
 };
 
 // SpiWithPins--------------------
-// SpiConfig &SpiWithPins::config_get()
-// {
-//     return _innerInstance.config_get();
-// };
-SpiWithPinsConfig &SpiWithPins::pinconfig_get()
-{
-    return _config;
-};
 
-Result SpiWithPins::init()
+SpiWithPins::SpiWithPins(SPI_HandleTypeDef &handle, Pin *cs, Pin *rw, Pin *dc)
+    : Spi(handle), _handle(handle), _cs(cs), _rw(rw), _dc(dc)
 {
+    BASE_INIT_ERROR_CHECK()
+    PTR_INIT_ERROR_CHECK(_cs)
+    PTR_INIT_ERROR_CHECK(_rw)
+    PTR_INIT_ERROR_CHECK(_dc)
     if (_cs)
     {
         _cs->config_get().inverse = _config.csPinHighIsDisable;
@@ -284,26 +259,25 @@ Result SpiWithPins::init()
     {
         _dc->config_get().inverse = _config.rwPinHighIsWrite;
     }
-    HAL_SPI_RegisterCallback(
-        &_handle, HAL_SPI_TX_COMPLETE_CB_ID,
-        &ww::peripheral::SpiWithPins::_on_write_complete_callback);
-    HAL_SPI_RegisterCallback(
-        &_handle, HAL_SPI_RX_COMPLETE_CB_ID,
-        &ww::peripheral::SpiWithPins::_on_read_complete_callback);
+    HAL_SPI_RegisterCallback(&_handle, HAL_SPI_TX_COMPLETE_CB_ID,
+                             &ww::peripheral::SpiWithPins::_on_write_complete_callback);
+    HAL_SPI_RegisterCallback(&_handle, HAL_SPI_RX_COMPLETE_CB_ID,
+                             &ww::peripheral::SpiWithPins::_on_read_complete_callback);
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
                              &ww::peripheral::Spi::_on_error_callback);
     Peripherals::peripheral_register("spiwithpin", this, &_handle);
-    return Result_OK;
 };
 
-Result SpiWithPins::deinit()
+SpiWithPins::~SpiWithPins()
 {
     Peripherals::peripheral_unregister("spiwithpin", this);
-    return Result_OK;
+};
+SpiWithPinsConfig &SpiWithPins::pinconfig_get()
+{
+    return _config;
 };
 
-Result SpiWithPins::read(bool isData, void *data, uint32_t size,
-                         WaitHandler &waitHandler)
+Result SpiWithPins::read(bool isData, void *data, uint32_t size, WaitHandler &waitHandler)
 {
     if (_config.autoCs || _status.busy)
     {
@@ -313,8 +287,7 @@ Result SpiWithPins::read(bool isData, void *data, uint32_t size,
     dc_set(isData);
     return Spi::read(data, size, waitHandler);
 };
-Result SpiWithPins::write(bool isData, void *data, uint32_t size,
-                          WaitHandler &waitHandler)
+Result SpiWithPins::write(bool isData, void *data, uint32_t size, WaitHandler &waitHandler)
 {
     if (_config.autoCs || _status.busy)
     {
@@ -346,8 +319,7 @@ Result SpiWithPins::session_end()
 
 void SpiWithPins::_on_read_complete_callback(SPI_HandleTypeDef *instance)
 {
-    SpiWithPins *spi =
-        (SpiWithPins *)Peripherals::peripheral_get_by_instance(instance);
+    SpiWithPins *spi = (SpiWithPins *)Peripherals::peripheral_get_by_instance(instance);
     if (spi->_config.autoCs || !spi->_status.busy)
     {
         spi->cs_set(false);
@@ -356,8 +328,7 @@ void SpiWithPins::_on_read_complete_callback(SPI_HandleTypeDef *instance)
 };
 void SpiWithPins::_on_write_complete_callback(SPI_HandleTypeDef *instance)
 {
-    SpiWithPins *spi =
-        (SpiWithPins *)Peripherals::peripheral_get_by_instance(instance);
+    SpiWithPins *spi = (SpiWithPins *)Peripherals::peripheral_get_by_instance(instance);
     if (spi->_config.autoCs || !spi->_status.busy)
     {
         spi->cs_set(false);
@@ -368,22 +339,19 @@ void SpiWithPins::_on_write_complete_callback(SPI_HandleTypeDef *instance)
 void SpiWithPins::cs_set(bool isEnable)
 {
     if (_cs != NULL)
-        _cs->write(isEnable ? PinStatus::PinStatus_Set
-                            : PinStatus::PinStatus_Reset);
+        _cs->write(isEnable ? PinStatus::PinStatus_Set : PinStatus::PinStatus_Reset);
 };
 
 void SpiWithPins::dc_set(bool isData)
 {
     if (_dc != NULL)
-        _dc->write(isData ? PinStatus::PinStatus_Set
-                          : PinStatus::PinStatus_Reset);
+        _dc->write(isData ? PinStatus::PinStatus_Set : PinStatus::PinStatus_Reset);
 };
 
 void SpiWithPins::rw_set(bool isRead)
 {
     if (_rw != NULL)
-        _rw->write(isRead ? PinStatus::PinStatus_Set
-                          : PinStatus::PinStatus_Reset);
+        _rw->write(isRead ? PinStatus::PinStatus_Set : PinStatus::PinStatus_Reset);
 };
 
 }; // namespace ww::peripheral

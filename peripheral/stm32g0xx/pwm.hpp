@@ -34,14 +34,12 @@ struct PwmConfig
     uint16_t fullScaleDuty;
 };
 
-class Pwm
+class Pwm : public Initializable
 {
   public:
-    Pwm(TIM_HandleTypeDef &handle) : _handle(handle){};
-    ~Pwm(){};
+    Pwm(TIM_HandleTypeDef &handle);
+    ~Pwm();
     PwmConfig &config_get();
-    Result init();
-    Result deinit();
 
     Result start();
     Result stop();

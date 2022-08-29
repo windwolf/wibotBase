@@ -47,21 +47,29 @@ char *strtrim(char *str, char delimit);
 
 uint32_t fast_log2(uint32_t _val);
 
-// class Initializable
-// {
-//   public:
-//     Initializable() : _initialized(false)
-//     {
-//     }
-//     Result init();
-//     void deinit();
+class Initializable
+{
+  public:
+    Result initErrorCode;
+};
 
-//   protected:
-//     bool _initialized;
-//     virtual Result _init() = 0;
-//     virtual void _deinit() = 0;
-// };
-
+#define BASE_INIT_ERROR_CHECK()                                                \
+    if (initErrorCode != Result_OK)                                            \
+    {                                                                          \
+        return;                                                                \
+    }
+#define MEMBER_INIT_ERROR_CHECK(instance)                                      \
+    initErrorCode = instance.initErrorCode;                                \
+    if (initErrorCode != Result_OK)                                            \
+    {                                                                          \
+        return;                                                                \
+    }
+#define PTR_INIT_ERROR_CHECK(instance)                                         \
+    initErrorCode = instance->initErrorCode;                               \
+    if (initErrorCode != Result_OK)                                            \
+    {                                                                          \
+        return;                                                                \
+    }
 } // namespace ww
 
 #endif // ___BASE_HPP__

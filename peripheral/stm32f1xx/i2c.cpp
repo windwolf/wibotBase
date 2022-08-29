@@ -88,23 +88,15 @@ I2cMasterConfig &I2cMaster::config_get()
 {
     return _config;
 };
+I2cMaster(Pin &scl, Pin &sda)
+    : _scl(scl), _sda(sda){MEMBER_INIT_ERROR_CHECK(_scl) MEMBER_INIT_ERROR_CHECK(sda)};
+~I2cMaster(){};
 
-Result I2cMaster::init()
-{
-    return Result_OK;
-};
-Result I2cMaster::deinit()
-{
-    return Result_OK;
-};
-
-Result I2cMaster::read(uint32_t address, void *data, uint32_t size,
-                       WaitHandler &waitHandler)
+Result I2cMaster::read(uint32_t address, void *data, uint32_t size, WaitHandler &waitHandler)
 {
     return Result_NotSupport;
 };
-Result I2cMaster::write(uint32_t address, void *data, uint32_t size,
-                        WaitHandler &waitHandler)
+Result I2cMaster::write(uint32_t address, void *data, uint32_t size, WaitHandler &waitHandler)
 {
     Result rst = Result_OK;
     if (rst != Result_OK)

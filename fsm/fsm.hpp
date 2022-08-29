@@ -55,7 +55,7 @@ class FSM_State
   public:
     friend class FSM;
     friend class FSM_Transition;
-    FSM_State(){};
+    FSM_State(const FSM_State_Config &config) : _config(config){};
     FSM_State_Config &config_get();
     uint32_t enterTick;
     uint32_t lastPollingTick;
@@ -100,7 +100,7 @@ class FSM_Transition
   public:
     friend class FSM;
     friend class FSM_State;
-    FSM_Transition(){};
+    FSM_Transition(const FSM_Transition_Config &config) : _config(config){};
     FSM_Transition_Config &config_get();
 
   private:
@@ -111,7 +111,7 @@ class FSM_Transition
     bool _do_timeout_check(FSM &fsm, FSM_State *fromState, uint32_t duration);
 };
 
-class FSM
+class FSM : public Initializable
 {
   public:
     friend class FSM_State;
@@ -119,9 +119,7 @@ class FSM
     FSM(const char *name, uint32_t eventClearMask, FSM_State (&states)[],
         uint32_t stateCount, FSM_Transition (&transitions)[],
         uint32_t transitionCount);
-
-    Result init();
-    Result deinit();
+    ~FSM();
 
     Result start(uint32_t stateNo, void *userData, uint32_t initialTick);
 

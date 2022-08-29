@@ -200,13 +200,9 @@ FSM::FSM(const char *name, uint32_t eventClearMask, FSM_State (&states)[],
          uint32_t transitionCount)
     : _name(name), _events(eventClearMask), _states(states),
       _stateCount(stateCount), _transitions(transitions),
-      _transitionCount(transitionCount){
-
-      };
-
-Result FSM::init()
+      _transitionCount(transitionCount)
 {
-    Result rst;
+    Result rst = Result_OK;
 #ifdef FSM_TRANSITION_PREFILTER
     for (uint8_t i = 0; i < _stateCount; i++)
     {
@@ -221,7 +217,8 @@ Result FSM::init()
         if (rst != Result_OK)
         {
             LOG_E("FSM %s build error.", (_name == NULL) ? "" : _name);
-            return rst;
+            initErrorCode = rst;
+            return;
         }
     }
 
@@ -231,16 +228,13 @@ Result FSM::init()
         if (rst != Result_OK)
         {
             LOG_E("FSM %s build error.", (_name == NULL) ? "" : _name);
-            return rst;
+            initErrorCode = rst;
+            return;
         }
     }
-    return Result_OK;
 };
 
-Result FSM::deinit()
-{
-    return Result_OK;
-};
+FSM::~FSM(){};
 
 Result FSM::start(uint32_t stateNo, void *userData, uint32_t initialTick)
 {

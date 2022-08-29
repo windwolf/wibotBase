@@ -25,8 +25,7 @@ void UART::_on_read_complete_callback(UART_HandleTypeDef *instance)
     UART *perip = (UART *)Peripherals::peripheral_get_by_instance(instance);
     if (perip->_status.isRxDmaEnabled)
     {
-        SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data,
-                                     perip->_rxBuffer.size);
+        SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data, perip->_rxBuffer.size);
     }
     auto wh = perip->_readWaitHandler;
 
@@ -37,14 +36,12 @@ void UART::_on_read_complete_callback(UART_HandleTypeDef *instance)
     }
 };
 
-void UART::_on_circular_data_received_callback(UART_HandleTypeDef *instance,
-                                               uint16_t pos)
+void UART::_on_circular_data_received_callback(UART_HandleTypeDef *instance, uint16_t pos)
 {
     UART *perip = (UART *)Peripherals::peripheral_get_by_instance(instance);
     if (perip->_status.isRxDmaEnabled)
     {
-        SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data,
-                                     perip->_rxBuffer.size);
+        SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data, perip->_rxBuffer.size);
     }
     auto wh = perip->_readWaitHandler;
 
@@ -61,8 +58,7 @@ void UART::_on_error_callback(UART_HandleTypeDef *instance)
     UART *perip = (UART *)Peripherals::peripheral_get_by_instance(instance);
     if (perip->_status.isRxDmaEnabled)
     {
-        SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data,
-                                     perip->_rxBuffer.size);
+        SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data, perip->_rxBuffer.size);
     }
     auto wh = perip->_readWaitHandler;
     if (wh != nullptr)
@@ -80,25 +76,27 @@ void UART::_on_error_callback(UART_HandleTypeDef *instance)
     }
 };
 
-Result UART::init()
+UART::UART(UART_HandleTypeDef &handle) : _handle(handle)
 {
-    HAL_UART_RegisterCallback(
-        &_handle, HAL_UART_TX_COMPLETE_CB_ID,
-        &ww::peripheral::UART::_on_write_complete_callback);
-    HAL_UART_RegisterCallback(
-        &_handle, HAL_UART_RX_COMPLETE_CB_ID,
-        &ww::peripheral::UART::_on_read_complete_callback);
-    HAL_UART_RegisterRxEventCallback(
-        &_handle, &ww::peripheral::UART::_on_circular_data_received_callback);
+    HAL_UART_RegisterCallback(&_handle, HAL_UART_TX_COMPLETE_CB_ID,
+                              &ww::peripheral::UART::_on_write_complete_callback);
+    HAL_UART_RegisterCallback(&_handle, HAL_UART_RX_COMPLETE_CB_ID,
+                              &ww::peripheral::UART::_on_read_complete_callback);
+    HAL_UART_RegisterRxEventCallback(&_handle,
+                                     &ww::peripheral::UART::_on_circular_data_received_callback);
     HAL_UART_RegisterCallback(&_handle, HAL_UART_ERROR_CB_ID,
                               &ww::peripheral::UART::_on_error_callback);
     Peripherals::peripheral_register("uart", this, &_handle);
-    return Result_OK;
+    initErrorCode = Result_OK;
 };
-Result UART::deinit()
+UART::~UART()
 {
     Peripherals::peripheral_unregister("uart", this);
-    return Result_OK;
+};
+
+UARTConfig &config_get()
+{
+    return _config;
 };
 
 Result UART::read(void *data, uint32_t size, WaitHandler &waitHandler)
@@ -108,8 +106,7 @@ Result UART::read(void *data, uint32_t size, WaitHandler &waitHandler)
     {
         return Result_Busy;
     }
-    if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_RX) ==
-        HAL_UART_STATE_BUSY_RX)
+    if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_RX) == HAL_UART_STATE_BUSY_RX)
     {
         return Result_Busy;
     }
@@ -125,14 +122,12 @@ Result UART::read(void *data, uint32_t size, WaitHandler &waitHandler)
         _status.isRxDmaEnabled = 1;
         // TODO: if size greater then uint16_t max, should slice the data and
         // send in multiple DMA transfers
-        return (Result)HAL_UART_Receive_DMA(&_handle, (uint8_t *)data,
-                                            (uint16_t)size);
+        return (Result)HAL_UART_Receive_DMA(&_handle, (uint8_t *)data, (uint16_t)size);
     }
     else
     {
         _status.isRxDmaEnabled = 0;
-        return (Result)HAL_UART_Receive_IT(&_handle, (uint8_t *)data,
-                                           (uint16_t)size);
+        return (Result)HAL_UART_Receive_IT(&_handle, (uint8_t *)data, (uint16_t)size);
     }
 };
 Result UART::write(void *data, uint32_t size, WaitHandler &waitHandler)
@@ -143,8 +138,7 @@ Result UART::write(void *data, uint32_t size, WaitHandler &waitHandler)
         return Result_Busy;
     }
 
-    if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_TX) ==
-        HAL_UART_STATE_BUSY_TX)
+    if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_TX) == HAL_UART_STATE_BUSY_TX)
     {
         return Result_Busy;
     }
@@ -161,14 +155,12 @@ Result UART::write(void *data, uint32_t size, WaitHandler &waitHandler)
         SCB_CleanDCache_by_Addr((uint32_t *)data, size);
         // TODO: if size greater then uint16_t max, should slice the data and
         // send in multiple DMA transfers
-        return (Result)HAL_UART_Transmit_DMA(&_handle, (uint8_t *)data,
-                                             (uint16_t)size);
+        return (Result)HAL_UART_Transmit_DMA(&_handle, (uint8_t *)data, (uint16_t)size);
     }
     else
     {
         _status.isTxDmaEnabled = 0;
-        return (Result)HAL_UART_Transmit_IT(&_handle, (uint8_t *)data,
-                                            (uint16_t)size);
+        return (Result)HAL_UART_Transmit_IT(&_handle, (uint8_t *)data, (uint16_t)size);
     }
 };
 
@@ -183,8 +175,7 @@ Result UART::start(uint8_t *data, uint32_t size, WaitHandler &waitHandler)
     {
         return Result_NotSupport;
     }
-    if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_RX) ==
-        HAL_UART_STATE_BUSY_RX)
+    if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_RX) == HAL_UART_STATE_BUSY_RX)
     {
         return Result_Busy;
     }
@@ -201,8 +192,7 @@ Result UART::stop()
 {
 
     Result rst = Result_OK;
-    if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_RX) !=
-        HAL_UART_STATE_BUSY_RX)
+    if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_RX) != HAL_UART_STATE_BUSY_RX)
     {
         rst = Result_OK;
     }

@@ -18,9 +18,7 @@ void Thread::sleep(uint32_t ms)
     osDelay(ms);
 };
 
-Mutex::Mutex(const char *name) : _name(name){};
-
-Result Mutex::init()
+Mutex::Mutex(const char *name) : _name(name)
 {
     osMutexAttr_t attr = {
         .name = _name,
@@ -28,11 +26,12 @@ Result Mutex::init()
         .cb_size = sizeof(this->_instance),
 
     };
-    return (osMutexNew(&attr) != NULL) ? Result_OK : Result_NoResource;
+    initErrorCode = (osMutexNew(&attr) != NULL) ? Result_OK : Result_NoResource;
 };
-Result Mutex::deinit()
+
+void Mutex::~Mutex()
 {
-    return (Result)osMutexDelete(&(this->_instance));
+    osMutexDelete(&(this->_instance));
 };
 
 bool Mutex::lock(uint32_t timeout)
@@ -45,31 +44,20 @@ void Mutex::unlock()
     osMutexRelease(&(this->_instance));
 };
 
-EventGroup::EventGroup(const char *name) : _name(name){};
-
-Result EventGroup::init()
+EventGroup::EventGroup(const char *name) : _name(name)
 {
 
-    if (_initialized)
-    {
-        return Result_OK;
-    }
     osEventFlagsAttr_t attr = {
         .name = _name,
         .cb_mem = &(this->_instance),
         .cb_size = sizeof(this->_instance),
     };
-    if ((Result rst = (osEventFlagsNew(&attr) != NULL)
-                          ? Result_OK
-                          : Result_NoResource) == Result_OK)
-    {
-        _initialized = true;
-    };
-    return rst;
+    initErrorCode =
+        (osEventFlagsNew(&attr) != NULL) ? Result_OK : Result_NoResource;
 };
-Result EventGroup::deinit()
+EventGroup::~EventGroup()
 {
-    return (Result)osEventFlagsDelete(&(this->_instance));
+    osEventFlagsDelete(&(this->_instance));
 };
 
 Result EventGroup::set(uint32_t flags)

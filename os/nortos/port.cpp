@@ -22,17 +22,14 @@ void Thread::sleep(uint32_t ms)
     return;
 };
 
-Mutex::Mutex(const char *name){};
-
-Result Mutex::init()
+Mutex::Mutex(const char *name)
 {
-    this->_instance = 0;
-    return Result_OK;
+    _instance = 0;
+    initErrorCode = Result_OK;
 };
-Result Mutex::deinit()
+Mutex::~Mutex()
 {
-    this->_instance = 0;
-    return Result_OK;
+    _instance = 0;
 };
 
 bool Mutex::lock(uint32_t timeout)
@@ -69,16 +66,14 @@ void Mutex::unlock()
     this->_instance = 0;
 };
 
-EventGroup::EventGroup(const char *name){};
-
-Result EventGroup::init()
+EventGroup::EventGroup(const char *name)
 {
-    this->_instance = 0;
-    return Result_OK;
+    _instance = 0;
+    initErrorCode = Result_OK;
 };
-void EventGroup::deinit()
+EventGroup::~EventGroup()
 {
-    this->_instance = 0;
+    _instance = 0;
 };
 
 Result EventGroup::set(uint32_t flags)

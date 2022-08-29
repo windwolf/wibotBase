@@ -16,7 +16,7 @@ namespace ww
  * 2. sender will return immediatly
  *
  */
-class WaitHandler
+class WaitHandler : public Initializable
 {
   public:
     void set_value(void *value);
@@ -45,10 +45,16 @@ typedef void (*Callback)(void *sender, void *event, void *receiver);
 class CallbackWaitHandler : public WaitHandler
 {
   public:
-    CallbackWaitHandler(void *receiver) : _receiver(receiver){};
+    CallbackWaitHandler(void *receiver) : _receiver(receiver)
+    {
+        initErrorCode = Result_OK;
+    };
 
     CallbackWaitHandler(void *receiver, Callback onDone, Callback onError)
-        : _receiver(receiver), _onDone(onDone), _onError(onError){};
+        : _receiver(receiver), _onDone(onDone), _onError(onError)
+    {
+        initErrorCode = Result_OK;
+    };
 
     void done_callback_set(Callback onDone);
     void error_callback_set(Callback onError);
@@ -77,7 +83,10 @@ class CallbackWaitHandler : public WaitHandler
 class PollingWaitHandler : public WaitHandler
 {
   public:
-    PollingWaitHandler(){};
+    PollingWaitHandler()
+    {
+        initErrorCode = Result_OK;
+    };
 
     virtual Result reset();
     virtual bool is_busy();
@@ -104,11 +113,9 @@ class EventGroupWaitHandler : public WaitHandler
 {
   public:
     EventGroupWaitHandler(EventGroup &eventGroup, uint32_t doneFlag,
-                          uint32_t errorFlag)
-        : _eventGroup(eventGroup), _doneFlag(doneFlag), _errorFlag(errorFlag){};
+                          uint32_t errorFlag);
 
-    Result init();
-    void deinit();
+    ~EventGroupWaitHandler();
     virtual Result reset();
     virtual bool is_busy();
     virtual Result wait(uint32_t timeout);

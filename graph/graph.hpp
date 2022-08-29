@@ -14,14 +14,14 @@ union Color {
         uint8_t r;
         uint8_t a;
     };
-} PACKED;
+};
 
 struct Color888
 {
     uint8_t b;
     uint8_t g;
     uint8_t r;
-} PACKED;
+};
 
 union Color565 {
     uint16_t value;
@@ -31,7 +31,7 @@ union Color565 {
         uint8_t g : 6;
         uint8_t r : 5;
     };
-} PACKED;
+};
 
 } // namespace ww::graph
 

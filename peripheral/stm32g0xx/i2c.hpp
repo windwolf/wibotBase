@@ -25,18 +25,14 @@ union I2cMasterConfig {
     uint32_t value;
 };
 
-class I2cMaster
+class I2cMaster : public Initializable
 {
   public:
-    I2cMaster(I2C_HandleTypeDef &handle) : _handle(handle){};
-    ~I2cMaster(){};
+    I2cMaster(I2C_HandleTypeDef &handle);
+    ~I2cMaster();
     I2cMasterConfig &config_get();
-    Result init();
-    Result deinit();
-    Result read(uint32_t address, void *data, uint32_t size,
-                WaitHandler &waitHandler);
-    Result write(uint32_t address, void *data, uint32_t size,
-                 WaitHandler &waitHandler);
+    Result read(uint32_t address, void *data, uint32_t size, WaitHandler &waitHandler);
+    Result write(uint32_t address, void *data, uint32_t size, WaitHandler &waitHandler);
     Result read(void *data, uint32_t size, WaitHandler &waitHandler);
     Result write(void *data, uint32_t size, WaitHandler &waitHandler);
 
