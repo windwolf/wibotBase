@@ -80,40 +80,12 @@ class CallbackWaitHandler : public WaitHandler
     } _status;
 };
 
-class PollingWaitHandler : public WaitHandler
-{
-  public:
-    PollingWaitHandler()
-    {
-        initErrorCode = Result_OK;
-    };
-
-    virtual Result reset();
-    virtual bool is_busy();
-
-    virtual Result wait(uint32_t timeout);
-
-    virtual void done_set(void *sender);
-    virtual void error_set(void *sender);
-
-  private:
-    union _status {
-        struct
-        {
-            bool is_done : 1;
-            bool is_error : 1;
-        };
-        uint32_t value;
-    } _status;
-};
-
 using namespace ww::os;
 
 class EventGroupWaitHandler : public WaitHandler
 {
   public:
-    EventGroupWaitHandler(EventGroup &eventGroup, uint32_t doneFlag,
-                          uint32_t errorFlag);
+    EventGroupWaitHandler(EventGroup &eventGroup, uint32_t doneFlag, uint32_t errorFlag);
 
     ~EventGroupWaitHandler();
     virtual Result reset();
