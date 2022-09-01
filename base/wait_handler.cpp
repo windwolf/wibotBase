@@ -10,7 +10,13 @@ using namespace ww::os;
 WaitHandler::WaitHandler(EventGroup &eventGroup, uint32_t doneFlag, uint32_t errorFlag)
     : _eventGroup(eventGroup), _doneFlag(doneFlag), _errorFlag(errorFlag)
 {
+    _config.autoReset = true; // TODO: need to think farther
     initErrorCode = _eventGroup.initErrorCode;
+};
+
+WaitHandlerConfig &WaitHandler::config_get()
+{
+    return _config;
 };
 
 void WaitHandler::set_value(void *value)
@@ -50,22 +56,24 @@ Result WaitHandler::wait(uint32_t level, uint32_t timeout)
     uint32_t events;
     uint32_t startTick = Utils::tick_get();
     uint32_t duration = 0;
+    Result rst = Result_OK;
     for (; timeout > duration; duration = Utils::tick_diff(startTick))
     {
-        auto rst =
-            _eventGroup.wait(_doneFlag | _errorFlag, events,
-                             EventOptions_WaitForAny | EventOptions_NoClear, timeout - duration);
+        rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
+                               EventOptions_WaitForAny | EventOptions_NoClear, timeout - duration);
         if (rst == Result::Result_OK)
         {
             if (events & _errorFlag)
             {
-                return Result_GeneralError;
+                rst = Result_GeneralError;
+                break;
             }
             else if (events & _doneFlag)
             {
                 if (level == _level)
                 {
-                    return Result_OK;
+                    rst = Result_OK;
+                    break;
                 }
                 else
                 {
@@ -75,15 +83,21 @@ Result WaitHandler::wait(uint32_t level, uint32_t timeout)
             else
             {
                 // TODO: no possible to reach here
-                return Result_StatusReserved;
+                rst = Result_StatusReserved;
+                break;
             }
         }
         else
         {
-            return Result_Timeout;
+            rst = Result_Timeout;
+            break;
         }
     }
-    return Result_Timeout;
+    if (_config.autoReset)
+    {
+        _eventGroup.reset(_doneFlag | _errorFlag);
+    }
+    return rst;
 };
 
 bool WaitHandler::is_busy()

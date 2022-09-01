@@ -8,6 +8,11 @@ namespace ww
 
 using namespace ww::os;
 
+struct WaitHandlerConfig
+{
+    bool autoReset : 1;
+};
+
 typedef void (*Callback)(void *sender, void *event, void *receiver);
 /**
  * @brief Implement the sender receiver async pattern.
@@ -23,10 +28,10 @@ class WaitHandler : public Initializable
 {
   public:
     WaitHandler(EventGroup &eventGroup, uint32_t doneFlag, uint32_t errorFlag);
+    WaitHandlerConfig &config_get();
     void set_value(void *value);
     void *get_value();
     void *get_sender();
-
     Result reset();
     bool is_busy();
     // Result wait();
@@ -43,6 +48,7 @@ class WaitHandler : public Initializable
   protected:
     void *_sender;
     void *_value;
+    WaitHandlerConfig _config;
     EventGroup &_eventGroup;
     uint32_t _doneFlag;
     uint32_t _errorFlag;
