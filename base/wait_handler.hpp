@@ -38,6 +38,7 @@ class WaitHandler : public Initializable
     void error_callback_set(void *receiver, Callback onError);
     uint32_t scope_begin();
     void scope_end();
+    uint32_t scope_get();
 
   protected:
     void *_sender;

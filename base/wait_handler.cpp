@@ -83,6 +83,7 @@ Result WaitHandler::wait(uint32_t level, uint32_t timeout)
             return Result_Timeout;
         }
     }
+    return Result_Timeout;
 };
 
 bool WaitHandler::is_busy()
@@ -134,9 +135,15 @@ uint32_t WaitHandler::scope_begin()
 {
     return ++_level;
 };
+
 void WaitHandler::scope_end()
 {
     --_level;
+};
+
+uint32_t WaitHandler::scope_get()
+{
+    return _level;
 };
 
 } // namespace ww

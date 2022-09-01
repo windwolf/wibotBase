@@ -31,8 +31,7 @@ enum Result : uint32_t
     Result_InvalidOperationFromISR = (uint32_t)7,
 
     Result_NotSupport = (uint32_t)8,
-    Result_StatusReserved =
-        0x7FFFFFFF ///< Prevents enum down-size compiler optimization.
+    Result_StatusReserved = 0x7FFFFFFF ///< Prevents enum down-size compiler optimization.
 };
 
 enum DataWidth
@@ -53,22 +52,22 @@ class Initializable
     Result initErrorCode;
 };
 
-#define BASE_INIT_ERROR_CHECK()                                                \
-    if (initErrorCode != Result_OK)                                            \
-    {                                                                          \
-        return;                                                                \
+#define BASE_INIT_ERROR_CHECK()                                                                    \
+    if (initErrorCode != Result_OK)                                                                \
+    {                                                                                              \
+        return;                                                                                    \
     }
-#define MEMBER_INIT_ERROR_CHECK(instance)                                      \
-    initErrorCode = instance.initErrorCode;                                \
-    if (initErrorCode != Result_OK)                                            \
-    {                                                                          \
-        return;                                                                \
+#define MEMBER_INIT_ERROR_CHECK(instance)                                                          \
+    initErrorCode = instance.initErrorCode;                                                        \
+    if (initErrorCode != Result_OK)                                                                \
+    {                                                                                              \
+        return;                                                                                    \
     }
-#define PTR_INIT_ERROR_CHECK(instance)                                         \
-    initErrorCode = instance->initErrorCode;                               \
-    if (initErrorCode != Result_OK)                                            \
-    {                                                                          \
-        return;                                                                \
+#define PTR_INIT_ERROR_CHECK(instance)                                                             \
+    initErrorCode = instance->initErrorCode;                                                       \
+    if (initErrorCode != Result_OK)                                                                \
+    {                                                                                              \
+        return;                                                                                    \
     }
 } // namespace ww
 
