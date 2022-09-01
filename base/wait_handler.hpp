@@ -10,7 +10,7 @@ using namespace ww::os;
 
 struct WaitHandlerConfig
 {
-    bool autoReset : 1;
+    bool disableAutoReset : 1;
 };
 
 typedef void (*Callback)(void *sender, void *event, void *receiver);

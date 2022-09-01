@@ -10,7 +10,6 @@ using namespace ww::os;
 WaitHandler::WaitHandler(EventGroup &eventGroup, uint32_t doneFlag, uint32_t errorFlag)
     : _eventGroup(eventGroup), _doneFlag(doneFlag), _errorFlag(errorFlag)
 {
-    _config.autoReset = true; // TODO: need to think farther
     initErrorCode = _eventGroup.initErrorCode;
 };
 
@@ -93,7 +92,7 @@ Result WaitHandler::wait(uint32_t level, uint32_t timeout)
             break;
         }
     }
-    if (_config.autoReset)
+    if (!_config.disableAutoReset)
     {
         _eventGroup.reset(_doneFlag | _errorFlag);
     }
