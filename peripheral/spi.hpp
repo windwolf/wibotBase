@@ -101,4 +101,5 @@ class SpiWithPins : public Spi
     static void _on_write_complete_callback(SPI_CALLBACK_ARG);
 };
 } // namespace ww::peripheral
+
 #endif // __WWDEVICE_PERIPHERAL_SPI_HPP__

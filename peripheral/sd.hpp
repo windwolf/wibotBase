@@ -2,15 +2,14 @@
 #define ___BSP_SD_HPP__
 
 #include "base.hpp"
-#include "wait_handler.hpp"
+#include "peripheral.hpp"
 #include "accessor/block.hpp"
-#include "stm32h7xx_hal.h"
 namespace ww::peripheral
 {
 using namespace ww;
 using namespace ww::accessor;
 
-typedef HAL_SD_CardInfoTypeDef CardInfo;
+SD_PER_DECL
 
 union SdConfig {
     struct
@@ -24,7 +23,7 @@ union SdConfig {
 class SdCard : Initializable
 {
   public:
-    SdCard(SD_HandleTypeDef &handle);
+    SdCard(SD_CTOR_ARG);
     ~SdCard();
     SdConfig &config_get();
     CardInfo &card_info_get();
@@ -36,7 +35,7 @@ class SdCard : Initializable
     Result card_init();
 
   private:
-    SD_HandleTypeDef &_handle;
+    SD_FIELD_DECL
     union {
         struct
         {
@@ -52,9 +51,9 @@ class SdCard : Initializable
     BUffer _rxBuffer;
 
   protected:
-    static void _on_read_complete_callback(SD_HandleTypeDef *instance);
-    static void _on_write_complete_callback(SD_HandleTypeDef *instance);
-    static void _on_error_callback(SD_HandleTypeDef *instance);
+    static void _on_read_complete_callback(SD_CALLBACK_ARG);
+    static void _on_write_complete_callback(SD_CALLBACK_ARG);
+    static void _on_error_callback(SD_CALLBACK_ARG);
 
 }
 
