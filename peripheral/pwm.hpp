@@ -6,7 +6,7 @@
 
 namespace ww::peripheral
 {
-
+#define PWM_PER_DECL
 typedef uint32_t PwmChannel;
 #define TimerChannel_1 LL_TIM_CHANNEL_CH1
 #define TimerChannel_1P LL_TIM_CHANNEL_CH1

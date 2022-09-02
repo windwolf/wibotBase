@@ -16,15 +16,6 @@ PwmConfig &Pwm::config_get()
     return _config;
 };
 
-Result Pwm::init()
-{
-    return Result_OK;
-};
-Result Pwm::deinit()
-{
-    return Result_OK;
-};
-
 Result Pwm::start()
 {
     LL_TIM_CC_EnableChannel(_handle.Instance, _config.channelsEnable);

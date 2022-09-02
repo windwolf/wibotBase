@@ -6,6 +6,9 @@
 
 namespace ww::peripheral
 {
+
+I2C_PER_DECL
+
 union I2cMasterConfig {
     struct
     {

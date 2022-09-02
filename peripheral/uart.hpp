@@ -5,6 +5,8 @@
 
 namespace ww::peripheral
 {
+#define UART_PER_DECL
+
 union UARTConfig {
     struct
     {

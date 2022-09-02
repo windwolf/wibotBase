@@ -7,6 +7,7 @@
 namespace ww::peripheral
 {
 
+PIN_PER_DECL
 enum PinStatus : uint32_t
 {
     PinStatus_Reset = 0U,

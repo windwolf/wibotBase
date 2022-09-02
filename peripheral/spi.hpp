@@ -7,6 +7,8 @@
 
 namespace ww::peripheral
 {
+#define PWM_PER_DECL
+
 union SpiConfig {
     struct
     {

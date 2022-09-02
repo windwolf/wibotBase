@@ -1,6 +1,7 @@
 #include "i2c.hpp"
 #include "misc.hpp"
 #include "os.hpp"
+#include "pin.hpp"
 
 namespace ww::peripheral
 {
@@ -9,7 +10,7 @@ namespace ww::peripheral
 #define SDA_SET() _sda.write(PinStatus_Set)
 #define SDA_RESET() _sda.write(PinStatus_Reset)
 
-void I2cMaster::_start()
+static void _i2c_start(Pin &_scl, Pin &_sda)
 {
     _sda.mode_set(PinMode_Output);
     _scl.mode_set(PinMode_Output);
@@ -22,7 +23,7 @@ void I2cMaster::_start()
     Misc::us_delay(4);
 };
 
-void I2cMaster::_stop()
+static void _i2c_stop(Pin &_scl, Pin &_sda)
 {
     SCL_RESET();
     Misc::us_delay(4);
@@ -34,7 +35,7 @@ void I2cMaster::_stop()
     Misc::us_delay(4);
 };
 
-bool I2cMaster::_ack_wait(uint32_t timeout)
+static bool _i2c_ack_wait(Pin &_scl, Pin &_sda, uint32_t timeout)
 {
     bool ack = false;
 
@@ -62,7 +63,7 @@ bool I2cMaster::_ack_wait(uint32_t timeout)
     return ack;
 };
 
-void I2cMaster::_byte_write(uint8_t byte)
+static void _i2c_byte_write(Pin &_scl, Pin &_sda, uint8_t byte)
 {
     uint8_t i = 8;
     while (i--)
@@ -89,10 +90,7 @@ I2cMasterConfig &I2cMaster::config_get()
     return _config;
 };
 I2cMaster::I2cMaster(Pin &scl, Pin &sda)
-    : _scl(scl), _sda(sda){
-        MEMBER_INIT_ERROR_CHECK(_scl) 
-        MEMBER_INIT_ERROR_CHECK(sda)
-        };
+    : _scl(scl), _sda(sda){MEMBER_INIT_ERROR_CHECK(_scl) MEMBER_INIT_ERROR_CHECK(sda)};
 I2cMaster::~I2cMaster(){};
 
 Result I2cMaster::read(uint32_t address, void *data, uint32_t size, WaitHandler &waitHandler)
@@ -106,30 +104,30 @@ Result I2cMaster::write(uint32_t address, void *data, uint32_t size, WaitHandler
     {
         return rst;
     }
-    _start();
-    _byte_write((uint8_t)_config.slaveAddress & 0xFE); // Slave address,SA0=0
-    if (!_ack_wait(20))
+    _i2c_start(_scl, _sda);
+    _i2c_byte_write(_scl, _sda, (uint8_t)_config.slaveAddress & 0xFE); // Slave address,SA0=0
+    if (!_i2c_ack_wait(_scl, _sda, 20))
     {
         rst = Result_Timeout;
     }
 
     if (_config.dataWidth == DATAWIDTH_8)
     {
-        _byte_write((uint8_t)address);
-        if (!_ack_wait(20))
+        _i2c_byte_write(_scl, _sda, (uint8_t)address);
+        if (!_i2c_ack_wait(_scl, _sda, 20))
         {
             rst = Result_Timeout;
         }
     }
     else if (_config.dataWidth == DATAWIDTH_16)
     {
-        _byte_write((uint8_t)(address >> 8));
-        if (!_ack_wait(20))
+        _i2c_byte_write(_scl, _sda, (uint8_t)(address >> 8));
+        if (!_i2c_ack_wait(_scl, _sda, 20))
         {
             rst = Result_Timeout;
         }
-        _byte_write((uint8_t)address);
-        if (!_ack_wait(20))
+        _i2c_byte_write(_scl, _sda, (uint8_t)address);
+        if (!_i2c_ack_wait(_scl, _sda, 20))
         {
             rst = Result_Timeout;
         }
@@ -143,8 +141,8 @@ Result I2cMaster::write(uint32_t address, void *data, uint32_t size, WaitHandler
     {
         for (uint32_t i = 0; i < size; i++)
         {
-            _byte_write(((uint8_t *)data)[i]);
-            if (!_ack_wait(20))
+            _i2c_byte_write(_scl, _sda, ((uint8_t *)data)[i]);
+            if (!_i2c_ack_wait(_scl, _sda, 20))
             {
                 rst = Result_Timeout;
                 break;
@@ -152,7 +150,7 @@ Result I2cMaster::write(uint32_t address, void *data, uint32_t size, WaitHandler
         }
     }
 
-    _stop();
+    _i2c_stop(_scl, _sda);
 
     if (rst == Result_OK)
     {
@@ -176,9 +174,9 @@ Result I2cMaster::write(void *data, uint32_t size, WaitHandler &waitHandler)
     {
         return rst;
     }
-    _start();
-    _byte_write((uint8_t)_config.slaveAddress & 0xFE); // Slave address,SA0=0
-    if (!_ack_wait(20))
+    _i2c_start(_scl, _sda);
+    _i2c_byte_write(_scl, _sda, (uint8_t)_config.slaveAddress & 0xFE); // Slave address,SA0=0
+    if (!_i2c_ack_wait(_scl, _sda, 20))
     {
         rst = Result_Timeout;
     }
@@ -186,15 +184,15 @@ Result I2cMaster::write(void *data, uint32_t size, WaitHandler &waitHandler)
     {
         for (uint32_t i = 0; i < size; i++)
         {
-            _byte_write(((uint8_t *)data)[i]);
-            if (!_ack_wait(20))
+            _i2c_byte_write(_scl, _sda, ((uint8_t *)data)[i]);
+            if (!_i2c_ack_wait(_scl, _sda, 20))
             {
                 rst = Result_Timeout;
                 break;
             }
         }
     }
-    _stop();
+    _i2c_stop(_scl, _sda);
 
     if (rst == Result_OK)
     {
