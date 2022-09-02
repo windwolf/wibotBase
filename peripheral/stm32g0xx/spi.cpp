@@ -155,12 +155,7 @@ SpiConfig &Spi::config_get()
 
 Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
 {
-    Result rst = Result_OK;
     if (_readWaitHandler != nullptr)
-    {
-        return Result_Busy;
-    }
-    if (rst != Result_OK)
     {
         return Result_Busy;
     }
@@ -185,12 +180,7 @@ Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
 };
 Result Spi::write(void *data, uint32_t size, WaitHandler &waitHandler)
 {
-    Result rst = Result_OK;
     if (_writeWaitHandler != nullptr)
-    {
-        return Result_Busy;
-    }
-    if (rst != Result_OK)
     {
         return Result_Busy;
     }

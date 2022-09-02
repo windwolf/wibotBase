@@ -85,10 +85,6 @@ Result SdCard::read(void *data, uint32_t num, uint32_t count, WaitHandler waitHa
     {
         return Result_Busy;
     }
-    if (rst != Result_OK)
-    {
-        return Result_Busy;
-    }
     _waitHandler = &waitHandler;
     _rxBuffer.data = data;
     _rxBuffer.size = _cardInfo.blockSize * count;
@@ -105,10 +101,6 @@ Result SdCard::write(void *data, uint32_t num, uint32_t count, WaitHandler waitH
 {
     Result rst = Result_OK;
     if (_waitHandler != nullptr)
-    {
-        return Result_Busy;
-    }
-    if (rst != Result_OK)
     {
         return Result_Busy;
     }
@@ -130,10 +122,6 @@ Result SdCard::erase(uint32_t num, uint32_t count, WaitHandler waitHandler)
     {
         return Result_Busy;
     }
-    if (rst != Result_OK)
-    {
-        return Result_Busy;
-    }
     _waitHandler = &waitHandler;
     return (Result)HAL_SD_Erase(&_handle, num, num + count);
 };
@@ -144,12 +132,11 @@ Result SdCard::status_query()
 };
 
 SdCardBlock::SdCardBlock(SdCard &sdcard, Buffer buffer)
-    : Block(buffer, ), _sdcard(sdcard), _buffer(buffer){};
+    : Block(buffer, ), _sdcard(sdcard),
+      _buffer(buffer){BASE_INIT_ERROR_CHECK() MEMBER_INIT_ERROR_CHECK(_sdcard)};
 
 Result SdCardBlock::card_init()
 {
-    BASE_INIT_ERROR_CHECK()
-    MEMBER_INIT_ERROR_CHECK(_sdcard)
     initErrorCode = _sdcard.card_init();
     if (initErrorCode != Result_OK)
     {
@@ -167,8 +154,17 @@ Result SdCardBlock::card_init()
     });
 };
 
-Result media_read(void *data, uint32_t num, uint32_t size) = 0;
-Result media_write(void *data, uint32_t num, uint32_t size) = 0;
-Result media_erase(uint32_t num, uint32_t size) = 0;
+Result SdCardBlock::media_read(void *data, uint32_t num, uint32_t size, WaitHandler &waitHandler)
+{
+    _instance.read(data, num, size, WaitHandler);
+};
+Result SdCardBlock::media_write(void *data, uint32_t num, uint32_t size, WaitHandler &waitHandler)
+{
+    _instance.write(data, num, size, WaitHandler);
+};
+Result SdCardBlock::media_erase(uint32_t num, uint32_t size, WaitHandler &waitHandler)
+{
+    _instance.wrase(data, num, size, WaitHandler);
+};
 
 } // namespace ww::peripheral

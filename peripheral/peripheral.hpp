@@ -1,10 +1,15 @@
 #ifndef __WW_PERIPHERAL_PERIPHERAL_HPP__
 #define __WW_PERIPHERAL_PERIPHERAL_HPP__
 
-#include "config.h"
 #include "stdbool.h"
 #include "stdint.h"
+#include "perip_port.hpp"
 #include "wait_handler.hpp"
+#include "buffer.hpp"
+
+#ifndef MAX_PERIPHERAL_COUNT
+#define MAX_PERIPHERAL_COUNT 20
+#endif // MAX_PERIPHERAL_COUNT
 
 namespace ww::peripheral
 {
@@ -19,10 +24,8 @@ class Peripherals
         void *instance;
     };
 
-    static void peripheral_register(const char *peripheralName,
-                                    void *peripheral, void *instance);
-    static void peripheral_unregister(const char *peripheralName,
-                                      void *peripheral);
+    static void peripheral_register(const char *peripheralName, void *peripheral, void *instance);
+    static void peripheral_unregister(const char *peripheralName, void *peripheral);
     static void *peripheral_get_by_instance(void *instance);
 
   private:

@@ -2,12 +2,7 @@
 #define __WWDEVICE_PERIPHERAL_TIM_HPP__
 
 #include "base.hpp"
-#include "stm32g0xx_hal.h"
-#include "stm32g0xx_ll_tim.h"
-
-#ifndef HAL_TIM_MODULE_ENABLED
-#define TIM_HandleTypeDef uint32_t
-#endif // HAL_TIM_MODULE_ENABLED
+#include "peripheral.hpp"
 
 namespace ww::peripheral
 {
@@ -37,7 +32,7 @@ struct PwmConfig
 class Pwm : public Initializable
 {
   public:
-    Pwm(TIM_HandleTypeDef &handle);
+    Pwm(PWM_CTOR_ARG);
     ~Pwm();
     PwmConfig &config_get();
 
@@ -46,7 +41,7 @@ class Pwm : public Initializable
     Result duty_set(PwmChannel channel, uint16_t duty);
 
   private:
-    TIM_HandleTypeDef &_handle;
+    PWM_FIELD_DECL
     PwmConfig _config;
 };
 } // namespace ww::peripheral

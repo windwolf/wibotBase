@@ -1,4 +1,5 @@
 #include "pwm.hpp"
+#include "stm32g0xx_ll_tim.h"
 
 #ifdef HAL_TIM_MODULE_ENABLED
 

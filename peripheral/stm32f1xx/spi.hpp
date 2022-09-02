@@ -92,7 +92,7 @@ class SpiWithPins : public Spi
         uint8_t value;
         struct
         {
-            uint8_t busy : 1;
+            uint8_t busy \raw\images\1_71\mergeHint.gif: 1;
         };
     } _status;
 

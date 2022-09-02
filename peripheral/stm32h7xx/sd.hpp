@@ -69,9 +69,9 @@ class SdCardBlock : public Block
     Buffer _buffer;
 
   protected:
-    virtual Result media_read(void *data, uint32_t num, uint32_t size) = 0;
-    virtual Result media_write(void *data, uint32_t num, uint32_t size) = 0;
-    virtual Result media_erase(uint32_t num, uint32_t size) = 0;
+    virtual Result media_read(void *data, uint32_t num, uint32_t size, WaitHandler &waitHandler) = 0;
+    virtual Result media_write(void *data, uint32_t num, uint32_t size, WaitHandler &waitHandler) = 0;
+    virtual Result media_erase(uint32_t num, uint32_t size, WaitHandler &waitHandler) = 0;
 }
 
 } // namespace ww::peripheral

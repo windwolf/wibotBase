@@ -177,10 +177,6 @@ Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
     {
         return Result_Busy;
     }
-    if (rst != Result_OK)
-    {
-        return Result_Busy;
-    }
     _readWaitHandler = &waitHandler;
 
     ww::peripheral::SizeInfo sizeInfo;
@@ -206,10 +202,6 @@ Result Spi::write(void *data, uint32_t size, WaitHandler &waitHandler)
 {
     Result rst = Result_OK;
     if (_writeWaitHandler != nullptr)
-    {
-        return Result_Busy;
-    }
-    if (rst != Result_OK)
     {
         return Result_Busy;
     }

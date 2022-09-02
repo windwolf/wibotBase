@@ -2,7 +2,7 @@
 #define __WWDEVICE_PERIPHERAL_PIN_HPP__
 
 #include "base.hpp"
-#include "stm32g0xx_hal.h"
+#include "peripheral.hpp"
 
 namespace ww::peripheral
 {
@@ -30,7 +30,7 @@ union PinConfig {
 class Pin : public Initializable
 {
   public:
-    Pin(GPIO_TypeDef &port, uint16_t pinMask);
+    Pin(PIN_CTOR_ARG, uint16_t pinMask);
     ~Pin();
     PinConfig &config_get();
     Result read(PinStatus &value);
@@ -40,7 +40,7 @@ class Pin : public Initializable
     Result mode_set(PinMode mode);
 
   private:
-    GPIO_TypeDef &_port;
+    PIN_FIELD_DECL;
     uint16_t _pinMask;
     PinConfig _config;
 };

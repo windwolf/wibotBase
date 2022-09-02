@@ -2,14 +2,8 @@
 #define __WWDEVICE_PERIPHERAL_SPI_HPP__
 
 #include "base.hpp"
+#include "peripheral.hpp"
 #include "pin.hpp"
-#include "spi.hpp"
-#include "wait_handler.hpp"
-#include "stm32g0xx_hal.h"
-
-#ifndef HAL_SPI_MODULE_ENABLED
-#define SPI_HandleTypeDef uint32_t
-#endif // HAL_SPI_MODULE_ENABLED
 
 namespace ww::peripheral
 {
@@ -30,7 +24,7 @@ union SpiConfig {
 class Spi : public Initializable
 {
   public:
-    Spi(SPI_HandleTypeDef &handle);
+    Spi(SPI_CTOR_ARG);
     ~Spi();
     SpiConfig &config_get();
 
@@ -38,7 +32,7 @@ class Spi : public Initializable
     Result write(void *data, uint32_t size, WaitHandler &waitHandler);
 
   private:
-    SPI_HandleTypeDef &_handle;
+    SPI_FIELD_DECL
     union {
         struct
         {
@@ -50,11 +44,13 @@ class Spi : public Initializable
     SpiConfig _config;
     WaitHandler *_readWaitHandler;
     WaitHandler *_writeWaitHandler;
+    Buffer _txBuffer;
+    Buffer _rxBuffer;
 
   protected:
-    static void _on_read_complete_callback(SPI_HandleTypeDef *instance);
-    static void _on_write_complete_callback(SPI_HandleTypeDef *instance);
-    static void _on_error_callback(SPI_HandleTypeDef *instance);
+    static void _on_read_complete_callback(SPI_CALLBACK_ARG);
+    static void _on_write_complete_callback(SPI_CALLBACK_ARG);
+    static void _on_error_callback(SPI_CALLBACK_ARG);
 };
 
 union SpiWithPinsConfig {
@@ -73,7 +69,7 @@ union SpiWithPinsConfig {
 class SpiWithPins : public Spi
 {
   public:
-    SpiWithPins(SPI_HandleTypeDef &handle, Pin *cs, Pin *rw, Pin *dc);
+    SpiWithPins(SPI_CTOR_ARG, Pin *cs, Pin *rw, Pin *dc);
     ~SpiWithPins();
 
     SpiWithPinsConfig &pinconfig_get();
@@ -83,7 +79,7 @@ class SpiWithPins : public Spi
     Result session_end();
 
   private:
-    SPI_HandleTypeDef &_handle;
+    SPI_FIELD_DECL
     Pin *_cs;
     Pin *_rw;
     Pin *_dc;
@@ -99,8 +95,8 @@ class SpiWithPins : public Spi
     void cs_set(bool isEnable);
     void dc_set(bool isData);
     void rw_set(bool isRead);
-    static void _on_read_complete_callback(SPI_HandleTypeDef *instance);
-    static void _on_write_complete_callback(SPI_HandleTypeDef *instance);
+    static void _on_read_complete_callback(SPI_CALLBACK_ARG);
+    static void _on_write_complete_callback(SPI_CALLBACK_ARG);
 };
 } // namespace ww::peripheral
 #endif // __WWDEVICE_PERIPHERAL_SPI_HPP__

@@ -2,12 +2,7 @@
 #define __WWDEVICE_PERIPHERAL_I2C_HPP__
 
 #include "peripheral.hpp"
-#include "pin.hpp"
-#include "stm32g0xx_hal.h"
-
-#ifndef HAL_I2C_MODULE_ENABLED
-#define I2C_HandleTypeDef uint32_t
-#endif // HAL_I2C_MODULE_ENABLED
+#include "buffer.hpp"
 
 namespace ww::peripheral
 {
@@ -28,7 +23,7 @@ union I2cMasterConfig {
 class I2cMaster : public Initializable
 {
   public:
-    I2cMaster(I2C_HandleTypeDef &handle);
+    I2cMaster(I2C_CTOR_ARG);
     ~I2cMaster();
     I2cMasterConfig &config_get();
     Result read(uint32_t address, void *data, uint32_t size, WaitHandler &waitHandler);
@@ -37,7 +32,7 @@ class I2cMaster : public Initializable
     Result write(void *data, uint32_t size, WaitHandler &waitHandler);
 
   private:
-    I2C_HandleTypeDef &_handle;
+    I2C_FIELD_DECL
     I2cMasterConfig _config;
     union {
         struct
@@ -48,9 +43,11 @@ class I2cMaster : public Initializable
         uint32_t value;
     } _status;
     WaitHandler *_waitHandler;
-    static void _on_read_complete_callback(I2C_HandleTypeDef *instance);
-    static void _on_write_complete_callback(I2C_HandleTypeDef *instance);
-    static void _on_error_callback(I2C_HandleTypeDef *instance);
+    Buffer _txBuffer;
+    Buffer _rxBuffer;
+    static void _on_read_complete_callback(I2C_CALLBACK_ARG);
+    static void _on_write_complete_callback(I2C_CALLBACK_ARG);
+    static void _on_error_callback(I2C_CALLBACK_ARG);
 };
 
 }; // namespace ww::peripheral
