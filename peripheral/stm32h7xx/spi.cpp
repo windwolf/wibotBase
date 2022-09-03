@@ -172,11 +172,6 @@ SpiConfig &Spi::config_get()
     return _config;
 }
 
-SpiConfig &Spi::config_get()
-{
-    return _config;
-}
-
 Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
 {
     Result rst = Result_OK;
