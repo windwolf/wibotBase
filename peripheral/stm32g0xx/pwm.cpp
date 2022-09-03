@@ -21,6 +21,7 @@ PwmConfig &Pwm::config_get()
 
 Result Pwm::start()
 {
+    init();
     LL_TIM_CC_EnableChannel(_handle.Instance, _config.channelsEnable);
 
     return Result_OK;
