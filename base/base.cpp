@@ -34,4 +34,20 @@ uint32_t fast_log2(uint32_t _val)
     return ret;
 }
 
+Result Initializable::init()
+{
+    if (initState.inited)
+    {
+        return initState.initErrorCode;
+    }
+    initState.initErrorCode = _init();
+    initState.inited = true;
+    return initState.initErrorCode;
+}
+void Initializable::deinit()
+{
+    initState.initErrorCode = Result_OK;
+    initState.inited = false;
+};
+
 }; // namespace ww

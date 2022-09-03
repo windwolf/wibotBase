@@ -24,7 +24,7 @@ typedef void (*Callback)(void *sender, void *event, void *receiver);
  * 2. sender will return immediatly
  *
  */
-class WaitHandler : public Initializable
+class WaitHandler
 {
   public:
     WaitHandler(EventGroup &eventGroup, uint32_t doneFlag, uint32_t errorFlag);

@@ -21,7 +21,7 @@ class Thread
     static void sleep(uint32_t ms);
 };
 
-class Mutex : public Initializable
+class Mutex
 {
   public:
     Mutex(const char *name);
@@ -41,18 +41,16 @@ typedef uint8_t EventOptions;
 #define EventOptions_Clear 0x00
 #define EventOptions_NoClear EventOptions_Clear_Flag
 
-class EventGroup: public Initializable
+class EventGroup
 {
   public:
     EventGroup(const char *name);
     ~EventGroup();
     Result set(uint32_t flags);
     Result reset(uint32_t flags);
-    Result wait(uint32_t flags, uint32_t &actualFlags, EventOptions options,
-                uint32_t timeout);
+    Result wait(uint32_t flags, uint32_t &actualFlags, EventOptions options, uint32_t timeout);
 
   private:
-
     EVENTGROUP_TYPEDEF _instance;
 };
 } // namespace ww::os

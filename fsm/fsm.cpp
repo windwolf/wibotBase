@@ -17,8 +17,7 @@ Result FSM_State::_init(FSM &fsm)
         this->_parent = fsm._find_state_by_no(_config.parentStateNo);
         if (this->_parent == nullptr)
         {
-            LOG_E("%s %s's parent not exsits.",
-                  (fsm._name == NULL) ? "" : fsm._name,
+            LOG_E("%s %s's parent not exsits.", (fsm._name == NULL) ? "" : fsm._name,
                   (_config.name == NULL) ? "" : _config.name);
             return Result_GeneralError;
         }
@@ -73,8 +72,7 @@ void FSM_State::enter(FSM &fsm, FSM_State *fromState)
         curSta = curSta->_parent;
     }
 
-    LOG_I("%lu %s.%s: entry", fsm.currentTick,
-          (fsm._name == NULL) ? "" : fsm._name,
+    LOG_I("%lu %s.%s: entry", fsm.currentTick, (fsm._name == NULL) ? "" : fsm._name,
           (_config.name == NULL) ? "" : _config.name);
 };
 
@@ -96,8 +94,7 @@ void FSM_State::exit(FSM &fsm, FSM_State *toState)
         curSta = curSta->_parent;
     }
 
-    LOG_I("%lu %s.%s: exit", fsm.currentTick,
-          (fsm._name == NULL) ? "" : fsm._name,
+    LOG_I("%lu %s.%s: exit", fsm.currentTick, (fsm._name == NULL) ? "" : fsm._name,
           (_config.name == NULL) ? "" : _config.name);
 };
 
@@ -120,14 +117,14 @@ Result FSM_Transition::_init(FSM &fsm)
     FSM_State *toState = fsm._find_state_by_no(_config.to);
     if (fromState == NULL)
     {
-        LOG_E("%s transition's from %d not exsits.",
-              (fsm._name == NULL) ? "" : fsm._name, _config.from);
+        LOG_E("%s transition's from %d not exsits.", (fsm._name == NULL) ? "" : fsm._name,
+              _config.from);
         return Result_GeneralError;
     }
     if (toState == NULL)
     {
-        LOG_E("%s transition's to %d not exsits.",
-              (fsm._name == NULL) ? "" : fsm._name, _config.to);
+        LOG_E("%s transition's to %d not exsits.", (fsm._name == NULL) ? "" : fsm._name,
+              _config.to);
         return Result_GeneralError;
     }
 
@@ -156,8 +153,7 @@ bool FSM_Transition::_do_event_check(FSM &fsm, FSM_State *fromState)
         return false;
     }
 
-    if (_config.mode == FSM_TRANSITION_MODE_EVENT &&
-        fsm._events.check(_config.events) &&
+    if (_config.mode == FSM_TRANSITION_MODE_EVENT && fsm._events.check(_config.events) &&
         (_config.guard == NULL || _config.guard(fsm, fromState)))
     {
         fromState->exit(fsm, _to);
@@ -172,16 +168,14 @@ bool FSM_Transition::_do_event_check(FSM &fsm, FSM_State *fromState)
     return false;
 };
 
-bool FSM_Transition::_do_timeout_check(FSM &fsm, FSM_State *fromState,
-                                       uint32_t duration)
+bool FSM_Transition::_do_timeout_check(FSM &fsm, FSM_State *fromState, uint32_t duration)
 {
     // skip transit to self.
     if (_config.to == fromState->_config.stateNo)
     {
         return false;
     }
-    if (_config.mode == FSM_TRANSITION_MODE_TIMEOUT &&
-        _config.timeout <= duration &&
+    if (_config.mode == FSM_TRANSITION_MODE_TIMEOUT && _config.timeout <= duration &&
         (_config.guard == NULL || _config.guard(fsm, fromState)))
     {
         fromState->exit(fsm, _to);
@@ -195,12 +189,12 @@ bool FSM_Transition::_do_timeout_check(FSM &fsm, FSM_State *fromState,
     return false;
 };
 
-FSM::FSM(const char *name, uint32_t eventClearMask, FSM_State (&states)[],
-         uint32_t stateCount, FSM_Transition (&transitions)[],
-         uint32_t transitionCount)
-    : _name(name), _events(eventClearMask), _states(states),
-      _stateCount(stateCount), _transitions(transitions),
-      _transitionCount(transitionCount)
+FSM::FSM(const char *name, uint32_t eventClearMask, FSM_State (&states)[], uint32_t stateCount,
+         FSM_Transition (&transitions)[], uint32_t transitionCount)
+    : _name(name), _events(eventClearMask), _states(states), _stateCount(stateCount),
+      _transitions(transitions), _transitionCount(transitionCount){};
+
+Result FSM::_init()
 {
     Result rst = Result_OK;
 #ifdef FSM_TRANSITION_PREFILTER
@@ -217,8 +211,7 @@ FSM::FSM(const char *name, uint32_t eventClearMask, FSM_State (&states)[],
         if (rst != Result_OK)
         {
             LOG_E("FSM %s build error.", (_name == NULL) ? "" : _name);
-            initErrorCode = rst;
-            return;
+            return Result_GeneralError;
         }
     }
 
@@ -228,13 +221,12 @@ FSM::FSM(const char *name, uint32_t eventClearMask, FSM_State (&states)[],
         if (rst != Result_OK)
         {
             LOG_E("FSM %s build error.", (_name == NULL) ? "" : _name);
-            initErrorCode = rst;
-            return;
+            return Result_GeneralError;
         }
     }
+    return Result_OK;
 };
-
-FSM::~FSM(){};
+void FSM::_deinit(){};
 
 Result FSM::start(uint32_t stateNo, void *userData, uint32_t initialTick)
 {
@@ -242,8 +234,7 @@ Result FSM::start(uint32_t stateNo, void *userData, uint32_t initialTick)
     FSM_State *state = _find_state_by_no(stateNo);
     if (state == nullptr)
     {
-        LOG_E("start state: %s.%lu not found.", (_name == NULL) ? "" : _name,
-              stateNo);
+        LOG_E("start state: %s.%lu not found.", (_name == NULL) ? "" : _name, stateNo);
         return Result_InvalidParameter;
     }
     this->userData = userData;

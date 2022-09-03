@@ -24,7 +24,8 @@ class SdCard : Initializable
 {
   public:
     SdCard(SD_CTOR_ARG);
-    ~SdCard();
+    virtual Result _init();
+    virtual void _deinit();
     SdConfig &config_get();
     CardInfo &card_info_get();
     Result read(void *data, uint32_t num, uint32_t count, WaitHandler WaitHandler);
@@ -68,8 +69,10 @@ class SdCardBlock : public Block
     Buffer _buffer;
 
   protected:
-    virtual Result media_read(void *data, uint32_t num, uint32_t size, WaitHandler &waitHandler) = 0;
-    virtual Result media_write(void *data, uint32_t num, uint32_t size, WaitHandler &waitHandler) = 0;
+    virtual Result media_read(void *data, uint32_t num, uint32_t size,
+                              WaitHandler &waitHandler) = 0;
+    virtual Result media_write(void *data, uint32_t num, uint32_t size,
+                               WaitHandler &waitHandler) = 0;
     virtual Result media_erase(uint32_t num, uint32_t size, WaitHandler &waitHandler) = 0;
 }
 

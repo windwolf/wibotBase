@@ -116,10 +116,10 @@ class FSM : public Initializable
   public:
     friend class FSM_State;
     friend class FSM_Transition;
-    FSM(const char *name, uint32_t eventClearMask, FSM_State (&states)[],
-        uint32_t stateCount, FSM_Transition (&transitions)[],
-        uint32_t transitionCount);
-    ~FSM();
+    FSM(const char *name, uint32_t eventClearMask, FSM_State (&states)[], uint32_t stateCount,
+        FSM_Transition (&transitions)[], uint32_t transitionCount);
+    virtual Result _init();
+    virtual void _deinit();
 
     Result start(uint32_t stateNo, void *userData, uint32_t initialTick);
 

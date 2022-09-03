@@ -4,11 +4,13 @@
 namespace ww::peripheral
 {
 
-Pin::Pin(GPIO_TypeDef &port, uint16_t pinMask) : _port(port), _pinMask(pinMask)
+Pin::Pin(GPIO_TypeDef &port, uint16_t pinMask) : _port(port), _pinMask(pinMask){};
+
+Result Pin::_init()
 {
-    initErrorCode = Result_OK;
+    return Result_OK;
 };
-Pin::~Pin(){};
+void Pin::_deinit(){};
 
 PinConfig &Pin::config_get()
 {

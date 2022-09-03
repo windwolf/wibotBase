@@ -8,10 +8,7 @@ namespace ww
 using namespace ww::os;
 
 WaitHandler::WaitHandler(EventGroup &eventGroup, uint32_t doneFlag, uint32_t errorFlag)
-    : _eventGroup(eventGroup), _doneFlag(doneFlag), _errorFlag(errorFlag)
-{
-    initErrorCode = _eventGroup.initErrorCode;
-};
+    : _eventGroup(eventGroup), _doneFlag(doneFlag), _errorFlag(errorFlag){};
 
 WaitHandlerConfig &WaitHandler::config_get()
 {

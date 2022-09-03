@@ -76,7 +76,9 @@ void UART::_on_error_callback(UART_HandleTypeDef *instance)
     }
 };
 
-UART::UART(UART_HandleTypeDef &handle) : _handle(handle)
+UART::UART(UART_HandleTypeDef &handle) : _handle(handle){};
+
+Result UART::_init()
 {
     HAL_UART_RegisterCallback(&_handle, HAL_UART_TX_COMPLETE_CB_ID,
                               &ww::peripheral::UART::_on_write_complete_callback);
@@ -87,9 +89,9 @@ UART::UART(UART_HandleTypeDef &handle) : _handle(handle)
     HAL_UART_RegisterCallback(&_handle, HAL_UART_ERROR_CB_ID,
                               &ww::peripheral::UART::_on_error_callback);
     Peripherals::peripheral_register("uart", this, &_handle);
-    initErrorCode = Result_OK;
+    return Result_OK;
 };
-UART::~UART()
+void UART::_deinit()
 {
     Peripherals::peripheral_unregister("uart", this);
 };

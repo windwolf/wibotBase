@@ -49,26 +49,46 @@ uint32_t fast_log2(uint32_t _val);
 class Initializable
 {
   public:
-    Result initErrorCode;
+    Result init();
+    void deinit();
+
+  protected:
+    virtual Result _init() = 0;
+    virtual void _deinit() = 0;
+
+  private:
+    struct
+    {
+        Result initErrorCode;
+        bool inited : 1;
+    } initState;
 };
 
-#define BASE_INIT_ERROR_CHECK()                                                                    \
-    if (initErrorCode != Result_OK)                                                                \
+#define INIT_BEGIN() Result rst;
+#define INIT_END() return rst;
+
+#define BASE_INIT_ERROR_CHECK(className)                                                           \
+    rst = className::init();                                                                       \
+    if (rst != Result_OK)                                                                          \
     {                                                                                              \
-        return;                                                                                    \
+        return rst;                                                                                \
     }
 #define MEMBER_INIT_ERROR_CHECK(instance)                                                          \
-    initErrorCode = instance.initErrorCode;                                                        \
-    if (initErrorCode != Result_OK)                                                                \
+    rst = instance.init();                                                                         \
+    if (rst != Result_OK)                                                                          \
     {                                                                                              \
-        return;                                                                                    \
+        return rst;                                                                                \
     }
 #define PTR_INIT_ERROR_CHECK(instance)                                                             \
-    initErrorCode = instance->initErrorCode;                                                       \
-    if (initErrorCode != Result_OK)                                                                \
+    rst = instance->init();                                                                        \
+    if (rst != Result_OK)                                                                          \
     {                                                                                              \
-        return;                                                                                    \
+        return rst;                                                                                \
     }
+
+#define BASE_DEINIT(className) className::deinit();
+#define MEMBER_DEINIT(instance) instance.deinit();
+#define PTR_DEINIT(instance) instance->deinit();
 } // namespace ww
 
 #endif // ___BASE_HPP__

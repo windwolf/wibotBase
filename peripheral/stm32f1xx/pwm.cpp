@@ -1,16 +1,18 @@
 #include "pwm.hpp"
 
-
 #ifdef HAL_TIM_MODULE_ENABLED
 
 namespace ww::peripheral
 {
 
-Pwm::Pwm(TIM_HandleTypeDef &handle) : _handle(handle)
+Pwm::Pwm(TIM_HandleTypeDef &handle) : _handle(handle){};
+
+Result Pwm::_init()
 {
-    initErrorCode = Result_OK;
+    return Result_OK;
 };
-Pwm::~Pwm(){};
+void Pwm::_deinit(){};
+
 PwmConfig &Pwm::config_get()
 {
     return _config;

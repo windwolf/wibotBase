@@ -5,17 +5,23 @@
 #ifdef HAL_QSPI_MODULE_ENABLED
 namespace ww::peripheral
 {
-    QSPI::QSPI(QSPI_HandleTypeDef &handle) : _handle(handle)
+QSPI::QSPI(QSPI_HandleTypeDef &handle) : _handle(handle)
+{
+}
+
+Result QSPI::_init()
 {
     HAL_QSPI_RegisterCallback(&_handle, HAL_QSPI_TX_CPLT_CB_ID, &QSPI::_on_write_complete_callback);
     HAL_QSPI_RegisterCallback(&_handle, HAL_QSPI_RX_CPLT_CB_ID, &QSPI::_on_read_complete_callback);
-    HAL_QSPI_RegisterCallback(&_handle, HAL_QSPI_CMD_CPLT_CB_ID, &QSPI::_on_command_complete_callback);
-    HAL_QSPI_RegisterCallback(&_handle, HAL_QSPI_STATUS_MATCH_CB_ID, &QSPI::_on_status_match_callback);
+    HAL_QSPI_RegisterCallback(&_handle, HAL_QSPI_CMD_CPLT_CB_ID,
+                              &QSPI::_on_command_complete_callback);
+    HAL_QSPI_RegisterCallback(&_handle, HAL_QSPI_STATUS_MATCH_CB_ID,
+                              &QSPI::_on_status_match_callback);
     HAL_QSPI_RegisterCallback(&_handle, HAL_QSPI_ERROR_CB_ID, &QSPI::_on_error_callback);
     Peripherals::peripheral_register("qspi", this, &_handle);
-    initErrorCode = Result_OK;
-}
-QSPI::~QSPI()
+    return Result_OK;
+};
+void QSPI::_deinit()
 {
     Peripherals::peripheral_unregister("qspi", this);
 };
@@ -24,9 +30,6 @@ QSPIConfig &QSPI::config_get()
 {
     return _config;
 }
-}
-#endif //HAL_QSPI_MODULE_ENABLED
-
 
 static void _command_qspi_cmd_tranlate(CommandFrame *cmd, QSPI_CommandTypeDef *cmdhandler)
 {
@@ -195,8 +198,7 @@ OP_RESULT command_qspi_autopolling(CommandQspi *command, CommandFrame *pollingCo
                                 HAL_MAX_DELAY);
 };
 
-OP_RESULT command_qspi_create(CommandQspi *command,
-                              QSPI_HandleTypeDef *instance,
+OP_RESULT command_qspi_create(CommandQspi *command, QSPI_HandleTypeDef *instance,
                               uint32_t dmaThreshold)
 {
     command_create((Command *)command, &_command_qspi_send);
@@ -215,11 +217,12 @@ OP_RESULT command_qspi_create(CommandQspi *command,
     return OP_RESULT_OK;
 };
 
-void _command_qspi_register(CommandQspi *command, void *parent,
-                            CommandErrorHandleFuncType onError,
+void _command_qspi_register(CommandQspi *command, void *parent, CommandErrorHandleFuncType onError,
                             CommandQspiEventHandleFuncType onStatusPollingResult)
 {
     command->parent = parent;
     command->base.onError = onError;
     command->onStatusPollingResult = onStatusPollingResult;
 };
+} // namespace ww::peripheral
+#endif // HAL_QSPI_MODULE_ENABLED

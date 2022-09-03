@@ -20,9 +20,7 @@ void Thread::sleep(uint32_t ms)
 
 Mutex::Mutex(const char *name)
 {
-    initErrorCode = (tx_mutex_create(&(this->instance), name, 0) == TX_SUCCESS)
-                        ? Result_OK
-                        : Result_NoResource;
+    tx_mutex_create(&(this->instance), name, 0);
 };
 
 Mutex::~Mutex(){
@@ -41,10 +39,7 @@ void Mutex::unlock()
 
 EventGroup::EventGroup(const char *name)
 {
-    initErrorCode =
-        (tx_event_flags_create(&(this->_instance), name) == TX_SUCCESS)
-            ? Result_OK
-            : Result_NoResource;
+    tx_event_flags_create(&(this->_instance), name);
 };
 
 EventGroup::~EventGroup(){
@@ -65,12 +60,12 @@ Result EventGroup::reset(uint32_t flags)
                : Result_GeneralError;
 };
 
-Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags,
-                        EventOptions options, uint32_t timeout)
+Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions options,
+                        uint32_t timeout)
 {
     // TODO: handler TX_OPTION
-    return (tx_event_flags_get(&(this->_instance), flags, option, &actualFlags,
-                               timeout) == TX_SUCCESS)
+    return (tx_event_flags_get(&(this->_instance), flags, option, &actualFlags, timeout) ==
+            TX_SUCCESS)
                ? Result_OK
                : Result_GeneralError;
 };

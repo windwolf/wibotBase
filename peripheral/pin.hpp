@@ -32,7 +32,8 @@ class Pin : public Initializable
 {
   public:
     Pin(PIN_CTOR_ARG, uint16_t pinMask);
-    ~Pin();
+    virtual Result _init();
+    virtual void _deinit();
     PinConfig &config_get();
     Result read(PinStatus &value);
     Result write(PinStatus value);

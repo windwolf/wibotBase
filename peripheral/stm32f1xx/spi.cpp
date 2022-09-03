@@ -132,7 +132,9 @@ static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option, uint32_t si
     // return;
 };
 
-Spi::Spi(SPI_HandleTypeDef &handle) : _handle(handle)
+Spi::Spi(SPI_HandleTypeDef &handle) : _handle(handle){};
+
+Result Spi::_init()
 {
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_TX_COMPLETE_CB_ID,
                              &ww::peripheral::Spi::_on_write_complete_callback);
@@ -141,9 +143,9 @@ Spi::Spi(SPI_HandleTypeDef &handle) : _handle(handle)
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
                              &ww::peripheral::Spi::_on_error_callback);
     Peripherals::peripheral_register("spi", this, &_handle);
-    initErrorCode = Result_OK;
-}
-Spi::~Spi()
+    return Result_OK;
+};
+void Spi::_deinit()
 {
     Peripherals::peripheral_unregister("spi", this);
 };
@@ -220,9 +222,11 @@ Result Spi::write(void *data, uint32_t size, WaitHandler &waitHandler)
 // SpiWithPins--------------------
 
 SpiWithPins::SpiWithPins(SPI_HandleTypeDef &handle, Pin *cs, Pin *rw, Pin *dc)
-    : Spi(handle), _handle(handle), _cs(cs), _rw(rw), _dc(dc)
+    : Spi(handle), _handle(handle), _cs(cs), _rw(rw), _dc(dc){};
+
+Result SpiWithPins::_init()
 {
-    BASE_INIT_ERROR_CHECK()
+    INIT_BEGIN()
     PTR_INIT_ERROR_CHECK(_cs)
     PTR_INIT_ERROR_CHECK(_rw)
     PTR_INIT_ERROR_CHECK(_dc)
@@ -245,12 +249,16 @@ SpiWithPins::SpiWithPins(SPI_HandleTypeDef &handle, Pin *cs, Pin *rw, Pin *dc)
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
                              &ww::peripheral::Spi::_on_error_callback);
     Peripherals::peripheral_register("spiwithpin", this, &_handle);
+    INIT_END()
 };
-
-SpiWithPins::~SpiWithPins()
+void SpiWithPins::_deinit()
 {
     Peripherals::peripheral_unregister("spiwithpin", this);
+    PTR_DEINIT(_cs)
+    PTR_DEINIT(_rw)
+    PTR_DEINIT(_dc)
 };
+
 SpiWithPinsConfig &SpiWithPins::pinconfig_get()
 {
     return _config;

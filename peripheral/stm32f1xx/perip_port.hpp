@@ -7,8 +7,10 @@
 /********** I2C **************************/
 #define I2C_PER_DECL class Pin;
 #define I2C_CTOR_ARG Pin &scl, Pin &sda
-#define I2C_FIELD_DECL Pin &_scl; Pin &_sda;
-#define I2C_CALLBACK_ARG 
+#define I2C_FIELD_DECL                                                                             \
+    Pin &_scl;                                                                                     \
+    Pin &_sda;
+#define I2C_CALLBACK_ARG
 
 /********** I2C **************************/
 
@@ -75,6 +77,15 @@
 #endif // HAL_UART_MODULE_ENABLED
 
 /********** UART **************************/
+
+/********** QSPI **************************/
+
+#define QSPI_PER_DECL
+#define QSPI_CTOR_ARG uint32_t dummy
+#define QSPI_FIELD_DECL uint32_t dummy;
+#define QSPI_CALLBACK_ARG uint32_t dummy
+
+/********** QSPI **************************/
 
 #define CACHE_LINE_SIZE 4
 

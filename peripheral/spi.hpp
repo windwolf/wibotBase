@@ -27,7 +27,8 @@ class Spi : public Initializable
 {
   public:
     Spi(SPI_CTOR_ARG);
-    ~Spi();
+    virtual Result _init();
+    virtual void _deinit();
     SpiConfig &config_get();
 
     Result read(void *data, uint32_t size, WaitHandler &waitHandler);
@@ -72,8 +73,8 @@ class SpiWithPins : public Spi
 {
   public:
     SpiWithPins(SPI_CTOR_ARG, Pin *cs, Pin *rw, Pin *dc);
-    ~SpiWithPins();
-
+    virtual Result _init();
+    virtual void _deinit();
     SpiWithPinsConfig &pinconfig_get();
     Result read(bool isData, void *data, uint32_t size, WaitHandler &waitHandler);
     Result write(bool isData, void *data, uint32_t size, WaitHandler &waitHandler);

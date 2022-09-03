@@ -26,7 +26,7 @@ Mutex::Mutex(const char *name) : _name(name)
         .cb_size = sizeof(this->_instance),
 
     };
-    initErrorCode = (osMutexNew(&attr) != NULL) ? Result_OK : Result_NoResource;
+    osMutexNew(&attr);
 };
 
 Mutex::~Mutex()
@@ -52,8 +52,8 @@ EventGroup::EventGroup(const char *name) : _name(name)
         .cb_mem = &(this->_instance),
         .cb_size = sizeof(this->_instance),
     };
-    initErrorCode =
-        (osEventFlagsNew(&attr) != NULL) ? Result_OK : Result_NoResource;
+
+    osEventFlagsNew(&attr);
 };
 EventGroup::~EventGroup()
 {
@@ -86,8 +86,8 @@ Result EventGroup::reset(uint32_t flags)
     }
 };
 
-Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags,
-                        EventOptions options, uint32_t timeout)
+Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions options,
+                        uint32_t timeout)
 {
     auto rst = osEventFlagsWait(&(this->_instance), flags, options, timeout);
     if ((int32_t)rst < 0)

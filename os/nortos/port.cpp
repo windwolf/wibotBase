@@ -25,7 +25,6 @@ void Thread::sleep(uint32_t ms)
 Mutex::Mutex(const char *name)
 {
     _instance = 0;
-    initErrorCode = Result_OK;
 };
 Mutex::~Mutex()
 {
@@ -69,7 +68,6 @@ void Mutex::unlock()
 EventGroup::EventGroup(const char *name)
 {
     _instance = 0;
-    initErrorCode = Result_OK;
 };
 EventGroup::~EventGroup()
 {

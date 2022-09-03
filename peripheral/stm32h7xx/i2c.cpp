@@ -27,6 +27,21 @@ I2cMaster::~I2cMaster()
     Peripherals::peripheral_unregister("i2c", this);
 };
 
+Result I2cMaster::_init()
+{
+    HAL_I2C_RegisterCallback(&_handle, HAL_I2C_MEM_TX_COMPLETE_CB_ID,
+                             &I2cMaster::_on_write_complete_callback);
+    HAL_I2C_RegisterCallback(&_handle, HAL_I2C_MEM_RX_COMPLETE_CB_ID,
+                             &I2cMaster::_on_read_complete_callback);
+    HAL_I2C_RegisterCallback(&_handle, HAL_I2C_ERROR_CB_ID, &I2cMaster::_on_error_callback);
+    Peripherals::peripheral_register("i2c", this, &_handle);
+    return Result_OK;
+};
+void I2cMaster::_deinit()
+{
+    Peripherals::peripheral_unregister("i2c", this);
+};
+
 Result I2cMaster::read(uint32_t address, void *data, uint32_t size, WaitHandler &waitHandler)
 {
     this->_rxWaitHandler = &waitHandler;
