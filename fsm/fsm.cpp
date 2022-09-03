@@ -230,6 +230,7 @@ void FSM::_deinit(){};
 
 Result FSM::start(uint32_t stateNo, void *userData, uint32_t initialTick)
 {
+    init();
     currentTick = initialTick;
     FSM_State *state = _find_state_by_no(stateNo);
     if (state == nullptr)
