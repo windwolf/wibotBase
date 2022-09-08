@@ -191,7 +191,7 @@ Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
     {
         this->_status.isRxDmaEnabled = 1;
         _rxBuffer.data = data;
-        _rxBuffer.size = size * (_config.dataWidth - 1);
+        _rxBuffer.size = size * (to_underlying(_config.dataWidth) - 1);
         return (Result)HAL_SPI_Receive_DMA(&_handle, (uint8_t *)data, sizeInfo.sizeInDMADataWidth);
     }
     else
@@ -219,8 +219,8 @@ Result Spi::write(void *data, uint32_t size, WaitHandler &waitHandler)
     {
         this->_status.isTxDmaEnabled = 1;
         _txBuffer.data = data;
-        _txBuffer.size = size * (_config.dataWidth - 1);
-        SCB_CleanDCache_by_Addr((uint32_t *)data, size * (_config.dataWidth - 1));
+        _txBuffer.size = size * (to_underlying(_config.dataWidth) - 1);
+        SCB_CleanDCache_by_Addr((uint32_t *)data, size * (to_underlying(_config.dataWidth) - 1));
         return (Result)HAL_SPI_Transmit_DMA(&_handle, static_cast<uint8_t *>(data),
                                             sizeInfo.sizeInDMADataWidth);
     }

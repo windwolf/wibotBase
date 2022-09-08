@@ -59,7 +59,7 @@ void Spi::_on_error_callback(SPI_HandleTypeDef *instance)
 static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option, uint32_t size,
                         ww::peripheral::SizeInfo &sizeInfo)
 {
-    sizeInfo.sizeInBytes = size << option.dataWidth;
+    sizeInfo.sizeInBytes = size << to_underlying(option.dataWidth);
     switch (option.dataWidth)
     {
     case DataWidth::Bit8:
