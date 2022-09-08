@@ -49,15 +49,15 @@ EventGroup::~EventGroup(){
 Result EventGroup::set(uint32_t flags)
 {
     return (tx_event_flags_set(&(this->_instance), flags, TX_OR) == TX_SUCCESS)
-               ? Result_OK
-               : Result_GeneralError;
+               ? Result::OK
+               : Result::GeneralError;
 };
 
 Result EventGroup::reset(uint32_t flags)
 {
     return (tx_event_flags_set(&(this->_instance), flags, TX_AND) == TX_SUCCESS)
-               ? Result_OK
-               : Result_GeneralError;
+               ? Result::OK
+               : Result::GeneralError;
 };
 
 Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions options,
@@ -66,6 +66,6 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions opti
     // TODO: handler TX_OPTION
     return (tx_event_flags_get(&(this->_instance), flags, option, &actualFlags, timeout) ==
             TX_SUCCESS)
-               ? Result_OK
-               : Result_GeneralError;
+               ? Result::OK
+               : Result::GeneralError;
 };

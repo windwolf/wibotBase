@@ -28,8 +28,8 @@ class I2cMaster : public Initializable
   public:
     I2cMaster(I2C_CTOR_ARG);
     ~I2cMaster();
-    virtual Result _init();
-    virtual void _deinit();
+    Result _init() override;
+    void _deinit() override;
     I2cMasterConfig &config_get();
     Result read(uint32_t address, void *data, uint32_t size, WaitHandler &waitHandler);
     Result write(uint32_t address, void *data, uint32_t size, WaitHandler &waitHandler);

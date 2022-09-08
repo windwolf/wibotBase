@@ -8,7 +8,7 @@ Pin::Pin(GPIO_TypeDef &port, uint16_t pinMask) : _port(port), _pinMask(pinMask){
 
 Result Pin::_init()
 {
-    return Result_OK;
+    return Result::OK;
 };
 void Pin::_deinit(){};
 
@@ -22,25 +22,25 @@ Result Pin::read(PinStatus &value)
     PinStatus rst;
     rst = (PinStatus)HAL_GPIO_ReadPin(&_port, this->_pinMask);
     value = (PinStatus)(rst ^ this->_config.inverse);
-    return Result_OK;
+    return Result::OK;
 };
 
 Result Pin::write(PinStatus value)
 {
     HAL_GPIO_WritePin(&_port, this->_pinMask, (GPIO_PinState)(value ^ this->_config.inverse));
-    return Result_OK;
+    return Result::OK;
 };
 
 Result Pin::toggle()
 {
     HAL_GPIO_TogglePin(&_port, this->_pinMask);
-    return Result_OK;
+    return Result::OK;
 };
 
 Result Pin::mode_set(PinMode mode)
 {
     LL_GPIO_SetPinMode(&_port, this->_pinMask,
-                       (mode == PinMode_Input) ? LL_GPIO_MODE_INPUT : LL_GPIO_MODE_OUTPUT);
-    return Result_OK;
+                       (mode == PinMode::Input) ? LL_GPIO_MODE_INPUT : LL_GPIO_MODE_OUTPUT);
+    return Result::OK;
 };
 } // namespace ww::peripheral

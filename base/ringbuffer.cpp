@@ -78,9 +78,9 @@ Result RingBuffer::write_index_sync(uint32_t newWrite)
     _write = newWrite;
     if (_operationNotify != nullptr)
     {
-        _operationNotify(RINGBUFFER_OPERATION_TYPE_SYNC_HEAD);
+        _operationNotify(RingBufferOperationType::SyncHead);
     }
-    return Result_OK;
+    return Result::OK;
 };
 Result RingBuffer::read_index_sync(uint32_t newRead)
 {
@@ -96,21 +96,21 @@ Result RingBuffer::read_index_sync(uint32_t newRead)
     }
     if (count < (int32_t)length)
     {
-        return Result_GeneralError;
+        return Result::GeneralError;
     }
     _read = newRead;
 
     if (_operationNotify != nullptr)
     {
-        _operationNotify(RINGBUFFER_OPERATION_TYPE_SYNC_TAIL);
+        _operationNotify(RingBufferOperationType::SyncTail);
     }
-    return Result_OK;
+    return Result::OK;
 };
 Result RingBuffer::read_offset_sync(uint32_t offset)
 {
     if (offset > count_get())
     {
-        return Result_InvalidParameter;
+        return Result::InvalidParameter;
     }
     uint32_t index = _read + offset;
     if (index >= _size)
@@ -120,16 +120,16 @@ Result RingBuffer::read_offset_sync(uint32_t offset)
     _read = index;
     if (_operationNotify != nullptr)
     {
-        _operationNotify(RINGBUFFER_OPERATION_TYPE_SYNC_TAIL);
+        _operationNotify(RingBufferOperationType::SyncTail);
     }
-    return Result_OK;
+    return Result::OK;
 };
-Result RingBuffer::write(void *valuePtr, uint32_t length,
-                         uint8_t allowCoverTail, uint32_t *actualLength)
+Result RingBuffer::write(void *valuePtr, uint32_t length, uint8_t allowCoverTail,
+                         uint32_t *actualLength)
 {
     if (length <= 0)
     {
-        return Result_InvalidParameter;
+        return Result::InvalidParameter;
     }
     uint32_t write = _write;
     uint32_t size = _size;
@@ -158,8 +158,7 @@ Result RingBuffer::write(void *valuePtr, uint32_t length,
         }
     }
 
-    uint32_t spaceFromWriteToEnd =
-        (read == 0) ? (cap - write) : (cap - write + 1);
+    uint32_t spaceFromWriteToEnd = (read == 0) ? (cap - write) : (cap - write + 1);
 
     if (length <= spaceFromWriteToEnd)
     {
@@ -169,8 +168,7 @@ Result RingBuffer::write(void *valuePtr, uint32_t length,
     }
     else
     {
-        memcpy(POINTER_ADD(_data, write, _dataWidth), valuePtr,
-               spaceFromWriteToEnd);
+        memcpy(POINTER_ADD(_data, write, _dataWidth), valuePtr, spaceFromWriteToEnd);
         memcpy(_data, POINTER_ADD(valuePtr, spaceFromWriteToEnd, _dataWidth),
                (length - spaceFromWriteToEnd));
 
@@ -186,17 +184,17 @@ Result RingBuffer::write(void *valuePtr, uint32_t length,
 
     if (_operationNotify != NULL)
     {
-        _operationNotify(RINGBUFFER_OPERATION_TYPE_ENQUEUE);
+        _operationNotify(RingBufferOperationType::Enqueue);
     }
     *actualLength = length;
-    return Result_OK;
+    return Result::OK;
 };
-Result RingBuffer::write_fill(uint8_t *value, uint32_t length,
-                              uint8_t allowCoverTail, uint32_t *actualLength)
+Result RingBuffer::write_fill(uint8_t *value, uint32_t length, uint8_t allowCoverTail,
+                              uint32_t *actualLength)
 {
     if (length <= 0)
     {
-        return Result_InvalidParameter;
+        return Result::InvalidParameter;
     }
     uint32_t write = _write;
     uint32_t size = _size;
@@ -224,22 +222,18 @@ Result RingBuffer::write_fill(uint8_t *value, uint32_t length,
         }
     }
 
-    uint32_t spaceFromWriteToEnd =
-        (read == 0) ? (cap - write) : (cap - write + 1);
+    uint32_t spaceFromWriteToEnd = (read == 0) ? (cap - write) : (cap - write + 1);
 
     if (length <= spaceFromWriteToEnd)
     {
-        memset(POINTER_ADD(_data, write, _dataWidth), *value,
-               length * _dataWidth);
+        memset(POINTER_ADD(_data, write, _dataWidth), *value, length * _dataWidth);
         write += length;
         write = (write == size) ? 0 : write;
     }
     else
     {
-        memset(POINTER_ADD(_data, write, _dataWidth), *value,
-               spaceFromWriteToEnd * _dataWidth);
-        memcpy(_data, (void *)value,
-               (length - spaceFromWriteToEnd) * _dataWidth);
+        memset(POINTER_ADD(_data, write, _dataWidth), *value, spaceFromWriteToEnd * _dataWidth);
+        memcpy(_data, (void *)value, (length - spaceFromWriteToEnd) * _dataWidth);
 
         write = length - spaceFromWriteToEnd;
     }
@@ -253,10 +247,10 @@ Result RingBuffer::write_fill(uint8_t *value, uint32_t length,
 
     if (_operationNotify != NULL)
     {
-        _operationNotify(RINGBUFFER_OPERATION_TYPE_ENQUEUE);
+        _operationNotify(RingBufferOperationType::Enqueue);
     }
     *actualLength = length;
-    return Result_OK;
+    return Result::OK;
 };
 Result RingBuffer::read(void *valuePtr, uint32_t length, uint32_t &actualLength)
 {
@@ -284,8 +278,8 @@ Result RingBuffer::read(void *valuePtr, uint32_t length, uint32_t &actualLength)
     {
         memcpy(valuePtr, POINTER_ADD(data, read, _dataWidth),
                countFormTailToBufferEnd * _dataWidth);
-        memcpy(POINTER_ADD(valuePtr, countFormTailToBufferEnd, _dataWidth),
-               data, (length - countFormTailToBufferEnd) * _dataWidth);
+        memcpy(POINTER_ADD(valuePtr, countFormTailToBufferEnd, _dataWidth), data,
+               (length - countFormTailToBufferEnd) * _dataWidth);
 
         read = length - countFormTailToBufferEnd;
     }
@@ -295,19 +289,19 @@ Result RingBuffer::read(void *valuePtr, uint32_t length, uint32_t &actualLength)
 
     if (_operationNotify != NULL)
     {
-        _operationNotify(RINGBUFFER_OPERATION_TYPE_DEQUEUE);
+        _operationNotify(RingBufferOperationType::Dequeue);
     }
     actualLength = length;
-    return Result_OK;
+    return Result::OK;
 };
 Result RingBuffer::peek(void *&data)
 {
     if (is_empty())
     {
-        return Result_GeneralError;
+        return Result::GeneralError;
     }
     data = POINTER_ADD(_data, _read, _dataWidth);
-    return Result_OK;
+    return Result::OK;
 };
 Result RingBuffer::index_peek(uint32_t index, void *&data)
 {
@@ -315,28 +309,28 @@ Result RingBuffer::index_peek(uint32_t index, void *&data)
     {
         if (index >= _write || index < _read)
         {
-            return Result_InvalidParameter;
+            return Result::InvalidParameter;
         }
     }
     else if (_write < _read)
     {
         if (index >= _write && index < _read)
         {
-            return Result_InvalidParameter;
+            return Result::InvalidParameter;
         }
     }
     else
     {
-        return Result_InvalidParameter;
+        return Result::InvalidParameter;
     }
     data = POINTER_ADD(_data, index, _dataWidth);
-    return Result_OK;
+    return Result::OK;
 };
 Result RingBuffer::offset_peek(uint32_t offset, void *&data)
 {
     if (offset > count_get())
     {
-        return Result_InvalidParameter;
+        return Result::InvalidParameter;
     }
     uint32_t index = _read + offset;
     if (index >= _size)
@@ -344,7 +338,7 @@ Result RingBuffer::offset_peek(uint32_t offset, void *&data)
         index -= _size;
     }
     data = POINTER_ADD(_data, index, _dataWidth);
-    return Result_OK;
+    return Result::OK;
 };
 void RingBuffer::operation_notify_register(OperationNotify operationNotify)
 {

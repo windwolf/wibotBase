@@ -3,14 +3,17 @@
 
 #include "graph.hpp"
 
-namespace ww::graph {
+namespace ww::graph
+{
 
-enum FONT_MEMORY_LAYOUT_DIRECTION {
+enum FONT_MEMORY_LAYOUT_DIRECTION
+{
     FONT_MEMORY_LAYOUT_DIRECTION_HORIZONTAL = 0,
     FONT_MEMORY_LAYOUT_DIRECTION_VERTICAL,
 };
 
-struct FontInfo {
+struct FontInfo
+{
     const uint8_t *table;
     uint16_t width;
     uint16_t height;
@@ -31,44 +34,49 @@ extern FontInfo Font6x8_v;
 
 extern FontInfo Font8x16_v;
 
-struct SpaceInfo {
+struct SpaceInfo
+{
     uint16_t x;
     uint16_t y;
     uint16_t width;
     uint16_t height;
 };
 
-struct FontDrawInfo {
+struct FontDrawInfo
+{
     Color foreColor;
     Color backColor;
     uint8_t spacing;
     uint8_t lineSpacing;
 };
 
-enum PIXEL_SIZE {
-    PIXEL_SIZE_1BIT = 0x00000001,
-    PIXEL_SIZE_8BIT = 0x000000FF,
-    PIXEL_SIZE_16BIT = 0x0000FFFF,
-    PIXEL_SIZE_24BIT = 0x00FFFFFF,
-    PIXEL_SIZE_32BIT = 0xFFFFFFFF,
+enum class PixelSize : uint32_t
+{
+    Bit1 = 0x00000001,
+    Bit8 = 0x000000FF,
+    Bit16 = 0x0000FFFF,
+    Bit24 = 0x00FFFFFF,
+    Bit32 = 0xFFFFFFFF,
 };
 
-enum CANVAS_MEMORY_LAYOUT_DIRECTION {
-    CANVAS_MEMORY_LAYOUT_DIRECTION_HORIZONTAL = 0,
-    CANVAS_MEMORY_LAYOUT_DIRECTION_VERTICAL,
+enum class CanvasMemoryLayoutDirection
+{
+    Horizontal = 0,
+    Vertical,
 };
 
-struct CanvasInfo {
+struct CanvasInfo
+{
     uint16_t width;
     uint16_t height;
-    PIXEL_SIZE pixelSize;
-    CANVAS_MEMORY_LAYOUT_DIRECTION direction;
+    PixelSize pixelSize;
+    CanvasMemoryLayoutDirection direction;
 };
 
-bool FONTS_CalcSpace(uint16_t x, uint16_t y, char *str, FontInfo *fontInfo,
-                     uint8_t spacing, SpaceInfo *spaceInfo);
+bool FONTS_CalcSpace(uint16_t x, uint16_t y, char *str, FontInfo *fontInfo, uint8_t spacing,
+                     SpaceInfo *spaceInfo);
 
-bool FONTS_FillData(uint8_t *buffer, CanvasInfo *canvas, uint16_t x, uint16_t y,
-                    char *str, FontInfo *fontInfo, FontDrawInfo *fontDrawInfo);
+bool FONTS_FillData(uint8_t *buffer, CanvasInfo *canvas, uint16_t x, uint16_t y, char *str,
+                    FontInfo *fontInfo, FontDrawInfo *fontDrawInfo);
 } // namespace ww::graph
 #endif //__WWBASE_GRAPH_FONTS_HPP_

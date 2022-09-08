@@ -52,23 +52,23 @@ Result WaitHandler::wait(uint32_t level, uint32_t timeout)
     uint32_t events;
     uint32_t startTick = Utils::tick_get();
     uint32_t duration = 0;
-    Result rst = Result_OK;
+    Result rst = Result::OK;
     for (; timeout > duration; duration = Utils::tick_diff(startTick))
     {
         rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
                                EventOptions_WaitForAny | EventOptions_NoClear, timeout - duration);
-        if (rst == Result::Result_OK)
+        if (rst == Result::OK)
         {
             if (events & _errorFlag)
             {
-                rst = Result_GeneralError;
+                rst = Result::GeneralError;
                 break;
             }
             else if (events & _doneFlag)
             {
                 if (level == _level)
                 {
-                    rst = Result_OK;
+                    rst = Result::OK;
                     break;
                 }
                 else
@@ -79,13 +79,13 @@ Result WaitHandler::wait(uint32_t level, uint32_t timeout)
             else
             {
                 // TODO: no possible to reach here
-                rst = Result_StatusReserved;
+                rst = Result::StatusReserved;
                 break;
             }
         }
         else
         {
-            rst = Result_Timeout;
+            rst = Result::Timeout;
             break;
         }
     }
@@ -101,7 +101,7 @@ bool WaitHandler::is_busy()
     uint32_t events;
     auto rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
                                 EventOptions_WaitForAny | EventOptions_NoClear, 0);
-    if (rst == Result::Result_OK)
+    if (rst == Result::OK)
     {
         return false;
     }
@@ -115,10 +115,10 @@ Result WaitHandler::reset()
 {
     if (is_busy())
     {
-        return Result_Busy;
+        return Result::Busy;
     }
     _eventGroup.reset(_doneFlag | _errorFlag);
-    return Result_OK;
+    return Result::OK;
 };
 
 void WaitHandler::done_set(void *sender)

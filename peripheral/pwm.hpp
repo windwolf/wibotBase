@@ -33,8 +33,8 @@ class Pwm : public Initializable
 {
   public:
     Pwm(PWM_CTOR_ARG);
-    virtual Result _init();
-    virtual void _deinit();
+    Result _init() override;
+    void _deinit() override;
     PwmConfig &config_get();
 
     Result start();

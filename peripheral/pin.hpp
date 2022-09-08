@@ -8,16 +8,16 @@ namespace ww::peripheral
 {
 
 PIN_PER_DECL
-enum PinStatus : uint32_t
+enum class PinStatus : uint32_t
 {
-    PinStatus_Reset = 0U,
-    PinStatus_Set = 1U,
+    Reset = 0U,
+    Set = 1U,
 };
 
-enum PinMode : uint8_t
+enum class PinMode : uint8_t
 {
-    PinMode_Input = 0U,
-    PinMode_Output = 1U,
+    Input = 0U,
+    Output = 1U,
 };
 union PinConfig {
     struct
@@ -32,8 +32,8 @@ class Pin : public Initializable
 {
   public:
     Pin(PIN_CTOR_ARG, uint16_t pinMask);
-    virtual Result _init();
-    virtual void _deinit();
+    Result _init() override;
+    void _deinit() override;
     PinConfig &config_get();
     Result read(PinStatus &value);
     Result write(PinStatus value);

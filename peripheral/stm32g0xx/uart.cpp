@@ -75,7 +75,7 @@ Result UART::_init()
     HAL_UART_RegisterCallback(&_handle, HAL_UART_ERROR_CB_ID,
                               &ww::peripheral::UART::_on_error_callback);
     Peripherals::peripheral_register("uart", this, &_handle);
-    return Result_OK;
+    return Result::OK;
 };
 void UART::_deinit()
 {
@@ -89,19 +89,19 @@ UARTConfig &UART::config_get()
 
 Result UART::read(void *data, uint32_t size, WaitHandler &waitHandler)
 {
-    Result rst = Result_OK;
+    Result rst = Result::OK;
     if (_readWaitHandler != nullptr)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
     if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_RX) == HAL_UART_STATE_BUSY_RX)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
 
-    if (rst != Result_OK)
+    if (rst != Result::OK)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
     _readWaitHandler = &waitHandler;
 
@@ -120,20 +120,20 @@ Result UART::read(void *data, uint32_t size, WaitHandler &waitHandler)
 };
 Result UART::write(void *data, uint32_t size, WaitHandler &waitHandler)
 {
-    Result rst = Result_OK;
+    Result rst = Result::OK;
     if (_writeWaitHandler != nullptr)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
 
     if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_TX) == HAL_UART_STATE_BUSY_TX)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
 
-    if (rst != Result_OK)
+    if (rst != Result::OK)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
     _writeWaitHandler = &waitHandler;
 
@@ -153,22 +153,22 @@ Result UART::write(void *data, uint32_t size, WaitHandler &waitHandler)
 
 Result UART::start(uint8_t *data, uint32_t size, WaitHandler &waitHandler)
 {
-    Result rst = Result_OK;
+    Result rst = Result::OK;
     if (_readWaitHandler != nullptr)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
     if (_handle.hdmarx->Init.Mode != DMA_CIRCULAR)
     {
-        return Result_NotSupport;
+        return Result::NotSupport;
     }
     if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_RX) == HAL_UART_STATE_BUSY_RX)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
-    if (rst != Result_OK)
+    if (rst != Result::OK)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
     _readWaitHandler = &waitHandler;
 
@@ -178,10 +178,10 @@ Result UART::start(uint8_t *data, uint32_t size, WaitHandler &waitHandler)
 Result UART::stop()
 {
 
-    Result rst = Result_OK;
+    Result rst = Result::OK;
     if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_RX) != HAL_UART_STATE_BUSY_RX)
     {
-        rst = Result_OK;
+        rst = Result::OK;
     }
     else
     {

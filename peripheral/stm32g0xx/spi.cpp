@@ -62,16 +62,16 @@ static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option, uint32_t si
     sizeInfo.sizeInBytes = size << option.dataWidth;
     switch (option.dataWidth)
     {
-    case DATAWIDTH_8:
-    case DATAWIDTH_16:
+    case DataWidth::Bit8:
+    case DataWidth::Bit16:
         sizeInfo.sizeInDMADataWidth = size;
         sizeInfo.sizeInSPIDataWidth = size;
         break;
-    case DATAWIDTH_24:
+    case DataWidth::Bit24:
         sizeInfo.sizeInDMADataWidth = size * 3;
         sizeInfo.sizeInSPIDataWidth = size * 3;
         break;
-    case DATAWIDTH_32:
+    case DataWidth::Bit32:
         sizeInfo.sizeInDMADataWidth = size << 1;
         sizeInfo.sizeInSPIDataWidth = size << 1;
         break;
@@ -90,8 +90,8 @@ static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option, uint32_t si
 
     switch (option.dataWidth)
     {
-    case DATAWIDTH_8:
-    case DATAWIDTH_24: {
+    case DataWidth::Bit8:
+    case DataWidth::Bit24: {
         handle.Init.DataSize = SPI_DATASIZE_8BIT;
         LL_SPI_SetDataWidth(handle.Instance, LL_SPI_DATAWIDTH_8BIT);
         auto &init1 = handle.hdmatx->Init;
@@ -106,8 +106,8 @@ static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option, uint32_t si
     }
 
     break;
-    case DATAWIDTH_16:
-    case DATAWIDTH_32: {
+    case DataWidth::Bit16:
+    case DataWidth::Bit32: {
         handle.Init.DataSize = SPI_DATASIZE_16BIT;
         LL_SPI_SetDataWidth(handle.Instance, LL_SPI_DATAWIDTH_16BIT);
         auto &init2 = handle.hdmatx->Init;
@@ -143,7 +143,7 @@ Result Spi::_init()
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
                              &ww::peripheral::Spi::_on_error_callback);
     Peripherals::peripheral_register("spi", this, &_handle);
-    return Result_OK;
+    return Result::OK;
 };
 void Spi::_deinit()
 {
@@ -159,7 +159,7 @@ Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
 {
     if (_readWaitHandler != nullptr)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
     _readWaitHandler = &waitHandler;
 
@@ -167,7 +167,7 @@ Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
     ww::peripheral::bits_switch(_handle, this->_config, size, sizeInfo);
     if (size < 0)
     {
-        return Result_GeneralError;
+        return Result::GeneralError;
     }
     if (this->_config.useRxDma && (size > this->_config.rxDmaThreshold))
     {
@@ -184,7 +184,7 @@ Result Spi::write(void *data, uint32_t size, WaitHandler &waitHandler)
 {
     if (_writeWaitHandler != nullptr)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
     _writeWaitHandler = &waitHandler;
 
@@ -192,7 +192,7 @@ Result Spi::write(void *data, uint32_t size, WaitHandler &waitHandler)
     ww::peripheral::bits_switch(_handle, this->_config, size, sizeInfo);
     if (size < 0)
     {
-        return Result_GeneralError;
+        return Result::GeneralError;
     }
     if (this->_config.useTxDma && (size > this->_config.txDmaThreshold))
     {
@@ -281,17 +281,17 @@ Result SpiWithPins::session_begin()
     cs_set(false);
     if (_status.busy)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
 
     _status.busy = 1;
-    return Result_OK;
+    return Result::OK;
 };
 Result SpiWithPins::session_end()
 {
     _status.busy = 0;
     cs_set(false);
-    return Result_OK;
+    return Result::OK;
 };
 
 void SpiWithPins::_on_read_complete_callback(SPI_HandleTypeDef *instance)
@@ -316,19 +316,19 @@ void SpiWithPins::_on_write_complete_callback(SPI_HandleTypeDef *instance)
 void SpiWithPins::cs_set(bool isEnable)
 {
     if (_cs != NULL)
-        _cs->write(isEnable ? PinStatus::PinStatus_Set : PinStatus::PinStatus_Reset);
+        _cs->write(isEnable ? PinStatus::Set : PinStatus::Reset);
 };
 
 void SpiWithPins::dc_set(bool isData)
 {
     if (_dc != NULL)
-        _dc->write(isData ? PinStatus::PinStatus_Set : PinStatus::PinStatus_Reset);
+        _dc->write(isData ? PinStatus::Set : PinStatus::Reset);
 };
 
 void SpiWithPins::rw_set(bool isRead)
 {
     if (_rw != NULL)
-        _rw->write(isRead ? PinStatus::PinStatus_Set : PinStatus::PinStatus_Reset);
+        _rw->write(isRead ? PinStatus::Set : PinStatus::Reset);
 };
 
 }; // namespace ww::peripheral

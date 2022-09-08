@@ -10,7 +10,7 @@ Pwm::Pwm(TIM_HandleTypeDef &handle) : _handle(handle){};
 
 Result Pwm::_init()
 {
-    return Result_OK;
+    return Result::OK;
 };
 void Pwm::_deinit(){};
 
@@ -24,14 +24,14 @@ Result Pwm::start()
     init();
     LL_TIM_CC_EnableChannel(_handle.Instance, _config.channelsEnable);
 
-    return Result_OK;
+    return Result::OK;
 };
 
 Result Pwm::stop()
 {
     LL_TIM_CC_DisableChannel(_handle.Instance, _config.channelsEnable);
 
-    return Result_OK;
+    return Result::OK;
 };
 
 Result Pwm::duty_set(PwmChannel channels, uint16_t duty)
@@ -55,7 +55,7 @@ Result Pwm::duty_set(PwmChannel channels, uint16_t duty)
         LL_TIM_OC_SetCompareCH4(_handle.Instance, period * duty / _config.fullScaleDuty);
     }
 
-    return Result_OK;
+    return Result::OK;
 };
 
 } // namespace ww::peripheral

@@ -29,8 +29,8 @@ class QSPI : Initializable
 {
   public:
     QSPI(QSPI_CTOR_ARG);
-    virtual Result _init();
-    virtual void _deinit();
+    Result _init() override;
+    void _deinit() override;
     QSPIConfig &config_get();
 
     Result read(void *data, uint32_t size, WaitHandler &waitHandler);

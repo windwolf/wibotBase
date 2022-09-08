@@ -10,7 +10,7 @@ void Utils::delay(uint32_t ms)
 
 uint32_t Utils::tick_get()
 {
-    return ww::peripheral::Misc::get_tick();
+    return ww::peripheral::Misc::get_tick_ms();
 };
 
 void Thread::sleep(uint32_t ms)
@@ -77,31 +77,29 @@ EventGroup::~EventGroup()
 Result EventGroup::set(uint32_t flags)
 {
     this->_instance |= flags;
-    return Result::Result_OK;
+    return Result::Result::OK;
 };
 
 Result EventGroup::reset(uint32_t flags)
 {
     this->_instance &= ~flags;
-    return Result::Result_OK;
+    return Result::Result::OK;
 };
 
-Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags,
-                        EventOptions options, uint32_t timeout)
+Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions options,
+                        uint32_t timeout)
 {
-    Result rst = Result_OK;
+    Result rst = Result::OK;
 
     if (timeout == TIMEOUT_NOWAIT)
     {
         if ((options & EventOptions_Wait_Flag) == EventOptions_WaitForAll)
         {
-            rst = ((this->_instance & flags) == flags) ? Result_OK
-                                                       : Result_NoResource;
+            rst = ((this->_instance & flags) == flags) ? Result::OK : Result::NoResource;
         }
         else
         {
-            rst = ((this->_instance & flags) != 0) ? Result_OK
-                                                   : Result_NoResource;
+            rst = ((this->_instance & flags) != 0) ? Result::OK : Result::NoResource;
         }
     }
     else
@@ -113,7 +111,7 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags,
             {
                 if (Utils::tick_diff(start) > timeout)
                 {
-                    rst = Result_Timeout;
+                    rst = Result::Timeout;
                     break;
                 }
             };
@@ -124,18 +122,17 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags,
             {
                 if (Utils::tick_diff(start) > timeout)
                 {
-                    rst = Result_Timeout;
+                    rst = Result::Timeout;
                     break;
                 }
             };
         }
     }
-    if ((rst == Result_OK) &&
-        ((options & EventOptions_Clear_Flag) == EventOptions_Clear_Flag))
+    if ((rst == Result::OK) && ((options & EventOptions_Clear_Flag) == EventOptions_Clear_Flag))
     {
         this->_instance &= ~flags;
     }
     actualFlags = this->_instance;
-    return Result_OK;
+    return Result::OK;
 };
 } // namespace ww::os

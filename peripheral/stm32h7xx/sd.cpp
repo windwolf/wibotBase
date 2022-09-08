@@ -54,7 +54,7 @@ Result SdCard::_init()
     HAL_SD_RegisterCallback(instance, HAL_SD_TX_CPLT_CB_ID, &_on_write_complete_callback);
     HAL_SD_RegisterCallback(instance, HAL_SD_ERROR_CB_ID, &_on_error_callback);
     Peripherals::peripheral_register("sd", this, &_handle);
-    return Result_OK;
+    return Result::OK;
 };
 void SdCard::_deinit()
 {
@@ -72,9 +72,9 @@ CardInfo &SdCard::card_info_get()
 
 Result SdCard::card_init()
 {
-    Result rst = Result_OK;
+    Result rst = Result::OK;
     rst = HAL_SD_InitCard(&_handle);
-    if (rst != Result_OK)
+    if (rst != Result::OK)
     {
         rst;
     }
@@ -83,10 +83,10 @@ Result SdCard::card_init()
 };
 Result SdCard::read(void *data, uint32_t num, uint32_t count, WaitHandler waitHandler)
 {
-    Result rst = Result_OK;
+    Result rst = Result::OK;
     if (_waitHandler != nullptr)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
     _waitHandler = &waitHandler;
     _rxBuffer.data = data;
@@ -102,10 +102,10 @@ Result SdCard::read(void *data, uint32_t num, uint32_t count, WaitHandler waitHa
 };
 Result SdCard::write(void *data, uint32_t num, uint32_t count, WaitHandler waitHandler)
 {
-    Result rst = Result_OK;
+    Result rst = Result::OK;
     if (_waitHandler != nullptr)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
     _waitHandler = &waitHandler;
     if (_config.useTxDma)
@@ -120,10 +120,10 @@ Result SdCard::write(void *data, uint32_t num, uint32_t count, WaitHandler waitH
 };
 Result SdCard::erase(uint32_t num, uint32_t count, WaitHandler waitHandler)
 {
-    Result rst = Result_OK;
+    Result rst = Result::OK;
     if (_waitHandler != nullptr)
     {
-        return Result_Busy;
+        return Result::Busy;
     }
     _waitHandler = &waitHandler;
     return (Result)HAL_SD_Erase(&_handle, num, num + count);
@@ -131,7 +131,7 @@ Result SdCard::erase(uint32_t num, uint32_t count, WaitHandler waitHandler)
 
 Result SdCard::status_query()
 {
-    return ((HAL_SD_GetCardState(&_handle) == HAL_SD_CARD_TRANSFER) ? Result_OK : Result_Busy);
+    return ((HAL_SD_GetCardState(&_handle) == HAL_SD_CARD_TRANSFER) ? Result::OK : Result::Busy);
 };
 
 SdCardBlock::SdCardBlock(SdCard &sdcard, Buffer buffer)
@@ -141,7 +141,7 @@ SdCardBlock::SdCardBlock(SdCard &sdcard, Buffer buffer)
 Result SdCardBlock::card_init()
 {
     initErrorCode = _sdcard.card_init();
-    if (initErrorCode != Result_OK)
+    if (initErrorCode != Result::OK)
     {
         return initErrorCode;
     }
@@ -150,9 +150,9 @@ Result SdCardBlock::card_init()
         .readBlockSize = cardInfo.blockSize,
         .writeBlockSize = cardInfo.blockSize,
         .eraseBlockSize = cardInfo.blockSize,
-        .readMode = BlockMode_Block,
-        .writeMode = BlockMode_Block,
-        .eraseMode = BlockMode_Block,
+        .readMode = BlockMode::Block,
+        .writeMode = BlockMode::Block,
+        .eraseMode = BlockMode::Block,
         .needEraseBeforeWrite = false,
     });
 };

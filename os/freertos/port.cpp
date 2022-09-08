@@ -69,7 +69,7 @@ Result EventGroup::set(uint32_t flags)
     }
     else
     {
-        return Result::Result_OK;
+        return Result::OK;
     }
 };
 
@@ -82,7 +82,7 @@ Result EventGroup::reset(uint32_t flags)
     }
     else
     {
-        return Result::Result_OK;
+        return Result::OK;
     }
 };
 
@@ -97,7 +97,7 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions opti
     else
     {
         actualFlags = rst;
-        return Result::Result_OK;
+        return Result::OK;
     }
 };
 } // namespace ww::os

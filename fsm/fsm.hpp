@@ -17,16 +17,16 @@ struct FSM_Transition_Config;
 class FSM_Transition;
 class FSM;
 
-enum FSM_STATE_MODE : uint8_t
+enum class FsmStateMode : uint8_t
 {
-    FSM_STATE_MODE_INTERVAL = 1U,
-    FSM_STATE_MODE_POLL = 2U,
+    Interval = 1U,
+    Poll = 2U,
 };
 
-enum FSM_TRANSITION_MODE : uint8_t
+enum class FsmTransitionMode : uint8_t
 {
-    FSM_TRANSITION_MODE_TIMEOUT = 1U,
-    FSM_TRANSITION_MODE_EVENT = 2U,
+    Timeout = 1U,
+    Event = 2U,
 };
 
 typedef void (*FSM_Action)(FSM &, FSM_State *);
@@ -85,7 +85,7 @@ struct FSM_Transition_Config
     const char *name;
     uint8_t from;
     uint8_t to;
-    FSM_TRANSITION_MODE mode;
+    FsmTransitionMode mode;
     union {
         FSM_EventFlag events;
         uint32_t timeout;
@@ -118,8 +118,8 @@ class FSM : public Initializable
     friend class FSM_Transition;
     FSM(const char *name, uint32_t eventClearMask, FSM_State (&states)[], uint32_t stateCount,
         FSM_Transition (&transitions)[], uint32_t transitionCount);
-    virtual Result _init();
-    virtual void _deinit();
+    Result _init() override;
+    void _deinit() override;
 
     Result start(uint32_t stateNo, void *userData, uint32_t initialTick);
 

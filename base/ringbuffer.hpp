@@ -6,19 +6,19 @@
 
 namespace ww
 {
+enum class RingBufferOperationType
+{
+    Enqueue,
+    Dequeue,
+    SyncHead,
+    SyncTail,
+    PeekToEnd,
+};
 
 class RingBuffer
 {
   public:
-    enum RINGBUFFER_OPERATION_TYPE
-    {
-        RINGBUFFER_OPERATION_TYPE_ENQUEUE,
-        RINGBUFFER_OPERATION_TYPE_DEQUEUE,
-        RINGBUFFER_OPERATION_TYPE_SYNC_HEAD,
-        RINGBUFFER_OPERATION_TYPE_SYNC_TAIL,
-        RINGBUFFER_OPERATION_TYPE_PEEK_TO_END,
-    };
-    typedef void (*OperationNotify)(RINGBUFFER_OPERATION_TYPE type);
+    typedef void (*OperationNotify)(RingBufferOperationType type);
 
     RingBuffer(void *data, uint32_t dataWidth, uint32_t maxSize);
     bool is_full();
@@ -31,8 +31,7 @@ class RingBuffer
     Result write_index_sync(uint32_t newWrite);
     Result read_index_sync(uint32_t newRead);
     Result read_offset_sync(uint32_t offset);
-    Result write(void *valuePtr, uint32_t length, uint8_t allowCoverTail,
-                 uint32_t *actualLength);
+    Result write(void *valuePtr, uint32_t length, uint8_t allowCoverTail, uint32_t *actualLength);
     Result write_fill(uint8_t *value, uint32_t length, uint8_t allowCoverTail,
                       uint32_t *actualLength);
     Result read(void *valuePtr, uint32_t length, uint32_t &actualLength);

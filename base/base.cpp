@@ -46,7 +46,7 @@ Result Initializable::init()
 }
 void Initializable::deinit()
 {
-    initState.initErrorCode = Result_OK;
+    initState.initErrorCode = Result::OK;
     initState.inited = false;
 };
 

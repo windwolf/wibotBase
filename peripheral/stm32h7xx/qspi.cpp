@@ -19,7 +19,7 @@ Result QSPI::_init()
                               &QSPI::_on_status_match_callback);
     HAL_QSPI_RegisterCallback(&_handle, HAL_QSPI_ERROR_CB_ID, &QSPI::_on_error_callback);
     Peripherals::peripheral_register("qspi", this, &_handle);
-    return Result_OK;
+    return Result::OK;
 };
 void QSPI::_deinit()
 {
