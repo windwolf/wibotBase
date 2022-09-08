@@ -77,13 +77,13 @@ EventGroup::~EventGroup()
 Result EventGroup::set(uint32_t flags)
 {
     this->_instance |= flags;
-    return Result::Result::OK;
+    return Result::OK;
 };
 
 Result EventGroup::reset(uint32_t flags)
 {
     this->_instance &= ~flags;
-    return Result::Result::OK;
+    return Result::OK;
 };
 
 Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions options,

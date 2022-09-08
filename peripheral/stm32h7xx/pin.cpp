@@ -20,14 +20,14 @@ PinConfig &Pin::config_get()
 Result Pin::read(PinStatus &value)
 {
     PinStatus rst;
-    rst = (PinStatus)HAL_GPIO_ReadPin(&_port, this->_pinMask);
-    value = (PinStatus)(rst ^ this->_config.inverse);
+    rst = static_cast<PinStatus>(HAL_GPIO_ReadPin(&_port, this->_pinMask));
+    value = static_cast<PinStatus>(to_underlying(rst) ^ this->_config.inverse);
     return Result::OK;
 };
 
 Result Pin::write(PinStatus value)
 {
-    HAL_GPIO_WritePin(&_port, this->_pinMask, (GPIO_PinState)(value ^ this->_config.inverse));
+    HAL_GPIO_WritePin(&_port, this->_pinMask, (GPIO_PinState)(to_underlying(value) ^ this->_config.inverse));
     return Result::OK;
 };
 
