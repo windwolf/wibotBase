@@ -34,6 +34,7 @@ target_include_directories(${PROJECT_NAME}
     ${CMAKE_CURRENT_LIST_DIR}/peripheral/${BSP_PORT}
 )
 
+# ############### USE_RTT_PRINT ####################################
 if(NOT DEFINED USE_RTT_PRINT)
     message(STATUS "USE_RTT_PRINT: not set, use default value : ON")
     set(USE_RTT_PRINT ON)
@@ -53,6 +54,7 @@ else()
     message(STATUS "USE_UART_PRINT: ${USE_UART_PRINT}")
 endif()
 
+# ############### USE_UART_PRINT ###################################
 if(${USE_UART_PRINT})
     target_compile_definitions(${PROJECT_NAME} PUBLIC -DUSE_UART_PRINT)
 endif()

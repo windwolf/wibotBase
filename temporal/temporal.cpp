@@ -38,7 +38,7 @@ int32_t Date::span_get(const Date &end, TemporalUnitType unitType) const
         return rst;
     }
 
-    LOG_E("unsupported unit type: %d", unitType);
+    LOG_E("unsupported unit type: %d", to_underlying(unitType));
     return 0 - 1;
 };
 uint32_t Date::to_number(TemporalUnitType unitType) const
@@ -64,7 +64,7 @@ uint32_t Date::to_number(TemporalUnitType unitType) const
         return rst;
     }
 
-    LOG_E("unsupported unit type: %d", unitType);
+    LOG_E("unsupported unit type: %d", to_underlying(unitType));
     return 0 - 1;
 };
 bool Date::equals(const Date &other, TemporalUnitType unitType) const
@@ -95,7 +95,7 @@ int32_t Time::span_get(const Time &end, TemporalUnitType unitType) const
         return rst;
     }
 
-    LOG_E("unsupported unit type: %d", unitType);
+    LOG_E("unsupported unit type: %d", to_underlying(unitType));
     return 0 - 1;
 };
 uint32_t Time::to_number(TemporalUnitType unitType) const
@@ -120,7 +120,7 @@ uint32_t Time::to_number(TemporalUnitType unitType) const
     {
         return rst;
     }
-    LOG_E("unsupported unit type: %d", unitType);
+    LOG_E("unsupported unit type: %d", to_underlying(unitType));
     return 0 - 1;
 };
 bool Time::equals(const Time &other, TemporalUnitType unitType) const
@@ -141,7 +141,7 @@ bool Time::equals(const Time &other, TemporalUnitType unitType) const
         return rst;
     }
 
-    LOG_E("unsupported unit type: %d", unitType);
+    LOG_E("unsupported unit type: %d", to_underlying(unitType));
     return false;
 };
 
@@ -168,7 +168,7 @@ int32_t DateTime::span_get(const DateTime &end, TemporalUnitType unitType) const
         return rst;
     }
 
-    LOG_E("unsupported unit type: %d", unitType);
+    LOG_E("unsupported unit type: %d", to_underlying(unitType));
     return 0 - 1;
 };
 uint32_t DateTime::to_number(TemporalUnitType unitType) const
@@ -194,7 +194,7 @@ uint32_t DateTime::to_number(TemporalUnitType unitType) const
         return rst;
     }
 
-    LOG_E("unsupported unit type: %d", unitType);
+    LOG_E("unsupported unit type: %d", to_underlying(unitType));
     return 0 - 1;
 };
 bool DateTime::equals(const DateTime &other, TemporalUnitType unitType) const
@@ -220,7 +220,7 @@ bool DateTime::equals(const DateTime &other, TemporalUnitType unitType) const
         return rst;
     }
 
-    LOG_E("unsupported unit type: %d", unitType);
+    LOG_E("unsupported unit type: %d", to_underlying(unitType));
     return false;
 };
 } // namespace ww::temporal
