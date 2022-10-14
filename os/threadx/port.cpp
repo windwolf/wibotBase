@@ -20,7 +20,7 @@ void Thread::sleep(uint32_t ms)
 
 Mutex::Mutex(const char *name)
 {
-    tx_mutex_create(&(this->instance), name, 0);
+    tx_mutex_create(&(this->_instance), const_cast<CHAR*>(name), 0);
 };
 
 Mutex::~Mutex(){
@@ -29,17 +29,17 @@ Mutex::~Mutex(){
 
 bool Mutex::lock(uint32_t timeout)
 {
-    return tx_mutex_get(&(this->instance), timeout) == TX_SUCCESS;
+    return tx_mutex_get(&(this->_instance), timeout) == TX_SUCCESS;
 };
 
 void Mutex::unlock()
 {
-    return tx_mutex_put(&(this->instance)) == TX_SUCCESS;
+    tx_mutex_put(&(this->_instance));
 };
 
 EventGroup::EventGroup(const char *name)
 {
-    tx_event_flags_create(&(this->_instance), name);
+    tx_event_flags_create(&(this->_instance), const_cast<CHAR*>(name));
 };
 
 EventGroup::~EventGroup(){
@@ -64,8 +64,11 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions opti
                         uint32_t timeout)
 {
     // TODO: handler TX_OPTION
-    return (tx_event_flags_get(&(this->_instance), flags, option, &actualFlags, timeout) ==
+    return (tx_event_flags_get(&(this->_instance), flags, options, &actualFlags, timeout) ==
             TX_SUCCESS)
                ? Result::OK
                : Result::GeneralError;
 };
+
+} // namespace ww::os
+
