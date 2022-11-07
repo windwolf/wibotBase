@@ -134,7 +134,7 @@ Result SdCard::status_query()
     return ((HAL_SD_GetCardState(&_handle) == HAL_SD_CARD_TRANSFER) ? Result::OK : Result::Busy);
 };
 
-SdCardBlock::SdCardBlock(SdCard &sdcard, Buffer buffer)
+SdCardBlock::SdCardBlock(SdCard &sdcard, Buffer8 buffer)
     : Block(buffer, ), _sdcard(sdcard),
       _buffer(buffer){BASE_INIT_ERROR_CHECK() MEMBER_INIT_ERROR_CHECK(_sdcard)};
 

@@ -3,21 +3,56 @@
 
 #include "stdint.h"
 
-namespace ww {
-struct Buffer {
+namespace ww
+{
+
+struct Buffer8
+{
   public:
     uint8_t *data;
     uint32_t size;
 };
 
-#define BUFFER_DECLARE(name, size)                                             \
-    uint8_t name##_##data[size];                                               \
-    Buffer name = {.data = name##_##data, .size = size};
+#define BUFFER8_DECLARE(name, sz)                                                                  \
+    uint8_t name##_##data[sz];                                                                     \
+    BUFFER8 name = {.data = name##_##data, .size = sz};
 
-#define BUFFER_DECLARE_STATIC(name, size)                                      \
-    static uint8_t name##_##data[size];                                        \
-    static Buffer name = {.data = name##_##data, .size = size};
-#define BUFFER_DATA_REF(name) (name##_##data)
+#define BUFFER8_DECLARE_STATIC(name, sz)                                                           \
+    static uint8_t name##_##data[sz];                                                              \
+    static Buffer8 name = {.data = name##_##data, .size = sz};
+#define BUFFER8_DATA_REF(name) (name##_##data)
+
+struct Buffer16
+{
+  public:
+    uint16_t *data;
+    uint32_t size;
+};
+
+#define BUFFER16_DECLARE(name, sz)                                                                 \
+    uint16_t name##_##data[sz];                                                                    \
+    Buffer16 name = {.data = name##_##data, .size = sz};
+
+#define BUFFER16_DECLARE_STATIC(name, sz)                                                          \
+    static uint16_t name##_##data[sz];                                                             \
+    static Buffer16 name = {.data = name##_##data, .size = sz};
+#define BUFFER16_DATA_REF(name) (name##_##data)
+#define BUFFER16_SIZE(name) (name.size)
+struct Buffer32
+{
+  public:
+    uint32_t *data;
+    uint32_t size;
+};
+
+#define BUFFER32_DECLARE(name, sz)                                                                 \
+    uint32_t name##_##data[sz];                                                                    \
+    Buffer32 name = {.data = name##_##data, .size = sz};
+
+#define BUFFER32_DECLARE_STATIC(name, sz)                                                          \
+    static uint32_t name##_##data[sz];                                                             \
+    static Buffer32 name = {.data = name##_##data, .size = sz};
+#define BUFFER32_DATA_REF(name) (name##_##data)
 
 } // namespace ww
 

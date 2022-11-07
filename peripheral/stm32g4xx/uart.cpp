@@ -39,7 +39,7 @@ void UART::_on_circular_data_received_callback(UART_HandleTypeDef *instance, uin
     {
         wh->set_value((void *)(uint32_t)pos);
         wh->done_set(perip);
-        wh->reset();
+        wh->reset(); //TODO: EventGroup have auto reset, is this reset nessecory?
     }
 };
 

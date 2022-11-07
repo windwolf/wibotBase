@@ -46,8 +46,8 @@ class UART : public Initializable
     } _status;
     WaitHandler *_writeWaitHandler;
     WaitHandler *_readWaitHandler;
-    Buffer _txBuffer;
-    Buffer _rxBuffer;
+    Buffer8 _txBuffer;
+    Buffer8 _rxBuffer;
 
   protected:
     static void _on_read_complete_callback(UART_CALLBACK_ARG);

@@ -11,8 +11,7 @@
 #define ALIGN32 __attribute__((aligned(32)))
 #define PACKED __attribute__((__packed__))
 #define ALWAYS_INLINE __attribute__((always_inline)) inline
-#define min(a, b) (((a) <= (b)) ? (a) : (b))
-#define max(a, b) (((a) >= (b)) ? (a) : (b))
+
 
 #define TIMEOUT_NOWAIT 0x00000000
 #define TIMEOUT_FOREVER 0xFFFFFFFF

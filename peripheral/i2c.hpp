@@ -48,8 +48,8 @@ class I2cMaster : public Initializable
         uint32_t value;
     } _status;
     WaitHandler *_waitHandler;
-    Buffer _txBuffer;
-    Buffer _rxBuffer;
+    Buffer8 _txBuffer;
+    Buffer8 _rxBuffer;
     static void _on_read_complete_callback(I2C_CALLBACK_ARG);
     static void _on_write_complete_callback(I2C_CALLBACK_ARG);
     static void _on_error_callback(I2C_CALLBACK_ARG);

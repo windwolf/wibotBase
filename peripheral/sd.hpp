@@ -48,8 +48,8 @@ class SdCard : Initializable
     SdConfig _config;
     CardInfo _cardInfo;
     WaitHandler *_waitHandler;
-    Buffer _txBuffer;
-    BUffer _rxBuffer;
+    Buffer8 _txBuffer;
+    BUffer8 _rxBuffer;
 
   protected:
     static void _on_read_complete_callback(SD_CALLBACK_ARG);
@@ -61,12 +61,12 @@ class SdCard : Initializable
 class SdCardBlock : public Block
 {
   public:
-    SdCardBlock(SdCard &sdcard, Buffer buffer);
+    SdCardBlock(SdCard &sdcard, Buffer8 buffer);
     Result card_init();
 
   private:
     SdCard &_instance;
-    Buffer _buffer;
+    Buffer8 _buffer;
 
   protected:
     Result media_read(void *data, uint32_t num, uint32_t size,
