@@ -37,7 +37,8 @@ struct Buffer16
     static uint16_t name##_##data[sz];                                                             \
     static Buffer16 name = {.data = name##_##data, .size = sz};
 #define BUFFER16_DATA_REF(name) (name##_##data)
-#define BUFFER16_SIZE(name) (name.size)
+// #define BUFFER16_SIZE(name) (name.size)
+
 struct Buffer32
 {
   public:
