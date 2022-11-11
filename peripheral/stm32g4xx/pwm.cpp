@@ -19,7 +19,7 @@ PwmConfig &Pwm::config_get()
     return _config;
 };
 
-Result Pwm::start()
+Result Pwm::all_enable()
 {
     init();
     LL_TIM_CC_EnableChannel(_handle.Instance, _config.channelsEnable);
@@ -27,7 +27,7 @@ Result Pwm::start()
     return Result::OK;
 };
 
-Result Pwm::stop()
+Result Pwm::all_disable()
 {
     LL_TIM_CC_DisableChannel(_handle.Instance, _config.channelsEnable);
 
@@ -55,6 +55,18 @@ Result Pwm::duty_set(PwmChannel channels, uint16_t duty)
         LL_TIM_OC_SetCompareCH4(_handle.Instance, period * duty / _config.fullScaleDuty);
     }
 
+    return Result::OK;
+};
+
+Result Pwm::channel_enable(PwmChannel channels)
+{
+    LL_TIM_CC_EnableChannel(_handle.Instance, _config.channelsEnable);
+    return Result::OK;
+};
+
+Result Pwm::channel_disable(PwmChannel channels)
+{
+    LL_TIM_CC_DisableChannel(_handle.Instance, _config.channelsEnable);
     return Result::OK;
 };
 

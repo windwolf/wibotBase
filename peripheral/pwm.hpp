@@ -37,9 +37,11 @@ class Pwm : public Initializable
     void _deinit() override;
     PwmConfig &config_get();
 
-    Result start();
-    Result stop();
+    Result all_enable();
+    Result all_disable();
     Result duty_set(PwmChannel channel, uint16_t duty);
+    Result channel_enable(PwmChannel channels);
+    Result channel_disable(PwmChannel channels);
 
   private:
     PWM_FIELD_DECL
