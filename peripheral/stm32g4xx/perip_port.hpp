@@ -3,6 +3,7 @@
 
 #include "stm32g4xx_hal.h"
 #include "stm32g4xx_ll_tim.h"
+#include "stm32g4xx_ll_adc.h"
 
 /********** ADC **************************/
 

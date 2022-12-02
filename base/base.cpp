@@ -1,7 +1,5 @@
 #include "base.hpp"
 
-namespace ww
-{
 char *strtrim(char *str, char delimit)
 {
     while (*str != 0x00)
@@ -32,7 +30,7 @@ uint32_t fast_log2(uint32_t _val)
     ret = (int)udata - 127; //-ć çŹŚĺˇĺ°ćçŹŚĺ
 
     return ret;
-}
+};
 
 Result Initializable::init()
 {
@@ -43,11 +41,10 @@ Result Initializable::init()
     initState.initErrorCode = _init();
     initState.inited = true;
     return initState.initErrorCode;
-}
+};
+
 void Initializable::deinit()
 {
     initState.initErrorCode = Result::OK;
     initState.inited = false;
 };
-
-}; // namespace ww

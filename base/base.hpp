@@ -26,60 +26,59 @@
 #define _SQRT3_2 0.86602540378443864676f
 #define _1_SQRT3 0.57735026918962576450f
 
-template <typename E> constexpr auto to_underlying(E e) noexcept
+template<typename E>
+constexpr auto to_underlying(E e) noexcept
 {
-    return static_cast<std::underlying_type_t<E>>(e);
+	return static_cast<std::underlying_type_t<E>>(e);
 }
-
-namespace ww
-{
 
 using namespace std;
 enum class Result : uint32_t
 {
-    OK = 0,
-    GeneralError = (uint32_t)1, // 无法归类的一场
-    Busy = (uint32_t)2,
-    Timeout = (uint32_t)3,
-    NoResource = (uint32_t)4,       // 没有资源(事件,外设等)
-    InvalidParameter = (uint32_t)5, ///< Parameter error.
-    NoMemory = (uint32_t)6,
-    InvalidOperationFromISR = (uint32_t)7,
+	OK = 0,
+	GeneralError = (uint32_t)1, // 无法归类的一场
+	Busy = (uint32_t)2,
+	Timeout = (uint32_t)3,
+	NoResource = (uint32_t)4,       // 没有资源(事件,外设等)
+	InvalidParameter = (uint32_t)5, ///< Parameter error.
+	NoMemory = (uint32_t)6,
+	InvalidOperationFromISR = (uint32_t)7,
 
-    NotSupport = (uint32_t)8,
-    StatusReserved = 0x7FFFFFFF ///< Prevents enum down-size compiler optimization.
+	NotSupport = (uint32_t)8,
+	StatusReserved = 0x7FFFFFFF ///< Prevents enum down-size compiler optimization.
 };
 
 enum class DataWidth : uint8_t
 {
-    Bit8 = 0x00,
-    Bit16 = 0x01,
-    Bit24 = 0x02,
-    Bit32 = 0x03,
+	Bit8 = 0x00,
+	Bit16 = 0x01,
+	Bit24 = 0x02,
+	Bit32 = 0x03,
 };
 
-char *strtrim(char *str, char delimit);
+char* strtrim(char* str, char delimit);
 
 uint32_t fast_log2(uint32_t _val);
 
-#pragma region initialization
+// -----------------
+// Initializable
 
 class Initializable
 {
-  public:
-    Result init();
-    void deinit();
+ public:
+	Result init();
+	void deinit();
 
-  protected:
-    virtual Result _init() = 0;
-    virtual void _deinit() = 0;
+ protected:
+	virtual Result _init() = 0;
+	virtual void _deinit() = 0;
 
-  private:
-    struct
-    {
-        Result initErrorCode;
-        bool inited : 1;
-    } initState;
+ private:
+	struct
+	{
+		Result initErrorCode;
+		bool inited: 1;
+	} initState;
 };
 
 #define INIT_BEGIN() Result rst;
@@ -108,480 +107,425 @@ class Initializable
 #define MEMBER_DEINIT(instance) instance.deinit();
 #define PTR_DEINIT(instance) instance->deinit();
 
-#pragma endregion
 
-#pragma region Scalar Vector2 Vector3 Vector4
+// -------------------------------
+// Vector2, Vector3, Vector4
 
-using Scalar = float;
-
-template <typename T> struct Vector2
+template<typename T>
+struct Vector2
 {
-    T v1;
-    T v2;
+	T v1;
+	T v2;
 
-    Vector2() : v1(0), v2(0)
-    {
-    }
-    Vector2(T v1, T v2) : v1(v1), v2(v2)
-    {
-    }
+	Vector2() : v1(0), v2(0)
+	{
+	}
+	Vector2(T v1, T v2) : v1(v1), v2(v2)
+	{
+	}
 
-    Vector2<T> operator+(const Vector2<T> &other) const
-    {
-        Vector2<T> result;
-        result.v1 = v1 + other.v1;
-        result.v2 = v2 + other.v2;
-        return result;
-    };
-    Vector2<T> operator+(const T other) const
-    {
-        Vector2<T> result;
-        result.v1 = v1 + other;
-        result.v2 = v2 + other;
-        return result;
-    };
-    void operator+=(const Vector2<T> &other)
-    {
-        v1 += other.v1;
-        v2 += other.v2;
-    };
-    void operator+=(const T other)
-    {
-        v1 += other;
-        v2 += other;
-    };
+	Vector2<T> operator+(const Vector2<T>& other) const
+	{
+		Vector2<T> result;
+		result.v1 = v1 + other.v1;
+		result.v2 = v2 + other.v2;
+		return result;
+	};
+	Vector2<T> operator+(const T other) const
+	{
+		Vector2<T> result;
+		result.v1 = v1 + other;
+		result.v2 = v2 + other;
+		return result;
+	};
+	void operator+=(const Vector2<T>& other)
+	{
+		v1 += other.v1;
+		v2 += other.v2;
+	};
+	void operator+=(const T other)
+	{
+		v1 += other;
+		v2 += other;
+	};
 
-    Vector2<T> operator-(const Vector2<T> &other) const
-    {
-        Vector2<T> result;
-        result.v1 = v1 - other.v1;
-        result.v2 = v2 - other.v2;
-        return result;
-    };
-    Vector2<T> operator-(const T &other) const
-    {
-        Vector2<T> result;
-        result.v1 = v1 - other;
-        result.v2 = v2 - other;
-        return result;
-    };
-    void operator-=(const Vector2<T> &other)
-    {
-        v1 -= other.v1;
-        v2 -= other.v2;
-    };
-    void operator-=(const T other)
-    {
-        v1 -= other;
-        v2 -= other;
-    };
+	Vector2<T> operator-(const Vector2<T>& other) const
+	{
+		Vector2<T> result;
+		result.v1 = v1 - other.v1;
+		result.v2 = v2 - other.v2;
+		return result;
+	};
+	Vector2<T> operator-(const T& other) const
+	{
+		Vector2<T> result;
+		result.v1 = v1 - other;
+		result.v2 = v2 - other;
+		return result;
+	};
+	void operator-=(const Vector2<T>& other)
+	{
+		v1 -= other.v1;
+		v2 -= other.v2;
+	};
+	void operator-=(const T other)
+	{
+		v1 -= other;
+		v2 -= other;
+	};
 
-    Vector2<T> operator*(const Vector2<T> &other) const
-    {
-        Vector2<T> result;
-        result.v1 = v1 * other.v1;
-        result.v2 = v2 * other.v2;
-        return result;
-    };
-    Vector2<T> operator*(const T other) const
-    {
-        Vector2<T> result;
-        result.v1 = v1 * other;
-        result.v2 = v2 * other;
-        return result;
-    };
-    void operator*=(const Vector2<T> &other)
-    {
-        v1 *= other.v1;
-        v2 *= other.v2;
-    };
-    void operator*=(const T other)
-    {
-        v1 *= other;
-        v2 *= other;
-    };
+	Vector2<T> operator*(const Vector2<T>& other) const
+	{
+		Vector2<T> result;
+		result.v1 = v1 * other.v1;
+		result.v2 = v2 * other.v2;
+		return result;
+	};
+	Vector2<T> operator*(const T other) const
+	{
+		Vector2<T> result;
+		result.v1 = v1 * other;
+		result.v2 = v2 * other;
+		return result;
+	};
+	void operator*=(const Vector2<T>& other)
+	{
+		v1 *= other.v1;
+		v2 *= other.v2;
+	};
+	void operator*=(const T other)
+	{
+		v1 *= other;
+		v2 *= other;
+	};
 
-    Vector2<T> operator/(const Vector2<T> &other) const
-    {
-        Vector2<T> result;
-        result.v1 = v1 / other.v1;
-        result.v2 = v2 / other.v2;
-        return result;
-    };
-    Vector2<T> operator/(const T other) const
-    {
-        Vector2<T> result;
-        result.v1 = v1 / other;
-        result.v2 = v2 / other;
-        return result;
-    };
-    void operator/=(const Vector2<T> &other)
-    {
-        v1 /= other.v1;
-        v2 /= other.v2;
-    };
-    void operator/=(const T other)
-    {
-        v1 /= other;
-        v2 /= other;
-    };
+	Vector2<T> operator/(const Vector2<T>& other) const
+	{
+		Vector2<T> result;
+		result.v1 = v1 / other.v1;
+		result.v2 = v2 / other.v2;
+		return result;
+	};
+	Vector2<T> operator/(const T other) const
+	{
+		Vector2<T> result;
+		result.v1 = v1 / other;
+		result.v2 = v2 / other;
+		return result;
+	};
+	void operator/=(const Vector2<T>& other)
+	{
+		v1 /= other.v1;
+		v2 /= other.v2;
+	};
+	void operator/=(const T other)
+	{
+		v1 /= other;
+		v2 /= other;
+	};
 };
 
-using Vector2f = Vector2<Scalar>;
+using Vector2f = Vector2<float>;
 using Vector2i = Vector2<uint32_t>;
 
-template <typename T> struct Vector3
+template<typename T>
+struct Vector3
 {
-    T v1;
-    T v2;
-    T v3;
+	T v1;
+	T v2;
+	T v3;
 
-    Vector3() : v1(0), v2(0), v3(0){};
-    Vector3(T v1, T v2, T v3) : v1(v1), v3(v3){};
+	Vector3() : v1(0), v2(0), v3(0)
+	{
+	};
+	Vector3(T v1, T v2, T v3) : v1(v1), v2(v2), v3(v3)
+	{
+	};
 
-    Vector3<T> operator+(const Vector3<T> &other) const
-    {
-        Vector3<T> result;
-        result.v1 = v1 + other.v1;
-        result.v2 = v2 + other.v2;
-        result.v3 = v3 + other.v3;
-        return result;
-    };
-    Vector3<T> operator+(const T other) const
-    {
-        Vector3<T> result;
-        result.v1 = v1 + other;
-        result.v2 = v2 + other;
-        result.v3 = v3 + other;
-        return result;
-    };
-    void operator+=(const Vector3<T> &other)
-    {
-        v1 += other.v1;
-        v2 += other.v2;
-        v3 += other.v3;
-    };
-    void operator+=(const T other)
-    {
-        v1 += other;
-        v2 += other;
-        v3 += other;
-    };
+	Vector3<T> operator+(const Vector3<T>& other) const
+	{
+		Vector3<T> result;
+		result.v1 = v1 + other.v1;
+		result.v2 = v2 + other.v2;
+		result.v3 = v3 + other.v3;
+		return result;
+	};
+	Vector3<T> operator+(const T other) const
+	{
+		Vector3<T> result;
+		result.v1 = v1 + other;
+		result.v2 = v2 + other;
+		result.v3 = v3 + other;
+		return result;
+	};
+	void operator+=(const Vector3<T>& other)
+	{
+		v1 += other.v1;
+		v2 += other.v2;
+		v3 += other.v3;
+	};
+	void operator+=(const T other)
+	{
+		v1 += other;
+		v2 += other;
+		v3 += other;
+	};
 
-    Vector3<T> operator-(const Vector3<T> &other) const
-    {
-        Vector3<T> result;
-        result.v1 = v1 - other.v1;
-        result.v2 = v2 - other.v2;
-        result.v3 = v3 - other.v3;
-        return result;
-    };
-    Vector3<T> operator-(const T &other) const
-    {
-        Vector3<T> result;
-        result.v1 = v1 - other;
-        result.v2 = v2 - other;
-        result.v3 = v3 - other;
-        return result;
-    };
-    void operator-=(const Vector3<T> &other)
-    {
-        v1 -= other.v1;
-        v2 -= other.v2;
-        v3 -= other.v3;
-    };
-    void operator-=(const T other)
-    {
-        v1 -= other;
-        v2 -= other;
-        v3 -= other;
-    };
+	Vector3<T> operator-(const Vector3<T>& other) const
+	{
+		Vector3<T> result;
+		result.v1 = v1 - other.v1;
+		result.v2 = v2 - other.v2;
+		result.v3 = v3 - other.v3;
+		return result;
+	};
+	Vector3<T> operator-(const T& other) const
+	{
+		Vector3<T> result;
+		result.v1 = v1 - other;
+		result.v2 = v2 - other;
+		result.v3 = v3 - other;
+		return result;
+	};
+	void operator-=(const Vector3<T>& other)
+	{
+		v1 -= other.v1;
+		v2 -= other.v2;
+		v3 -= other.v3;
+	};
+	void operator-=(const T other)
+	{
+		v1 -= other;
+		v2 -= other;
+		v3 -= other;
+	};
 
-    Vector3<T> operator*(const Vector3<T> &other) const
-    {
-        Vector2<T> result;
-        result.v1 = v1 * other.v1;
-        result.v2 = v2 * other.v2;
-        result.v3 = v3 * other.v3;
-        return result;
-    };
-    Vector3<T> operator*(const T other) const
-    {
-        Vector3<T> result;
-        result.v1 = v1 * other;
-        result.v2 = v2 * other;
-        result.v3 = v3 * other;
-        return result;
-    };
-    void operator*=(const Vector3<T> &other)
-    {
-        v1 *= other.v1;
-        v2 *= other.v2;
-        v3 *= other.v3;
-    };
-    void operator*=(const T other)
-    {
-        v1 *= other;
-        v2 *= other;
-        v3 *= other;
-    };
+	Vector3<T> operator*(const Vector3<T>& other) const
+	{
+		Vector2<T> result;
+		result.v1 = v1 * other.v1;
+		result.v2 = v2 * other.v2;
+		result.v3 = v3 * other.v3;
+		return result;
+	};
+	Vector3<T> operator*(const T other) const
+	{
+		Vector3<T> result;
+		result.v1 = v1 * other;
+		result.v2 = v2 * other;
+		result.v3 = v3 * other;
+		return result;
+	};
+	void operator*=(const Vector3<T>& other)
+	{
+		v1 *= other.v1;
+		v2 *= other.v2;
+		v3 *= other.v3;
+	};
+	void operator*=(const T other)
+	{
+		v1 *= other;
+		v2 *= other;
+		v3 *= other;
+	};
 
-    Vector3<T> operator/(const Vector3<T> &other) const
-    {
-        Vector3<T> result;
-        result.v1 = v1 / other.v1;
-        result.v2 = v2 / other.v2;
-        result.v3 = v3 / other.v3;
-        return result;
-    };
-    Vector3<T> operator/(const T other) const
-    {
-        Vector3<T> result;
-        result.v1 = v1 / other;
-        result.v2 = v2 / other;
-        result.v3 = v3 / other;
-        return result;
-    };
-    void operator/=(const Vector3<T> &other)
-    {
-        v1 /= other.v1;
-        v2 /= other.v2;
-        v3 /= other.v3;
-    };
-    void operator/=(const T other)
-    {
-        v1 /= other;
-        v2 /= other;
-        v3 /= other;
-    };
+	Vector3<T> operator/(const Vector3<T>& other) const
+	{
+		Vector3<T> result;
+		result.v1 = v1 / other.v1;
+		result.v2 = v2 / other.v2;
+		result.v3 = v3 / other.v3;
+		return result;
+	};
+	Vector3<T> operator/(const T other) const
+	{
+		Vector3<T> result;
+		result.v1 = v1 / other;
+		result.v2 = v2 / other;
+		result.v3 = v3 / other;
+		return result;
+	};
+	void operator/=(const Vector3<T>& other)
+	{
+		v1 /= other.v1;
+		v2 /= other.v2;
+		v3 /= other.v3;
+	};
+	void operator/=(const T other)
+	{
+		v1 /= other;
+		v2 /= other;
+		v3 /= other;
+	};
 };
 
-using Vector3f = Vector3<Scalar>;
+using Vector3f = Vector3<float>;
 using Vector3b = Vector3<uint8_t>;
 using Vector3i = Vector3<uint32_t>;
 
-template <typename T> struct Vector4
+template<typename T>
+struct Vector4
 {
-    T v1;
-    T v2;
-    T v3;
-    T v4;
+	T v1;
+	T v2;
+	T v3;
+	T v4;
 
-    Vector4() : v1(0), v2(0), v3(0), v4(0){};
-    Vector4(T v1, T v2, T v3, T v4) : v1(v1), v3(v3), v4(0){};
+	Vector4() : v1(0), v2(0), v3(0), v4(0)
+	{
+	};
+	Vector4(T v1, T v2, T v3, T v4) : v1(v1), v2(v2), v3(v3), v4(v4)
+	{
+	};
 
-    Vector4<T> operator+(const Vector4<T> &other) const
-    {
-        Vector4<T> result;
-        result.v1 = v1 + other.v1;
-        result.v2 = v2 + other.v2;
-        result.v3 = v3 + other.v3;
-        result.v4 = v4 + other.v4;
-        return result;
-    };
-    Vector4<T> operator+(const T other) const
-    {
-        Vector4<T> result;
-        result.v1 = v1 + other;
-        result.v2 = v2 + other;
-        result.v3 = v3 + other;
-        result.v4 = v4 + other;
-        return result;
-    };
-    void operator+=(const Vector4<T> &other)
-    {
-        v1 += other.v1;
-        v2 += other.v2;
-        v3 += other.v3;
-        v4 += other.v4;
-    };
-    void operator+=(const T other)
-    {
-        v1 += other;
-        v2 += other;
-        v3 += other;
-        v4 += other;
-    };
+	Vector4<T> operator+(const Vector4<T>& other) const
+	{
+		Vector4<T> result;
+		result.v1 = v1 + other.v1;
+		result.v2 = v2 + other.v2;
+		result.v3 = v3 + other.v3;
+		result.v4 = v4 + other.v4;
+		return result;
+	};
+	Vector4<T> operator+(const T other) const
+	{
+		Vector4<T> result;
+		result.v1 = v1 + other;
+		result.v2 = v2 + other;
+		result.v3 = v3 + other;
+		result.v4 = v4 + other;
+		return result;
+	};
+	void operator+=(const Vector4<T>& other)
+	{
+		v1 += other.v1;
+		v2 += other.v2;
+		v3 += other.v3;
+		v4 += other.v4;
+	};
+	void operator+=(const T other)
+	{
+		v1 += other;
+		v2 += other;
+		v3 += other;
+		v4 += other;
+	};
 
-    Vector4<T> operator-(const Vector4<T> &other) const
-    {
-        Vector4<T> result;
-        result.v1 = v1 - other.v1;
-        result.v2 = v2 - other.v2;
-        result.v3 = v3 - other.v3;
-        result.v4 = v4 - other.v4;
-        return result;
-    };
-    Vector4<T> operator-(const T &other) const
-    {
-        Vector4<T> result;
-        result.v1 = v1 - other;
-        result.v2 = v2 - other;
-        result.v3 = v3 - other;
-        result.v4 = v4 - other;
-        return result;
-    };
-    void operator-=(const Vector4<T> &other)
-    {
-        v1 -= other.v1;
-        v2 -= other.v2;
-        v3 -= other.v3;
-        v4 -= other.v4;
-    };
-    void operator-=(const T other)
-    {
-        v1 -= other;
-        v2 -= other;
-        v3 -= other;
-        v4 -= other;
-    };
+	Vector4<T> operator-(const Vector4<T>& other) const
+	{
+		Vector4<T> result;
+		result.v1 = v1 - other.v1;
+		result.v2 = v2 - other.v2;
+		result.v3 = v3 - other.v3;
+		result.v4 = v4 - other.v4;
+		return result;
+	};
+	Vector4<T> operator-(const T& other) const
+	{
+		Vector4<T> result;
+		result.v1 = v1 - other;
+		result.v2 = v2 - other;
+		result.v3 = v3 - other;
+		result.v4 = v4 - other;
+		return result;
+	};
+	void operator-=(const Vector4<T>& other)
+	{
+		v1 -= other.v1;
+		v2 -= other.v2;
+		v3 -= other.v3;
+		v4 -= other.v4;
+	};
+	void operator-=(const T other)
+	{
+		v1 -= other;
+		v2 -= other;
+		v3 -= other;
+		v4 -= other;
+	};
 
-    Vector4<T> operator*(const Vector4<T> &other) const
-    {
-        Vector2<T> result;
-        result.v1 = v1 * other.v1;
-        result.v2 = v2 * other.v2;
-        result.v3 = v3 * other.v3;
-        result.v4 = v4 * other.v4;
-        return result;
-    };
-    Vector4<T> operator*(const T other) const
-    {
-        Vector4<T> result;
-        result.v1 = v1 * other;
-        result.v2 = v2 * other;
-        result.v3 = v3 * other;
-        result.v4 = v4 * other;
-        return result;
-    };
-    void operator*=(const Vector4<T> &other)
-    {
-        v1 *= other.v1;
-        v2 *= other.v2;
-        v3 *= other.v3;
-        v4 *= other.v4;
-    };
-    void operator*=(const T other)
-    {
-        v1 *= other;
-        v2 *= other;
-        v3 *= other;
-        v4 *= other;
-    };
+	Vector4<T> operator*(const Vector4<T>& other) const
+	{
+		Vector2<T> result;
+		result.v1 = v1 * other.v1;
+		result.v2 = v2 * other.v2;
+		result.v3 = v3 * other.v3;
+		result.v4 = v4 * other.v4;
+		return result;
+	};
+	Vector4<T> operator*(const T other) const
+	{
+		Vector4<T> result;
+		result.v1 = v1 * other;
+		result.v2 = v2 * other;
+		result.v3 = v3 * other;
+		result.v4 = v4 * other;
+		return result;
+	};
+	void operator*=(const Vector4<T>& other)
+	{
+		v1 *= other.v1;
+		v2 *= other.v2;
+		v3 *= other.v3;
+		v4 *= other.v4;
+	};
+	void operator*=(const T other)
+	{
+		v1 *= other;
+		v2 *= other;
+		v3 *= other;
+		v4 *= other;
+	};
 
-    Vector4<T> operator/(const Vector4<T> &other) const
-    {
-        Vector4<T> result;
-        result.v1 = v1 / other.v1;
-        result.v2 = v2 / other.v2;
-        result.v3 = v3 / other.v3;
-        result.v4 = v4 / other.v4;
-        return result;
-    };
-    Vector4<T> operator/(const T other) const
-    {
-        Vector4<T> result;
-        result.v1 = v1 / other;
-        result.v2 = v2 / other;
-        result.v3 = v3 / other;
-        result.v4 = v4 / other;
-        return result;
-    };
-    void operator/=(const Vector4<T> &other)
-    {
-        v1 /= other.v1;
-        v2 /= other.v2;
-        v3 /= other.v3;
-        v4 /= other.v4;
-    };
-    void operator/=(const T other)
-    {
-        v1 /= other;
-        v2 /= other;
-        v3 /= other;
-        v4 /= other;
-    };
+	Vector4<T> operator/(const Vector4<T>& other) const
+	{
+		Vector4<T> result;
+		result.v1 = v1 / other.v1;
+		result.v2 = v2 / other.v2;
+		result.v3 = v3 / other.v3;
+		result.v4 = v4 / other.v4;
+		return result;
+	};
+	Vector4<T> operator/(const T other) const
+	{
+		Vector4<T> result;
+		result.v1 = v1 / other;
+		result.v2 = v2 / other;
+		result.v3 = v3 / other;
+		result.v4 = v4 / other;
+		return result;
+	};
+	void operator/=(const Vector4<T>& other)
+	{
+		v1 /= other.v1;
+		v2 /= other.v2;
+		v3 /= other.v3;
+		v4 /= other.v4;
+	};
+	void operator/=(const T other)
+	{
+		v1 /= other;
+		v2 /= other;
+		v3 /= other;
+		v4 /= other;
+	};
 };
 
-using Vector4f = Vector4<Scalar>;
+using Vector4f = Vector4<float>;
+using Vector4b = Vector4<uint8_t>;
 using Vector4i = Vector4<uint32_t>;
 
-#pragma endregion
-
-struct Math
+template<typename T>
+class Configurable
 {
-    static Scalar atan2(Scalar y, Scalar x)
-    {
-        Scalar result;
-        arm_atan2_f32(y, x, &result);
-        return result;
-    }
-    static void sincos(Scalar theta, Scalar *sin, Scalar *cos)
-    {
-        arm_sin_cos_f32(theta, sin, cos);
-    }
+ public:
+	virtual void config_apply(T& config)
+	{
+		_config = config;
+	}
 
-    static Scalar sin(Scalar theta)
-    {
-        return arm_sin_f32(theta);
-    }
-
-    static Scalar cos(Scalar theta)
-    {
-        return arm_cos_f32(theta);
-    }
-
-    static Scalar sqrt(Scalar x)
-    {
-        Scalar result;
-        arm_sqrt_f32(x, &result);
-        return result;
-    }
-
-    static Scalar mod(Scalar x, Scalar y)
-    {
-        Scalar result = std::fmod(x, y);
-        return result >= 0 ? result : (result + y);
-    }
-
-    static Scalar sign(Scalar x)
-    {
-        return x >= 0 ? 1 : -1;
-    }
-
-    static Vector2f sign(Vector2f x)
-    {
-        Vector2f result;
-        if (x.v1 > 0)
-            result.v1 = 1.0f;
-        else if (x.v1 < 0)
-
-            result.v1 = -1.0f;
-        else
-            result.v1 = 0.0f;
-
-        if (x.v2 > 0)
-            result.v2 = 1.0f;
-        else if (x.v2 < 0)
-            result.v2 = -1.0f;
-        else
-            result.v2 = 0.0f;
-        return result;
-    }
-
-    static Scalar circle_normalize(Scalar theta)
-    {
-
-        Scalar result = std::fmod(theta, _2PI);
-        return result >= 0 ? result : (result + _2PI);
-    }
-
-    static Scalar floor(Scalar x)
-    {
-        return std::floor(x);
-    }
+ protected:
+	T _config;
 };
-
-} // namespace ww
 
 #endif // ___BASE_HPP__

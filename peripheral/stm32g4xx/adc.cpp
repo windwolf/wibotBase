@@ -7,75 +7,79 @@
 namespace ww::peripheral
 {
 
-AdcConfig &Adc::config_get()
-{
-    return _config;
-};
+	AdcConfig& Adc::config_get()
+	{
+		return _config;
+	};
 
-Adc::Adc(ADC_HandleTypeDef &handle) : _handle(handle){};
+	Adc::Adc(ADC_HandleTypeDef& handle) : _handle(handle)
+	{
+	};
 
-Adc::~Adc(){};
+	Adc::~Adc()
+	{
+	};
 
-Result Adc::_init()
-{
-    HAL_ADC_RegisterCallback(&_handle, HAL_ADC_CONVERSION_COMPLETE_CB_ID,
-                             &Adc::_on_conversion_complete_callback);
-    HAL_ADC_RegisterCallback(&_handle, HAL_ADC_ERROR_CB_ID, &Adc::_on_error_callback);
-    Peripherals::peripheral_register("adc", this, &_handle);
-    return Result::OK;
-};
-void Adc::_deinit()
-{
-    Peripherals::peripheral_unregister("adc", this);
-};
+	Result Adc::_init()
+	{
+		HAL_ADC_RegisterCallback(&_handle, HAL_ADC_CONVERSION_COMPLETE_CB_ID,
+			&Adc::_on_conversion_complete_callback);
+		HAL_ADC_RegisterCallback(&_handle, HAL_ADC_ERROR_CB_ID, &Adc::_on_error_callback);
+		Peripherals::peripheral_register("adc", this, &_handle);
+		return Result::OK;
+	};
+	void Adc::_deinit()
+	{
+		Peripherals::peripheral_unregister("adc", this);
+	};
 
-Result Adc::read(Buffer16 buffer)
-{
-    return Result::NotSupport;
-};
+//	Result Adc::read(Buffer32 buffer)
+//	{
+//		return Result::NotSupport;
+//	};
 
-Result Adc::start(Buffer16 buffer, WaitHandler &waitHandler)
-{
-    if (_waitHandler != nullptr)
-    {
-        return Result::Busy;
-    }
-    _buffer = buffer;
-    _waitHandler = &waitHandler;
-    return (Result)HAL_ADC_Start_DMA(&_handle, (uint32_t *)buffer.data, buffer.size);
-};
+	Result Adc::start(Buffer32 buffer, WaitHandler& waitHandler)
+	{
+		if (_waitHandler != nullptr)
+		{
+			return Result::Busy;
+		}
+		_buffer = buffer;
+		_waitHandler = &waitHandler;
+		return (Result)HAL_ADC_Start_DMA(&_handle, buffer.data, buffer.size);
+	};
 
-Result Adc::stop()
-{
-    _waitHandler = nullptr;
-    return (Result)HAL_ADC_Stop_DMA(&_handle);
-};
+	Result Adc::stop()
+	{
+		_waitHandler = nullptr;
+		return (Result)HAL_ADC_Stop_DMA(&_handle);
+	};
 
-void Adc::_on_conversion_complete_callback(ADC_HandleTypeDef *instance)
-{
-    Adc *perip = (Adc *)Peripherals::peripheral_get_by_instance(instance);
-    auto wh = perip->_waitHandler;
-    if (wh != nullptr)
-    {
-        wh->done_set(perip);
-    }
-};
-void Adc::_on_error_callback(ADC_HandleTypeDef *instance)
-{
-    Adc *perip = (Adc *)Peripherals::peripheral_get_by_instance(instance);
-    auto wh = perip->_waitHandler;
-    if (wh != nullptr)
-    {
-        perip->_waitHandler = nullptr;
-        wh->done_set(perip);
-    }
-    wh = perip->_waitHandler;
-    if (wh != nullptr)
-    {
-        perip->_waitHandler = nullptr;
-        wh->done_set(perip);
-    }
-};
+	void Adc::_on_conversion_complete_callback(ADC_HandleTypeDef* instance)
+	{
+		Adc* perip = (Adc*)Peripherals::peripheral_get_by_instance(instance);
+		auto wh = perip->_waitHandler;
+		if (wh != nullptr)
+		{
+			wh->done_set(perip);
+		}
+	};
+	void Adc::_on_error_callback(ADC_HandleTypeDef* instance)
+	{
+		Adc* perip = (Adc*)Peripherals::peripheral_get_by_instance(instance);
+		auto wh = perip->_waitHandler;
+		if (wh != nullptr)
+		{
+			perip->_waitHandler = nullptr;
+			wh->done_set(perip);
+		}
+		wh = perip->_waitHandler;
+		if (wh != nullptr)
+		{
+			perip->_waitHandler = nullptr;
+			wh->done_set(perip);
+		}
+	};
 
 } // namespace ww::peripheral
 
