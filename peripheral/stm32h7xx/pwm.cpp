@@ -60,11 +60,13 @@ Result Pwm::duty_set(PwmChannel channels, uint16_t duty)
 Result Pwm::channel_enable(PwmChannel channels)
 {
     LL_TIM_CC_EnableChannel(_handle.Instance, _config.channelsEnable);
+	return Result::OK;
 };
 
 Result Pwm::channel_disable(PwmChannel channels)
 {
     LL_TIM_CC_DisableChannel(_handle.Instance, _config.channelsEnable);
+	return Result::OK;
 };
 
 } // namespace wibot::peripheral
