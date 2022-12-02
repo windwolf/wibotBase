@@ -4,6 +4,22 @@
 #include "stm32h7xx_hal.h"
 #include "stm32h7xx_ll_tim.h"
 
+/********** ADC **************************/
+
+#ifdef HAL_ADC_MODULE_ENABLED
+#define ADC_PER_DECL
+#define ADC_CTOR_ARG ADC_HandleTypeDef &handle
+#define ADC_FIELD_DECL ADC_HandleTypeDef &_handle;
+#define ADC_CALLBACK_ARG ADC_HandleTypeDef *handle
+#else
+#define ADC_PER_DECL
+#define ADC_CTOR_ARG uint32_t dummy
+#define ADC_FIELD_DECL uint32_t dummy;
+#define ADC_CALLBACK_ARG uint32_t dummy
+#endif // HAL_ADC_MODULE_ENABLED
+
+/********** ADC **************************/
+
 /********** I2C **************************/
 
 #ifdef HAL_I2C_MODULE_ENABLED
