@@ -1,7 +1,7 @@
 #include "os/os.hpp"
 #include "port.hpp"
 
-namespace ww::os
+namespace wibot::os
 {
 void Utils::delay(uint32_t ms)
 {
@@ -70,5 +70,5 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions opti
                : Result::GeneralError;
 };
 
-} // namespace ww::os
+} // namespace wibot::os
 

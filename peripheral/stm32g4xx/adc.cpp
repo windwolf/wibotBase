@@ -4,7 +4,7 @@
 
 #ifdef HAL_ADC_MODULE_ENABLED
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 	AdcConfig& Adc::config_get()
@@ -81,6 +81,6 @@ namespace ww::peripheral
 		}
 	};
 
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 
 #endif

@@ -1,6 +1,6 @@
 #include "sd.hpp"
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 void SdCard::_on_write_complete_callback(SD_HandleTypeDef *instance)
@@ -170,4 +170,4 @@ Result SdCardBlock::media_erase(uint32_t num, uint32_t size, WaitHandler &waitHa
     _instance.wrase(data, num, size, WaitHandler);
 };
 
-} // namespace ww::peripheral
+} // namespace wibot::peripheral

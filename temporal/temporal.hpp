@@ -2,7 +2,7 @@
 #define __WWBASE_TEMPORAL_HPP__
 
 #include "base.hpp"
-namespace ww::temporal
+namespace wibot::temporal
 {
 enum class TemporalUnitType
 {
@@ -64,6 +64,6 @@ struct DateTime
     uint32_t to_number(TemporalUnitType unitType) const;
     bool equals(const DateTime &other, TemporalUnitType unitType) const;
 };
-} // namespace ww::temporal
+} // namespace wibot::temporal
 
 #endif // __WWBASE_TEMPORAL_HPP__

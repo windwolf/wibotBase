@@ -3,7 +3,7 @@
 #include "os.hpp"
 #include "pin.hpp"
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 #define SCL_SET() _scl.write(PinStatus::Set)
 #define SCL_RESET() _scl.write(PinStatus::Reset)
@@ -210,11 +210,11 @@ Result I2cMaster::write(void *data, uint32_t size, WaitHandler &waitHandler)
 };
 
 // uint32_t I2CMaster::wait_for_cplt(uint32_t timeout) {
-//     auto tick = ww::os::Utils::tick_get();
+//     auto tick = wibot::os::Utils::tick_get();
 //     while (_status.isWriteBusy || _status.isReadBusy) {
-//         if (ww::os::Utils::tick_diff(tick) > timeout) {
+//         if (wibot::os::Utils::tick_diff(tick) > timeout) {
 //             return Result::Timeout;
 //         }
 //     }
 // };
-} // namespace ww::peripheral
+} // namespace wibot::peripheral

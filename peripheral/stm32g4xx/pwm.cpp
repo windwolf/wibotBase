@@ -3,7 +3,7 @@
 
 #ifdef HAL_TIM_MODULE_ENABLED
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 	Pwm::Pwm(TIM_HandleTypeDef& handle) : _handle(handle)
@@ -74,6 +74,6 @@ namespace ww::peripheral
 		return Result::OK;
 	};
 
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 
 #endif // HAL_TIM_MODULE_ENABLED

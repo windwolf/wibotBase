@@ -8,7 +8,7 @@
 #define FSCCAutoPollingTypeDef QSPI_AutoPollingTypeDef
 #define FSCC_EVENT_AUTO_POLLING_CPLT 0x08000000
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 union QSPIConfig {
     struct
@@ -60,5 +60,5 @@ class QSPI : Initializable
     static void _on_error_callback(QSPI_CALLBACK_ARG);
 };
 
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 #endif // ___BSP_QSPI_H__

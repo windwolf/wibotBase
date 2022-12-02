@@ -1,7 +1,7 @@
 #include "fonts/fonts.hpp"
 #include "string.h"
 
-namespace ww::graph
+namespace wibot::graph
 {
 static inline void setPixel(uint8_t *buffer, uint32_t memOffset, PixelSize pixelSize, Color color)
 {
@@ -202,4 +202,4 @@ bool FONTS_FillData(uint8_t *buffer, CanvasInfo *canvas, uint16_t x, uint16_t y,
         return true;
     }
 }
-} // namespace ww::graph
+} // namespace wibot::graph

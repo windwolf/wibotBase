@@ -2,7 +2,7 @@
 #define __WWBASE_FSM_EVENTGROUP_HPP__
 
 #include "stdint.h"
-namespace ww::fsm
+namespace wibot::fsm
 {
 
 struct FSM_EventFlag
@@ -28,6 +28,6 @@ class FSM_EventGroup
     uint32_t _eventsClearMask;
 };
 
-} // namespace ww::fsm
+} // namespace wibot::fsm
 
 #endif // __WWBASE_FSM_EVENTGROUP_HPP__

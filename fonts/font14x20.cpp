@@ -1,7 +1,7 @@
 
 #include "fonts/fonts.hpp"
 
-namespace ww::graph
+namespace wibot::graph
 {
 // Character bitmaps for Courier New 15pt
 const uint8_t Font20_Table[] = {
@@ -2101,4 +2101,4 @@ FontInfo Font14x20 = {
     20,               /* Height */
 };
 
-} // namespace ww::graph
+} // namespace wibot::graph

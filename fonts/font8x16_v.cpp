@@ -1,5 +1,5 @@
 #include "fonts/fonts.hpp"
-namespace ww::graph
+namespace wibot::graph
 {
 const unsigned char F8X16[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -200,4 +200,4 @@ FontInfo Font8x16_v = {
     .height = 16,
     .direction = FONT_MEMORY_LAYOUT_DIRECTION_VERTICAL,
 };
-} // namespace ww::graph
+} // namespace wibot::graph

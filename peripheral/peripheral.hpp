@@ -11,7 +11,7 @@
 #define MAX_PERIPHERAL_COUNT 20
 #endif // MAX_PERIPHERAL_COUNT
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 class Peripherals
@@ -33,6 +33,6 @@ class Peripherals
     // uint32_t peripheralCount;
 };
 
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 
 #endif // __WW_PERIPHERAL_PERIPHERAL_HPP__

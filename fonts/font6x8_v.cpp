@@ -1,6 +1,6 @@
 #include "fonts/fonts.hpp"
 
-namespace ww::graph
+namespace wibot::graph
 {
 
 //常用ASCII表
@@ -109,4 +109,4 @@ FontInfo Font6x8_v = {
     .height = 8,
     .direction = FONT_MEMORY_LAYOUT_DIRECTION_VERTICAL,
 };
-} // namespace ww::graph
+} // namespace wibot::graph

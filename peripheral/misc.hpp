@@ -3,7 +3,7 @@
 
 #include "stdint.h"
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 class Misc
 {
@@ -14,6 +14,6 @@ class Misc
     static uint64_t get_tick_us();
     static uint64_t get_tick_ns();
 };
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 
 #endif // __WWDEVICE_PERIPHERAL_MISC_HPP__

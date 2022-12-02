@@ -3,7 +3,7 @@
 #define LOG_MODULE "peripheral"
 #include "log.h"
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 void Peripherals::peripheral_register(const char *peripheralName,
@@ -59,4 +59,4 @@ void *Peripherals::peripheral_get_by_instance(void *instance)
 Peripherals::PeripheralItem Peripherals::_peripherals[MAX_PERIPHERAL_COUNT] = {
     0};
 
-} // namespace ww::peripheral
+} // namespace wibot::peripheral

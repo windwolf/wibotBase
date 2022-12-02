@@ -4,7 +4,7 @@
 #include "base.hpp"
 #include "peripheral.hpp"
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 #define PWM_PER_DECL
 	typedef uint32_t PwmChannel;
@@ -47,6 +47,6 @@ namespace ww::peripheral
 		PWM_FIELD_DECL
 		PwmConfig _config;
 	};
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 
 #endif // __WWDEVICE_PERIPHERAL_TIM_HPP__

@@ -1,16 +1,16 @@
 #include "os.hpp"
 #include "soc.hpp"
 
-namespace ww::os
+namespace wibot::os
 {
 void Utils::delay(uint32_t ms)
 {
-    ww::peripheral::Misc::ms_delay(ms);
+    wibot::peripheral::Misc::ms_delay(ms);
 };
 
 uint32_t Utils::tick_get()
 {
-    return ww::peripheral::Misc::get_tick_ms();
+    return wibot::peripheral::Misc::get_tick_ms();
 };
 
 void Thread::sleep(uint32_t ms)
@@ -135,4 +135,4 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions opti
     actualFlags = this->_instance;
     return Result::OK;
 };
-} // namespace ww::os
+} // namespace wibot::os

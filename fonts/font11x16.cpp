@@ -1,6 +1,6 @@
 
 #include "fonts/fonts.hpp"
-namespace ww::graph
+namespace wibot::graph
 {
 const uint8_t Font16_Table[] = {
     // @0 ' ' (11 pixels wide)
@@ -1718,4 +1718,4 @@ FontInfo Font11x16 = {
     Font16_Table, 11, /* Width */
     16,               /* Height */
 };
-} // namespace ww::graph
+} // namespace wibot::graph

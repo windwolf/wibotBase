@@ -2,7 +2,7 @@
 #define LOG_MODULE "fsm"
 #include "log.h"
 
-namespace ww::fsm
+namespace wibot::fsm
 {
 
 FSM_State_Config &FSM_State::config_get()
@@ -340,4 +340,4 @@ FSM_State *FSM::_find_state_by_no(uint8_t stateNo)
     }
     return nullptr;
 };
-} // namespace ww::fsm
+} // namespace wibot::fsm

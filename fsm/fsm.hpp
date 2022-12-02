@@ -5,7 +5,7 @@
 #include "eventgroup.hpp"
 #include "stdint.h"
 
-namespace ww::fsm
+namespace wibot::fsm
 {
 #define FSM_MAX_STATES_COUNT (256)
 #define FSM_MAX_TRANSITIONS_COUNT (256)
@@ -150,6 +150,6 @@ class FSM : public Initializable
     void _transition_check(FSM_State &state);
 };
 
-} // namespace ww::fsm
+} // namespace wibot::fsm
 
 #endif // __WWBASE_FSM_HPP__

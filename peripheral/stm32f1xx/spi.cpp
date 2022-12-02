@@ -5,7 +5,7 @@
 
 #ifdef HAL_SPI_MODULE_ENABLED
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 struct SizeInfo
 {
@@ -57,7 +57,7 @@ void Spi::_on_error_callback(SPI_HandleTypeDef *instance)
 };
 
 static void bits_switch(SPI_HandleTypeDef &handle, SpiConfig option, uint32_t size,
-                        ww::peripheral::SizeInfo &sizeInfo)
+                        wibot::peripheral::SizeInfo &sizeInfo)
 {
     sizeInfo.sizeInBytes = size << to_underlying(option.dataWidth);
     switch (option.dataWidth)
@@ -137,11 +137,11 @@ Spi::Spi(SPI_HandleTypeDef &handle) : _handle(handle){};
 Result Spi::_init()
 {
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_TX_COMPLETE_CB_ID,
-                             &ww::peripheral::Spi::_on_write_complete_callback);
+                             &wibot::peripheral::Spi::_on_write_complete_callback);
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_RX_COMPLETE_CB_ID,
-                             &ww::peripheral::Spi::_on_read_complete_callback);
+                             &wibot::peripheral::Spi::_on_read_complete_callback);
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
-                             &ww::peripheral::Spi::_on_error_callback);
+                             &wibot::peripheral::Spi::_on_error_callback);
     Peripherals::peripheral_register("spi", this, &_handle);
     return Result::OK;
 };
@@ -168,8 +168,8 @@ Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
     }
     _readWaitHandler = &waitHandler;
 
-    ww::peripheral::SizeInfo sizeInfo;
-    ww::peripheral::bits_switch(_handle, this->_config, size, sizeInfo);
+    wibot::peripheral::SizeInfo sizeInfo;
+    wibot::peripheral::bits_switch(_handle, this->_config, size, sizeInfo);
     if (size < 0)
     {
         return Result::GeneralError;
@@ -198,8 +198,8 @@ Result Spi::write(void *data, uint32_t size, WaitHandler &waitHandler)
     }
     _writeWaitHandler = &waitHandler;
 
-    ww::peripheral::SizeInfo sizeInfo;
-    ww::peripheral::bits_switch(_handle, this->_config, size, sizeInfo);
+    wibot::peripheral::SizeInfo sizeInfo;
+    wibot::peripheral::bits_switch(_handle, this->_config, size, sizeInfo);
     if (size < 0)
     {
         return Result::GeneralError;
@@ -243,11 +243,11 @@ Result SpiWithPins::_init()
         _dc->config_get().inverse = _config.rwPinHighIsWrite;
     }
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_TX_COMPLETE_CB_ID,
-                             &ww::peripheral::SpiWithPins::_on_write_complete_callback);
+                             &wibot::peripheral::SpiWithPins::_on_write_complete_callback);
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_RX_COMPLETE_CB_ID,
-                             &ww::peripheral::SpiWithPins::_on_read_complete_callback);
+                             &wibot::peripheral::SpiWithPins::_on_read_complete_callback);
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
-                             &ww::peripheral::Spi::_on_error_callback);
+                             &wibot::peripheral::Spi::_on_error_callback);
     Peripherals::peripheral_register("spiwithpin", this, &_handle);
     INIT_END()
 };
@@ -341,6 +341,6 @@ void SpiWithPins::rw_set(bool isRead)
         _rw->write(isRead ? PinStatus::Set : PinStatus::Reset);
 };
 
-}; // namespace ww::peripheral
+}; // namespace wibot::peripheral
 
 #endif

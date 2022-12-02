@@ -4,10 +4,10 @@
 #include "base.hpp"
 #include "peripheral.hpp"
 #include "accessor/block.hpp"
-namespace ww::peripheral
+namespace wibot::peripheral
 {
-using namespace ww;
-using namespace ww::accessor;
+using namespace wibot;
+using namespace wibot::accessor;
 
 SD_PER_DECL
 
@@ -76,6 +76,6 @@ class SdCardBlock : public Block
     Result media_erase(uint32_t num, uint32_t size, WaitHandler &waitHandler) override;
 }
 
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 
 #endif // ___BSP_SD_HPP__

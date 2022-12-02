@@ -3,7 +3,7 @@
 
 #include "peripheral.hpp"
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 #define UART_PER_DECL
 
@@ -56,7 +56,7 @@ class UART : public Initializable
     static void _on_error_callback(UART_CALLBACK_ARG);
 };
 
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 
 extern "C"
 {

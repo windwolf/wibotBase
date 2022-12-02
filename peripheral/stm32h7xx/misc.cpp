@@ -1,6 +1,6 @@
 #include "misc.hpp"
 #include "stm32h7xx_hal.h"
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 __STATIC_INLINE uint32_t LL_SYSTICK_IsActiveCounterFlag()
@@ -67,4 +67,4 @@ uint64_t Misc::get_tick_ns()
     }
     return (m * 1000000 + (u * 1000000) / tms);
 };
-} // namespace ww::peripheral
+} // namespace wibot::peripheral

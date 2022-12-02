@@ -2,7 +2,7 @@
 #include "fonts/fonts.hpp"
 
 
-namespace ww::graph{
+namespace wibot::graph{
 const uint8_t Font12_Table[] =
 	{
 		// @0 ' ' (7 pixels wide)

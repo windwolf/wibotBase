@@ -3,7 +3,7 @@
 #include "stm32h7xx_ll_dma.h"
 
 #ifdef HAL_QSPI_MODULE_ENABLED
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 QSPI::QSPI(QSPI_HandleTypeDef &handle) : _handle(handle)
 {
@@ -224,5 +224,5 @@ void _command_qspi_register(CommandQspi *command, void *parent, CommandErrorHand
     command->base.onError = onError;
     command->onStatusPollingResult = onStatusPollingResult;
 };
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 #endif // HAL_QSPI_MODULE_ENABLED

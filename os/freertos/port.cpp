@@ -1,7 +1,7 @@
 #include "cmsis_os2.h"
 #include "os.hpp"
 
-namespace ww::os
+namespace wibot::os
 {
 void Utils::delay(uint32_t ms)
 {
@@ -100,4 +100,4 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions opti
         return Result::OK;
     }
 };
-} // namespace ww::os
+} // namespace wibot::os

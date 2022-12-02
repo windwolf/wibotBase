@@ -4,7 +4,7 @@
 #include "peripheral.hpp"
 #include "buffer.hpp"
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 	ADC_PER_DECL
@@ -48,6 +48,6 @@ namespace ww::peripheral
 		static void _on_error_callback(ADC_CALLBACK_ARG);
 	};
 
-}; // namespace ww::peripheral
+}; // namespace wibot::peripheral
 
 #endif // __WWBASE_ADC_HPP__

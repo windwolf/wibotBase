@@ -4,7 +4,7 @@
 #include "peripheral.hpp"
 #include "buffer.hpp"
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 I2C_PER_DECL
@@ -55,6 +55,6 @@ class I2cMaster : public Initializable
     static void _on_error_callback(I2C_CALLBACK_ARG);
 };
 
-}; // namespace ww::peripheral
+}; // namespace wibot::peripheral
 
 #endif // __WWDEVICE_PERIPHERAL_I2C_HPP__

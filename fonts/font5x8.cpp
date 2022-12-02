@@ -1,7 +1,7 @@
 
 #include "fonts/fonts.hpp"
 
-namespace ww::graph
+namespace wibot::graph
 {
 const uint8_t Font8_Table[] = {
     // @0 ' ' (5 pixels wide)
@@ -959,4 +959,4 @@ FontInfo Font5x8 = {
     Font8_Table, 5, /* Width */
     8,              /* Height */
 };
-} // namespace ww::graph
+} // namespace wibot::graph

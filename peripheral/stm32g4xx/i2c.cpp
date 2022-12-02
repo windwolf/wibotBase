@@ -4,7 +4,7 @@
 
 #ifdef HAL_I2C_MODULE_ENABLED
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 I2cMasterConfig &I2cMaster::config_get()
@@ -176,6 +176,6 @@ void I2cMaster::_on_error_callback(I2C_HandleTypeDef *instance)
     }
 };
 
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 
 #endif

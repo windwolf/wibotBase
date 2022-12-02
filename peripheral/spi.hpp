@@ -5,7 +5,7 @@
 #include "peripheral.hpp"
 #include "pin.hpp"
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 #define PWM_PER_DECL
 
@@ -101,6 +101,6 @@ class SpiWithPins : public Spi
     static void _on_read_complete_callback(SPI_CALLBACK_ARG);
     static void _on_write_complete_callback(SPI_CALLBACK_ARG);
 };
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 
 #endif // __WWDEVICE_PERIPHERAL_SPI_HPP__

@@ -3,7 +3,7 @@
 
 #include "stdint.h"
 
-namespace ww
+namespace wibot
 {
 
 	struct Buffer8
@@ -83,6 +83,6 @@ namespace ww
     static Buffer32 name = {.data = name##_##data, .size = sz};
 #define BUFFER32_DATA_REF(name) (name##_##data)
 
-} // namespace ww
+} // namespace wibot
 
 #endif // __WWBASE_BUFFER_HPP__

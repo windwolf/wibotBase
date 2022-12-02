@@ -1,6 +1,6 @@
 #include "eventgroup.hpp"
 
-namespace ww::fsm
+namespace wibot::fsm
 {
 bool FSM_EventGroup::check(FSM_EventFlag &eventFlags)
 {
@@ -21,4 +21,4 @@ void FSM_EventGroup::update_end()
 {
     _events &= ~_eventsClearMask;
 };
-} // namespace ww::fsm
+} // namespace wibot::fsm

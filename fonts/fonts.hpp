@@ -3,7 +3,7 @@
 
 #include "graph.hpp"
 
-namespace ww::graph
+namespace wibot::graph
 {
 
 enum FONT_MEMORY_LAYOUT_DIRECTION
@@ -78,5 +78,5 @@ bool FONTS_CalcSpace(uint16_t x, uint16_t y, char *str, FontInfo *fontInfo, uint
 
 bool FONTS_FillData(uint8_t *buffer, CanvasInfo *canvas, uint16_t x, uint16_t y, char *str,
                     FontInfo *fontInfo, FontDrawInfo *fontDrawInfo);
-} // namespace ww::graph
+} // namespace wibot::graph
 #endif //__WWBASE_GRAPH_FONTS_HPP_

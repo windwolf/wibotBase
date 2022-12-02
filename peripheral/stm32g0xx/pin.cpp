@@ -1,7 +1,7 @@
 #include "pin.hpp"
 #include "stm32g0xx_ll_gpio.h"
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 Pin::Pin(GPIO_TypeDef &port, uint16_t pinMask) : _port(port), _pinMask(pinMask){};
@@ -43,4 +43,4 @@ Result Pin::mode_set(PinMode mode)
                        (mode == PinMode::Input) ? LL_GPIO_MODE_INPUT : LL_GPIO_MODE_OUTPUT);
     return Result::OK;
 };
-} // namespace ww::peripheral
+} // namespace wibot::peripheral

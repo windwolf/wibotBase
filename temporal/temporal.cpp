@@ -3,7 +3,7 @@
 #define LOG_MODULE "tempral"
 #include "log.h"
 
-namespace ww::temporal
+namespace wibot::temporal
 {
 
 static uint32_t _date_to_days(uint8_t year, uint8_t month, uint8_t day)
@@ -223,4 +223,4 @@ bool DateTime::equals(const DateTime &other, TemporalUnitType unitType) const
     LOG_E("unsupported unit type: %d", to_underlying(unitType));
     return false;
 };
-} // namespace ww::temporal
+} // namespace wibot::temporal

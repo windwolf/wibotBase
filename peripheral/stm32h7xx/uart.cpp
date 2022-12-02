@@ -5,7 +5,7 @@
 
 #ifdef HAL_UART_MODULE_ENABLED
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 void UART::_on_write_complete_callback(UART_HandleTypeDef *instance)
@@ -81,13 +81,13 @@ UART::UART(UART_HandleTypeDef &handle) : _handle(handle){};
 Result UART::_init()
 {
     HAL_UART_RegisterCallback(&_handle, HAL_UART_TX_COMPLETE_CB_ID,
-                              &ww::peripheral::UART::_on_write_complete_callback);
+                              &wibot::peripheral::UART::_on_write_complete_callback);
     HAL_UART_RegisterCallback(&_handle, HAL_UART_RX_COMPLETE_CB_ID,
-                              &ww::peripheral::UART::_on_read_complete_callback);
+                              &wibot::peripheral::UART::_on_read_complete_callback);
     HAL_UART_RegisterRxEventCallback(&_handle,
-                                     &ww::peripheral::UART::_on_circular_data_received_callback);
+                                     &wibot::peripheral::UART::_on_circular_data_received_callback);
     HAL_UART_RegisterCallback(&_handle, HAL_UART_ERROR_CB_ID,
-                              &ww::peripheral::UART::_on_error_callback);
+                              &wibot::peripheral::UART::_on_error_callback);
     Peripherals::peripheral_register("uart", this, &_handle);
     return Result::OK;
 };
@@ -211,7 +211,7 @@ Result UART::stop()
     return rst;
 };
 
-}; // namespace ww::peripheral
+}; // namespace wibot::peripheral
 
 void uart_send_byte(const char *data, uint16_t len)
 {

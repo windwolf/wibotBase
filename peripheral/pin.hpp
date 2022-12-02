@@ -4,7 +4,7 @@
 #include "base.hpp"
 #include "peripheral.hpp"
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 PIN_PER_DECL
@@ -46,6 +46,6 @@ class Pin : public Initializable
     uint16_t _pinMask;
     PinConfig _config;
 };
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 
 #endif // __WWDEVICE_PERIPHERAL_PIN_HPP__

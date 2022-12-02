@@ -3,7 +3,7 @@
 
 #include "base.hpp"
 
-namespace ww::graph
+namespace wibot::graph
 {
 union Color {
     uint32_t value;
@@ -33,7 +33,7 @@ union Color565 {
     };
 };
 
-} // namespace ww::graph
+} // namespace wibot::graph
 
 #define COLOR_WHITE (Color{.value=0x00FFFFFFUL})
 #define COLOR_SILVER (Color{.value=0x00C0C0C0UL})

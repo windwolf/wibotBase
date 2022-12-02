@@ -4,7 +4,7 @@
 #include "base.hpp"
 #include "port.hpp"
 
-namespace ww::os
+namespace wibot::os
 {
 
 class Utils
@@ -53,6 +53,6 @@ class EventGroup
   private:
     EVENTGROUP_TYPEDEF _instance;
 };
-} // namespace ww::os
+} // namespace wibot::os
 
 #endif // ___OS_PORT_HPP__

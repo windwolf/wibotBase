@@ -3,7 +3,7 @@
 
 #ifdef HAL_TIM_MODULE_ENABLED
 
-namespace ww::peripheral
+namespace wibot::peripheral
 {
 
 Pwm::Pwm(TIM_HandleTypeDef &handle) : _handle(handle){};
@@ -68,6 +68,6 @@ Result Pwm::channel_disable(PwmChannel channels)
     LL_TIM_CC_DisableChannel(_handle.Instance, _config.channelsEnable);
 };
 
-} // namespace ww::peripheral
+} // namespace wibot::peripheral
 
 #endif // HAL_TIM_MODULE_ENABLED
