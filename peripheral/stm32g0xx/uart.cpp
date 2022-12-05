@@ -100,7 +100,7 @@ Result UART::read(void *data, uint32_t size, WaitHandler &waitHandler)
     }
     _readWaitHandler = &waitHandler;
 
-    if (_config.useRxDma && (size > _config.rxDmaThreshold))
+    if (config.useRxDma && (size > config.rxDmaThreshold))
     {
         _status.isRxDmaEnabled = 1;
         // TODO: if size greater then uint16_t max, should slice the data and
@@ -132,7 +132,7 @@ Result UART::write(void *data, uint32_t size, WaitHandler &waitHandler)
     }
     _writeWaitHandler = &waitHandler;
 
-    if (_config.useTxDma && (size > _config.txDmaThreshold))
+    if (config.useTxDma && (size > config.txDmaThreshold))
     {
         _status.isTxDmaEnabled = 1;
         // TODO: if size greater then uint16_t max, should slice the data and
