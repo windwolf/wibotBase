@@ -29,12 +29,12 @@ void Adc::_deinit()
     Peripherals::peripheral_unregister("adc", this);
 };
 
-Result Adc::read(Buffer16 buffer)
-{
-    return Result::NotSupport;
-};
+//Result Adc::read(Buffer16 buffer)
+//{
+//    return Result::NotSupport;
+//};
 
-Result Adc::start(Buffer16 buffer, WaitHandler &waitHandler)
+Result Adc::start(Buffer32 buffer, WaitHandler &waitHandler)
 {
     if (_waitHandler != nullptr)
     {
