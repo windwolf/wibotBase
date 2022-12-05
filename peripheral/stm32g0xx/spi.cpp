@@ -217,15 +217,15 @@ Result SpiWithPins::_init()
     PTR_INIT_ERROR_CHECK(_dc)
     if (_cs)
     {
-        _cs->config_get().inverse = _config.csPinHighIsDisable;
+        _cs->config_get().inverse = _pinconfig.csPinHighIsDisable;
     }
     if (_dc)
     {
-        _dc->config_get().inverse = _config.dcPinHighIsCmd;
+        _dc->config_get().inverse = _pinconfig.dcPinHighIsCmd;
     }
     if (_rw)
     {
-        _dc->config_get().inverse = _config.rwPinHighIsWrite;
+        _dc->config_get().inverse = _pinconfig.rwPinHighIsWrite;
     }
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_TX_COMPLETE_CB_ID,
                              &wibot::peripheral::SpiWithPins::_on_write_complete_callback);
@@ -246,12 +246,12 @@ void SpiWithPins::_deinit()
 
 SpiWithPinsConfig &SpiWithPins::pinconfig_get()
 {
-    return _config;
+    return _pinconfig;
 };
 
 Result SpiWithPins::read(bool isData, void *data, uint32_t size, WaitHandler &waitHandler)
 {
-    if (_config.autoCs || _status.busy)
+    if (_pinconfig.autoCs || _status.busy)
     {
         cs_set(true);
     }
@@ -261,7 +261,7 @@ Result SpiWithPins::read(bool isData, void *data, uint32_t size, WaitHandler &wa
 };
 Result SpiWithPins::write(bool isData, void *data, uint32_t size, WaitHandler &waitHandler)
 {
-    if (_config.autoCs || _status.busy)
+    if (_pinconfig.autoCs || _status.busy)
     {
         cs_set(true);
     }
@@ -292,7 +292,7 @@ Result SpiWithPins::session_end()
 void SpiWithPins::_on_read_complete_callback(SPI_HandleTypeDef *instance)
 {
     SpiWithPins *spi = (SpiWithPins *)Peripherals::peripheral_get_by_instance(instance);
-    if (spi->_config.autoCs || !spi->_status.busy)
+    if (spi->_pinconfig.autoCs || !spi->_status.busy)
     {
         spi->cs_set(false);
     }
@@ -301,7 +301,7 @@ void SpiWithPins::_on_read_complete_callback(SPI_HandleTypeDef *instance)
 void SpiWithPins::_on_write_complete_callback(SPI_HandleTypeDef *instance)
 {
     SpiWithPins *spi = (SpiWithPins *)Peripherals::peripheral_get_by_instance(instance);
-    if (spi->_config.autoCs || !spi->_status.busy)
+    if (spi->_pinconfig.autoCs || !spi->_status.busy)
     {
         spi->cs_set(false);
     }
