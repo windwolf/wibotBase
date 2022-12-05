@@ -7,11 +7,6 @@
 namespace wibot::peripheral
 {
 
-AdcConfig &Adc::config_get()
-{
-    return _config;
-};
-
 Adc::Adc(ADC_HandleTypeDef &handle) : _handle(handle){};
 
 Adc::~Adc(){};
