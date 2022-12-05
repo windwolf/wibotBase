@@ -17,13 +17,13 @@ Result Pin::read(PinStatus &value)
 {
     PinStatus rst;
     rst = static_cast<PinStatus>(HAL_GPIO_ReadPin(&_port, this->_pinMask));
-    value = static_cast<PinStatus>(to_underlying(rst) ^ this->_config.inverse);
+    value = static_cast<PinStatus>(to_underlying(rst) ^ this->config.inverse);
     return Result::OK;
 };
 
 Result Pin::write(PinStatus value)
 {
-    HAL_GPIO_WritePin(&_port, this->_pinMask, (GPIO_PinState)(to_underlying(value) ^ this->_config.inverse));
+    HAL_GPIO_WritePin(&_port, this->_pinMask, (GPIO_PinState)(to_underlying(value) ^ this->config.inverse));
     return Result::OK;
 };
 

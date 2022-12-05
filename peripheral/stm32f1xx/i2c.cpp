@@ -104,13 +104,13 @@ Result I2cMaster::write(uint32_t address, void *data, uint32_t size, WaitHandler
         return rst;
     }
     _i2c_start(_scl, _sda);
-    _i2c_byte_write(_scl, _sda, (uint8_t)_config.slaveAddress & 0xFE); // Slave address,SA0=0
+    _i2c_byte_write(_scl, _sda, (uint8_t)config.slaveAddress & 0xFE); // Slave address,SA0=0
     if (!_i2c_ack_wait(_scl, _sda, 20))
     {
         rst = Result::Timeout;
     }
 
-    if (_config.dataWidth == DataWidth::Bit8)
+    if (config.dataWidth == DataWidth::Bit8)
     {
         _i2c_byte_write(_scl, _sda, (uint8_t)address);
         if (!_i2c_ack_wait(_scl, _sda, 20))
@@ -118,7 +118,7 @@ Result I2cMaster::write(uint32_t address, void *data, uint32_t size, WaitHandler
             rst = Result::Timeout;
         }
     }
-    else if (_config.dataWidth == DataWidth::Bit16)
+    else if (config.dataWidth == DataWidth::Bit16)
     {
         _i2c_byte_write(_scl, _sda, (uint8_t)(address >> 8));
         if (!_i2c_ack_wait(_scl, _sda, 20))
@@ -174,7 +174,7 @@ Result I2cMaster::write(void *data, uint32_t size, WaitHandler &waitHandler)
         return rst;
     }
     _i2c_start(_scl, _sda);
-    _i2c_byte_write(_scl, _sda, (uint8_t)_config.slaveAddress & 0xFE); // Slave address,SA0=0
+    _i2c_byte_write(_scl, _sda, (uint8_t)config.slaveAddress & 0xFE); // Slave address,SA0=0
     if (!_i2c_ack_wait(_scl, _sda, 20))
     {
         rst = Result::Timeout;

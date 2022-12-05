@@ -165,12 +165,12 @@ Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
     _readWaitHandler = &waitHandler;
 
     wibot::peripheral::SizeInfo sizeInfo;
-    wibot::peripheral::bits_switch(_handle, this->_config, size, sizeInfo);
+    wibot::peripheral::bits_switch(_handle, this->config, size, sizeInfo);
     if (size < 0)
     {
         return Result::GeneralError;
     }
-    if (this->_config.useRxDma && (size > this->_config.rxDmaThreshold))
+    if (this->config.useRxDma && (size > this->config.rxDmaThreshold))
     {
         this->_status.isRxDmaEnabled = 1;
         return (Result)HAL_SPI_Receive_DMA(&_handle, (uint8_t *)data, sizeInfo.sizeInDMADataWidth);
@@ -195,12 +195,12 @@ Result Spi::write(void *data, uint32_t size, WaitHandler &waitHandler)
     _writeWaitHandler = &waitHandler;
 
     wibot::peripheral::SizeInfo sizeInfo;
-    wibot::peripheral::bits_switch(_handle, this->_config, size, sizeInfo);
+    wibot::peripheral::bits_switch(_handle, this->config, size, sizeInfo);
     if (size < 0)
     {
         return Result::GeneralError;
     }
-    if (this->_config.useTxDma && (size > this->_config.txDmaThreshold))
+    if (this->config.useTxDma && (size > this->config.txDmaThreshold))
     {
         this->_status.isTxDmaEnabled = 1;
         // SCB_CleanDCache_by_Addr((uint32_t *)data, byteSize);
