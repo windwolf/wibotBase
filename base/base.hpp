@@ -113,10 +113,10 @@ template<typename T>
 class Configurable
 {
  public:
-	void config_apply(T& config)
-	{
-		this->config = config;
-	}
+//	void config_apply(T& config)
+//	{
+//		this->config = config;
+//	}
 
  public:
 	T config;
@@ -567,7 +567,5 @@ void operator/=(const Vector4<T>& one, const T other)
 using Vector4f = Vector4<float>;
 using Vector4b = Vector4<uint8_t>;
 using Vector4i = Vector4<uint32_t>;
-
-
 
 #endif // ___BASE_HPP__
