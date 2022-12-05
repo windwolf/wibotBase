@@ -13,10 +13,6 @@ Result Pwm::_init()
 };
 void Pwm::_deinit(){};
 
-PwmConfig &Pwm::config_get()
-{
-    return _config;
-};
 
 Result Pwm::all_enable()
 {

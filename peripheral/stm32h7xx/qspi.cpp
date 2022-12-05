@@ -26,11 +26,6 @@ void QSPI::_deinit()
     Peripherals::peripheral_unregister("qspi", this);
 };
 
-QSPIConfig &QSPI::config_get()
-{
-    return _config;
-}
-
 static void _command_qspi_cmd_tranlate(CommandFrame *cmd, QSPI_CommandTypeDef *cmdhandler)
 {
     cmdhandler->Instruction = cmd->commandId;

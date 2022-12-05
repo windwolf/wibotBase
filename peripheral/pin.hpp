@@ -28,13 +28,13 @@ union PinConfig {
     uint32_t value;
 };
 
-class Pin : public Initializable
+class Pin : public Initializable, public Configurable<PinConfig>
 {
   public:
     Pin(PIN_CTOR_ARG, uint16_t pinMask);
     Result _init() override;
     void _deinit() override;
-    PinConfig &config_get();
+
     Result read(PinStatus &value);
     Result write(PinStatus value);
 
@@ -44,7 +44,6 @@ class Pin : public Initializable
   private:
     PIN_FIELD_DECL;
     uint16_t _pinMask;
-    PinConfig _config;
 };
 } // namespace wibot::peripheral
 

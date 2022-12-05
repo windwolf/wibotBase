@@ -21,13 +21,13 @@ union UARTConfig {
     uint32_t value;
 };
 
-class UART : public Initializable
+class UART : public Initializable, public Configurable<UARTConfig>
 {
   public:
     UART(UART_CTOR_ARG);
     Result _init() override;
     void _deinit() override;
-    UARTConfig &config_get();
+
     Result read(void *data, uint32_t size, WaitHandler &waitHandler);
     Result write(void *data, uint32_t size, WaitHandler &waitHandler);
     Result start(uint8_t *data, uint32_t size, WaitHandler &waitHandler);
@@ -35,7 +35,6 @@ class UART : public Initializable
 
   private:
     UART_FIELD_DECL
-    UARTConfig _config;
     union {
         struct
         {
@@ -44,6 +43,7 @@ class UART : public Initializable
         };
         uint32_t value;
     } _status;
+
     WaitHandler *_writeWaitHandler;
     WaitHandler *_readWaitHandler;
     Buffer8 _txBuffer;

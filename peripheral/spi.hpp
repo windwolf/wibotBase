@@ -23,13 +23,13 @@ union SpiConfig {
     uint32_t value;
 };
 
-class Spi : public Initializable
+class Spi : public Initializable, public Configurable<SpiConfig>
 {
   public:
     Spi(SPI_CTOR_ARG);
     Result _init() override;
     void _deinit() override;
-    SpiConfig &config_get();
+
 
     Result read(void *data, uint32_t size, WaitHandler &waitHandler);
     Result write(void *data, uint32_t size, WaitHandler &waitHandler);
@@ -44,7 +44,7 @@ class Spi : public Initializable
         };
         uint32_t value;
     } _status;
-    SpiConfig _config;
+
     WaitHandler *_readWaitHandler;
     WaitHandler *_writeWaitHandler;
     Buffer8 _txBuffer;
@@ -75,7 +75,7 @@ class SpiWithPins : public Spi
     SpiWithPins(SPI_CTOR_ARG, Pin *cs, Pin *rw, Pin *dc);
     Result _init() override;
     void _deinit() override;
-    SpiWithPinsConfig &pinconfig_get();
+	SpiWithPinsConfig &pinconfig_get();
     Result read(bool isData, void *data, uint32_t size, WaitHandler &waitHandler);
     Result write(bool isData, void *data, uint32_t size, WaitHandler &waitHandler);
     Result session_begin();
@@ -83,10 +83,11 @@ class SpiWithPins : public Spi
 
   private:
     SPI_FIELD_DECL
+	SpiWithPinsConfig _pinconfig;
+
     Pin *_cs;
     Pin *_rw;
     Pin *_dc;
-    SpiWithPinsConfig _config;
     union {
         uint8_t value;
         struct

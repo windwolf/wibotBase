@@ -61,10 +61,6 @@ void SdCard::_deinit()
     Peripherals::peripheral_unregister("sd", this);
 };
 
-SdConfig &SdCard::config_get()
-{
-    return _config;
-};
 CardInfo &SdCard::card_info_get()
 {
     return _cardInfo;

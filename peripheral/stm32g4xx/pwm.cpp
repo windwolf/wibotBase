@@ -18,10 +18,6 @@ namespace wibot::peripheral
 	{
 	};
 
-	PwmConfig& Pwm::config_get()
-	{
-		return _config;
-	};
 
 	Result Pwm::all_enable()
 	{

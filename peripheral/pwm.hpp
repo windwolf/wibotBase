@@ -29,13 +29,13 @@ namespace wibot::peripheral
 		uint16_t fullScaleDuty;
 	};
 
-	class Pwm : public Initializable
+	class Pwm : public Initializable, public Configurable<PwmConfig>
 	{
 	 public:
 		Pwm(PWM_CTOR_ARG);
 		Result _init() override;
 		void _deinit() override;
-		PwmConfig& config_get();
+
 
 		Result all_enable();
 		Result all_disable();
@@ -45,7 +45,7 @@ namespace wibot::peripheral
 
 	 private:
 		PWM_FIELD_DECL
-		PwmConfig _config;
+
 	};
 } // namespace wibot::peripheral
 

@@ -6,12 +6,6 @@
 
 namespace wibot::peripheral
 {
-
-I2cMasterConfig &I2cMaster::config_get()
-{
-    return _config;
-};
-
 I2cMaster::I2cMaster(I2C_HandleTypeDef &handle) : _handle(handle){};
 
 I2cMaster::~I2cMaster(){};

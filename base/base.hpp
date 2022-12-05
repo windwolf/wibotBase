@@ -107,6 +107,23 @@ class Initializable
 #define MEMBER_DEINIT(instance) instance.deinit();
 #define PTR_DEINIT(instance) instance->deinit();
 
+// -------------------------------
+// Configurable
+template<typename T>
+class Configurable
+{
+ public:
+	virtual void config_apply(T& config)
+	{
+		_config = config;
+	}
+	T& config_get() {
+		return _config;
+	}
+
+ protected:
+	T _config;
+};
 
 // -------------------------------
 // Vector2, Vector3, Vector4
@@ -554,17 +571,6 @@ using Vector4f = Vector4<float>;
 using Vector4b = Vector4<uint8_t>;
 using Vector4i = Vector4<uint32_t>;
 
-template<typename T>
-class Configurable
-{
- public:
-	virtual void config_apply(T& config)
-	{
-		_config = config;
-	}
 
- protected:
-	T _config;
-};
 
 #endif // ___BASE_HPP__

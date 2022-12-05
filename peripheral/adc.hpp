@@ -19,21 +19,21 @@ namespace wibot::peripheral
 		uint32_t value;
 	};
 
-	class Adc : public Initializable
+	class Adc : public Initializable, public Configurable<AdcConfig>
 	{
 	 public:
 		Adc(ADC_CTOR_ARG);
 		~Adc();
 		Result _init() override;
 		void _deinit() override;
-		AdcConfig& config_get();
+
+
 		// Result read(Buffer32 buffer);
 		Result start(Buffer32 buffer, WaitHandler& waitHandler);
 		Result stop();
 
 	 private:
 		ADC_FIELD_DECL
-		AdcConfig _config;
 		union
 		{
 			struct

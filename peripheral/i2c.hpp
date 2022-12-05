@@ -27,14 +27,14 @@ namespace wibot::peripheral
 		uint32_t value;
 	};
 
-	class I2cMaster : public Initializable
+	class I2cMaster : public Initializable, public Configurable<I2cMasterConfig>
 	{
 	 public:
 		I2cMaster(I2C_CTOR_ARG);
 		~I2cMaster();
 		Result _init() override;
 		void _deinit() override;
-		I2cMasterConfig& config_get();
+
 		Result read(uint32_t address, void* data, uint32_t size, WaitHandler& waitHandler);
 		Result write(uint32_t address, void* data, uint32_t size, WaitHandler& waitHandler);
 		Result read(void* data, uint32_t size, WaitHandler& waitHandler);
@@ -42,7 +42,6 @@ namespace wibot::peripheral
 
 	 private:
 		I2C_FIELD_DECL
-		I2cMasterConfig _config;
 		union
 		{
 			struct

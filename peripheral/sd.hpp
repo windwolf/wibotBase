@@ -20,13 +20,12 @@ union SdConfig {
     uint32_t value;
 };
 
-class SdCard : Initializable
+class SdCard : Initializable, public Configurable<SdConfig>
 {
   public:
     SdCard(SD_CTOR_ARG);
     Result _init() override;
     void _deinit() override;
-    SdConfig &config_get();
     CardInfo &card_info_get();
     Result read(void *data, uint32_t num, uint32_t count, WaitHandler WaitHandler);
     Result write(void *data, uint32_t num, uint32_t count, WaitHandler WaitHandler);
@@ -45,7 +44,7 @@ class SdCard : Initializable
         };
         uint32_t value;
     } _status;
-    SdConfig _config;
+
     CardInfo _cardInfo;
     WaitHandler *_waitHandler;
     Buffer8 _txBuffer;

@@ -96,11 +96,6 @@ void UART::_deinit()
     Peripherals::peripheral_unregister("uart", this);
 };
 
-UARTConfig &UART::config_get()
-{
-    return _config;
-};
-
 Result UART::read(void *data, uint32_t size, WaitHandler &waitHandler)
 {
     Result rst = Result::OK;

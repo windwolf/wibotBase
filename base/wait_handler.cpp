@@ -12,10 +12,6 @@ namespace wibot
 	{
 	};
 
-	WaitHandlerConfig& WaitHandler::config_get()
-	{
-		return _config;
-	};
 
 	void WaitHandler::set_value(void* value)
 	{

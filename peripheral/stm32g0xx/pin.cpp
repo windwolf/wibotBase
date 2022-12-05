@@ -12,10 +12,6 @@ Result Pin::_init()
 };
 void Pin::_deinit(){};
 
-PinConfig &Pin::config_get()
-{
-    return _config;
-};
 
 Result Pin::read(PinStatus &value)
 {

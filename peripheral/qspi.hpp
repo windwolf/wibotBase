@@ -25,13 +25,13 @@ union QSPIConfig {
     uint32_t value;
 };
 
-class QSPI : Initializable
+class QSPI : Initializable, public Configurable<QSPIConfig>
 {
   public:
     QSPI(QSPI_CTOR_ARG);
     Result _init() override;
     void _deinit() override;
-    QSPIConfig &config_get();
+
 
     Result read(void *data, uint32_t size, WaitHandler &waitHandler);
     Result write(void *data, uint32_t size, WaitHandler &waitHandler);
@@ -46,7 +46,7 @@ class QSPI : Initializable
         };
         uint32_t value;
     } _status;
-    QSPIConfig _config;
+
     WaitHandler *_readWaitHandler;
     WaitHandler *_writeWaitHandler;
     Buffer8 _txBuffer;
@@ -61,4 +61,5 @@ class QSPI : Initializable
 };
 
 } // namespace wibot::peripheral
+
 #endif // ___BSP_QSPI_H__

@@ -24,11 +24,10 @@ namespace wibot
  * 2. sender will return immediatly
  *
  */
-	class WaitHandler
+	class WaitHandler: public Configurable<WaitHandlerConfig>
 	{
 	 public:
 		WaitHandler(EventGroup& eventGroup, uint32_t doneFlag, uint32_t errorFlag);
-		WaitHandlerConfig& config_get();
 		void set_value(void* value);
 		void* get_value();
 		void* get_sender();
@@ -48,7 +47,6 @@ namespace wibot
 	 protected:
 		void* _sender;
 		void* _value;
-		WaitHandlerConfig _config;
 		EventGroup& _eventGroup;
 		uint32_t _doneFlag;
 		uint32_t _errorFlag;

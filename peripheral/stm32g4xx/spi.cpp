@@ -150,11 +150,6 @@ void Spi::_deinit()
     Peripherals::peripheral_unregister("spi", this);
 };
 
-SpiConfig &Spi::config_get()
-{
-    return _config;
-}
-
 Result Spi::read(void *data, uint32_t size, WaitHandler &waitHandler)
 {
     if (_readWaitHandler != nullptr)

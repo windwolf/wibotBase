@@ -85,10 +85,6 @@ static void _i2c_byte_write(Pin &_scl, Pin &_sda, uint8_t byte)
     }
 };
 
-I2cMasterConfig &I2cMaster::config_get()
-{
-    return _config;
-};
 I2cMaster::I2cMaster(Pin &scl, Pin &sda) : _scl(scl), _sda(sda){};
 I2cMaster::~I2cMaster(){};
 
@@ -207,7 +203,8 @@ Result I2cMaster::write(void *data, uint32_t size, WaitHandler &waitHandler)
         waitHandler.error_set(this);
     }
     return Result::OK;
-};
+}
+
 
 // uint32_t I2CMaster::wait_for_cplt(uint32_t timeout) {
 //     auto tick = wibot::os::Utils::tick_get();
