@@ -87,7 +87,7 @@ namespace wibot
 				break;
 			}
 		}
-		if (!_config.disableAutoReset)
+		if (!config.disableAutoReset)
 		{
 			_eventGroup.reset(_doneFlag | _errorFlag);
 		}

@@ -113,16 +113,13 @@ template<typename T>
 class Configurable
 {
  public:
-	virtual void config_apply(T& config)
+	void config_apply(T& config)
 	{
-		_config = config;
-	}
-	T& config_get() {
-		return _config;
+		this->config = config;
 	}
 
- protected:
-	T _config;
+ public:
+	T config;
 };
 
 // -------------------------------

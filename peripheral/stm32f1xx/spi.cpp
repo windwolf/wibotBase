@@ -225,15 +225,15 @@ Result SpiWithPins::_init()
     PTR_INIT_ERROR_CHECK(_dc)
     if (_cs)
     {
-        _cs->config_get().inverse = _pinconfig.csPinHighIsDisable;
+        _cs->config.inverse = _pinconfig.csPinHighIsDisable;
     }
     if (_dc)
     {
-        _dc->config_get().inverse = _pinconfig.dcPinHighIsCmd;
+        _dc->config.inverse = _pinconfig.dcPinHighIsCmd;
     }
     if (_rw)
     {
-        _dc->config_get().inverse = _pinconfig.rwPinHighIsWrite;
+        _dc->config.inverse = _pinconfig.rwPinHighIsWrite;
     }
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_TX_COMPLETE_CB_ID,
                              &wibot::peripheral::SpiWithPins::_on_write_complete_callback);
