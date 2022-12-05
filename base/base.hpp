@@ -124,105 +124,118 @@ struct Vector2
 	{
 	}
 
-	Vector2<T> operator+(const Vector2<T>& other) const
-	{
-		Vector2<T> result;
-		result.v1 = v1 + other.v1;
-		result.v2 = v2 + other.v2;
-		return result;
-	};
-	Vector2<T> operator+(const T other) const
-	{
-		Vector2<T> result;
-		result.v1 = v1 + other;
-		result.v2 = v2 + other;
-		return result;
-	};
-	void operator+=(const Vector2<T>& other)
-	{
-		v1 += other.v1;
-		v2 += other.v2;
-	};
-	void operator+=(const T other)
-	{
-		v1 += other;
-		v2 += other;
-	};
-
-	Vector2<T> operator-(const Vector2<T>& other) const
-	{
-		Vector2<T> result;
-		result.v1 = v1 - other.v1;
-		result.v2 = v2 - other.v2;
-		return result;
-	};
-	Vector2<T> operator-(const T& other) const
-	{
-		Vector2<T> result;
-		result.v1 = v1 - other;
-		result.v2 = v2 - other;
-		return result;
-	};
-	void operator-=(const Vector2<T>& other)
-	{
-		v1 -= other.v1;
-		v2 -= other.v2;
-	};
-	void operator-=(const T other)
-	{
-		v1 -= other;
-		v2 -= other;
-	};
-
-	Vector2<T> operator*(const Vector2<T>& other) const
-	{
-		Vector2<T> result;
-		result.v1 = v1 * other.v1;
-		result.v2 = v2 * other.v2;
-		return result;
-	};
-	Vector2<T> operator*(const T other) const
-	{
-		Vector2<T> result;
-		result.v1 = v1 * other;
-		result.v2 = v2 * other;
-		return result;
-	};
-	void operator*=(const Vector2<T>& other)
-	{
-		v1 *= other.v1;
-		v2 *= other.v2;
-	};
-	void operator*=(const T other)
-	{
-		v1 *= other;
-		v2 *= other;
-	};
-
-	Vector2<T> operator/(const Vector2<T>& other) const
-	{
-		Vector2<T> result;
-		result.v1 = v1 / other.v1;
-		result.v2 = v2 / other.v2;
-		return result;
-	};
-	Vector2<T> operator/(const T other) const
-	{
-		Vector2<T> result;
-		result.v1 = v1 / other;
-		result.v2 = v2 / other;
-		return result;
-	};
-	void operator/=(const Vector2<T>& other)
-	{
-		v1 /= other.v1;
-		v2 /= other.v2;
-	};
-	void operator/=(const T other)
-	{
-		v1 /= other;
-		v2 /= other;
-	};
+};
+template<typename T>
+static Vector2<T> operator+(const Vector2<T>& one, const Vector2<T>& other)
+{
+	Vector2<T> result;
+	result.v1 = one.v1 + other.v1;
+	result.v2 = one.v2 + other.v2;
+	return result;
+};
+template<typename T>
+Vector2<T> operator+(const Vector2<T>& one, const T other)
+{
+	Vector2<T> result;
+	result.v1 = one.v1 + other;
+	result.v2 = one.v2 + other;
+	return result;
+};
+template<typename T>
+void operator+=(const Vector2<T>& one, const Vector2<T>& other)
+{
+	one.v1 += other.v1;
+	one.v2 += other.v2;
+};
+template<typename T>
+void operator+=(const Vector2<T>& one, const T other)
+{
+	one.v1 += other;
+	one.v2 += other;
+};
+template<typename T>
+Vector2<T> operator-(const Vector2<T>& one, const Vector2<T>& other)
+{
+	Vector2<T> result;
+	result.v1 = one.v1 - other.v1;
+	result.v2 = one.v2 - other.v2;
+	return result;
+};
+template<typename T>
+Vector2<T> operator-(const Vector2<T>& one, const T& other)
+{
+	Vector2<T> result;
+	result.v1 = one.v1 - other;
+	result.v2 = one.v2 - other;
+	return result;
+};
+template<typename T>
+void operator-=(const Vector2<T>& one, const Vector2<T>& other)
+{
+	one.v1 -= other.v1;
+	one.v2 -= other.v2;
+};
+template<typename T>
+void operator-=(const Vector2<T>& one, const T other)
+{
+	one.v1 -= other;
+	one.v2 -= other;
+};
+template<typename T>
+Vector2<T> operator*(const Vector2<T>& one, const Vector2<T>& other)
+{
+	Vector2<T> result;
+	result.v1 = one.v1 * other.v1;
+	result.v2 = one.v2 * other.v2;
+	return result;
+};
+template<typename T>
+Vector2<T> operator*(const Vector2<T>& one, const T other)
+{
+	Vector2<T> result;
+	result.v1 = one.v1 * other;
+	result.v2 = one.v2 * other;
+	return result;
+};
+template<typename T>
+void operator*=(const Vector2<T>& one, const Vector2<T>& other)
+{
+	one.v1 *= other.v1;
+	one.v2 *= other.v2;
+};
+template<typename T>
+void operator*=(const Vector2<T>& one, const T other)
+{
+	one.v1 *= other;
+	one.v2 *= other;
+};
+template<typename T>
+Vector2<T> operator/(const Vector2<T>& one, const Vector2<T>& other)
+{
+	Vector2<T> result;
+	result.v1 = one.v1 / other.v1;
+	result.v2 = one.v2 / other.v2;
+	return result;
+};
+template<typename T>
+Vector2<T> operator/(const Vector2<T>& one, const T other)
+{
+	Vector2<T> result;
+	result.v1 = one.v1 / other;
+	result.v2 = one.v2 / other;
+	return result;
+};
+template<typename T>
+void operator/=(const Vector2<T>& one, const Vector2<T>& other)
+{
+	one.v1 /= other.v1;
+	one.v2 /= other.v2;
+};
+template<typename T>
+void operator/=(const Vector2<T>& one, const T other)
+{
+	one.v1 /= other;
+	one.v2 /= other;
 };
 
 using Vector2f = Vector2<float>;
@@ -242,121 +255,135 @@ struct Vector3
 	{
 	};
 
-	Vector3<T> operator+(const Vector3<T>& other) const
-	{
-		Vector3<T> result;
-		result.v1 = v1 + other.v1;
-		result.v2 = v2 + other.v2;
-		result.v3 = v3 + other.v3;
-		return result;
-	};
-	Vector3<T> operator+(const T other) const
-	{
-		Vector3<T> result;
-		result.v1 = v1 + other;
-		result.v2 = v2 + other;
-		result.v3 = v3 + other;
-		return result;
-	};
-	void operator+=(const Vector3<T>& other)
-	{
-		v1 += other.v1;
-		v2 += other.v2;
-		v3 += other.v3;
-	};
-	void operator+=(const T other)
-	{
-		v1 += other;
-		v2 += other;
-		v3 += other;
-	};
+};
+template<typename T>
+Vector3<T> operator+(const Vector3<T>& one, const Vector3<T>& other)
+{
+	Vector3<T> result;
+	result.v1 = one.v1 + other.v1;
+	result.v2 = one.v2 + other.v2;
+	result.v3 = one.v3 + other.v3;
+	return result;
+};
+template<typename T>
+Vector3<T> operator+(const Vector3<T>& one, const T other)
+{
+	Vector3<T> result;
+	result.v1 = one.v1 + other;
+	result.v2 = one.v2 + other;
+	result.v3 = one.v3 + other;
+	return result;
+};
+template<typename T>
+void operator+=(const Vector3<T>& one, const Vector3<T>& other)
+{
+	one.v1 += other.v1;
+	one.v2 += other.v2;
+	one.v3 += other.v3;
+};
+template<typename T>
+void operator+=(const Vector3<T>& one, const T other)
+{
+	one.v1 += other;
+	one.v2 += other;
+	one.v3 += other;
+};
+template<typename T>
+Vector3<T> operator-(const Vector3<T>& one, const Vector3<T>& other)
+{
+	Vector3<T> result;
+	result.v1 = one.v1 - other.v1;
+	result.v2 = one.v2 - other.v2;
+	result.v3 = one.v3 - other.v3;
+	return result;
+};
+template<typename T>
+Vector3<T> operator-(const Vector3<T>& one, const T& other)
+{
+	Vector3<T> result;
+	result.v1 = one.v1 - other;
+	result.v2 = one.v2 - other;
+	result.v3 = one.v3 - other;
+	return result;
+};
+template<typename T>
+void operator-=(const Vector3<T>& one, const Vector3<T>& other)
+{
+	one.v1 -= other.v1;
+	one.v2 -= other.v2;
+	one.v3 -= other.v3;
+};
+template<typename T>
+void operator-=(const Vector3<T>& one, const T other)
+{
+	one.v1 -= other;
+	one.v2 -= other;
+	one.v3 -= other;
+};
+template<typename T>
+Vector3<T> operator*(const Vector3<T>& one, const Vector3<T>& other)
+{
+	Vector2<T> result;
+	result.v1 = one.v1 * other.v1;
+	result.v2 = one.v2 * other.v2;
+	result.v3 = one.v3 * other.v3;
+	return result;
+};
+template<typename T>
+Vector3<T> operator*(const Vector3<T>& one, const T other)
+{
+	Vector3<T> result;
+	result.v1 = one.v1 * other;
+	result.v2 = one.v2 * other;
+	result.v3 = one.v3 * other;
+	return result;
+};
+template<typename T>
+void operator*=(const Vector3<T>& one, const Vector3<T>& other)
+{
+	one.v1 *= other.v1;
+	one.v2 *= other.v2;
+	one.v3 *= other.v3;
+};
+template<typename T>
+void operator*=(const Vector3<T>& one, const T other)
+{
+	one.v1 *= other;
+	one.v2 *= other;
+	one.v3 *= other;
+};
+template<typename T>
 
-	Vector3<T> operator-(const Vector3<T>& other) const
-	{
-		Vector3<T> result;
-		result.v1 = v1 - other.v1;
-		result.v2 = v2 - other.v2;
-		result.v3 = v3 - other.v3;
-		return result;
-	};
-	Vector3<T> operator-(const T& other) const
-	{
-		Vector3<T> result;
-		result.v1 = v1 - other;
-		result.v2 = v2 - other;
-		result.v3 = v3 - other;
-		return result;
-	};
-	void operator-=(const Vector3<T>& other)
-	{
-		v1 -= other.v1;
-		v2 -= other.v2;
-		v3 -= other.v3;
-	};
-	void operator-=(const T other)
-	{
-		v1 -= other;
-		v2 -= other;
-		v3 -= other;
-	};
-
-	Vector3<T> operator*(const Vector3<T>& other) const
-	{
-		Vector2<T> result;
-		result.v1 = v1 * other.v1;
-		result.v2 = v2 * other.v2;
-		result.v3 = v3 * other.v3;
-		return result;
-	};
-	Vector3<T> operator*(const T other) const
-	{
-		Vector3<T> result;
-		result.v1 = v1 * other;
-		result.v2 = v2 * other;
-		result.v3 = v3 * other;
-		return result;
-	};
-	void operator*=(const Vector3<T>& other)
-	{
-		v1 *= other.v1;
-		v2 *= other.v2;
-		v3 *= other.v3;
-	};
-	void operator*=(const T other)
-	{
-		v1 *= other;
-		v2 *= other;
-		v3 *= other;
-	};
-
-	Vector3<T> operator/(const Vector3<T>& other) const
-	{
-		Vector3<T> result;
-		result.v1 = v1 / other.v1;
-		result.v2 = v2 / other.v2;
-		result.v3 = v3 / other.v3;
-		return result;
-	};
-	Vector3<T> operator/(const T other) const
-	{
-		Vector3<T> result;
-		result.v1 = v1 / other;
-		result.v2 = v2 / other;
-		result.v3 = v3 / other;
-		return result;
-	};
-	void operator/=(const Vector3<T>& other)
-	{
-		v1 /= other.v1;
-		v2 /= other.v2;
-		v3 /= other.v3;
-	};
-	void operator/=(const T other)
-	{
-		v1 /= other;
-		v2 /= other;
-		v3 /= other;
-	};
+Vector3<T> operator/(const Vector3<T>& one, const Vector3<T>& other)
+{
+	Vector3<T> result;
+	result.v1 = one.v1 / other.v1;
+	result.v2 = one.v2 / other.v2;
+	result.v3 = one.v3 / other.v3;
+	return result;
+};
+template<typename T>
+Vector3<T> operator/(const Vector3<T>& one, const T other)
+{
+	Vector3<T> result;
+	result.v1 = one.v1 / other;
+	result.v2 = one.v2 / other;
+	result.v3 = one.v3 / other;
+	return result;
+};
+template<typename T>
+void operator/=(const Vector3<T>& one, const Vector3<T>& other)
+{
+	one.v1 /= other.v1;
+	one.v2 /= other.v2;
+	one.v3 /= other.v3;
+};
+template<typename T>
+void operator/=(const Vector3<T>& one, const T other)
+{
+	one.v1 /= other;
+	one.v2 /= other;
+	one.v3 /= other;
 };
 
 using Vector3f = Vector3<float>;
@@ -378,139 +405,151 @@ struct Vector4
 	{
 	};
 
-	Vector4<T> operator+(const Vector4<T>& other) const
-	{
-		Vector4<T> result;
-		result.v1 = v1 + other.v1;
-		result.v2 = v2 + other.v2;
-		result.v3 = v3 + other.v3;
-		result.v4 = v4 + other.v4;
-		return result;
-	};
-	Vector4<T> operator+(const T other) const
-	{
-		Vector4<T> result;
-		result.v1 = v1 + other;
-		result.v2 = v2 + other;
-		result.v3 = v3 + other;
-		result.v4 = v4 + other;
-		return result;
-	};
-	void operator+=(const Vector4<T>& other)
-	{
-		v1 += other.v1;
-		v2 += other.v2;
-		v3 += other.v3;
-		v4 += other.v4;
-	};
-	void operator+=(const T other)
-	{
-		v1 += other;
-		v2 += other;
-		v3 += other;
-		v4 += other;
-	};
-
-	Vector4<T> operator-(const Vector4<T>& other) const
-	{
-		Vector4<T> result;
-		result.v1 = v1 - other.v1;
-		result.v2 = v2 - other.v2;
-		result.v3 = v3 - other.v3;
-		result.v4 = v4 - other.v4;
-		return result;
-	};
-	Vector4<T> operator-(const T& other) const
-	{
-		Vector4<T> result;
-		result.v1 = v1 - other;
-		result.v2 = v2 - other;
-		result.v3 = v3 - other;
-		result.v4 = v4 - other;
-		return result;
-	};
-	void operator-=(const Vector4<T>& other)
-	{
-		v1 -= other.v1;
-		v2 -= other.v2;
-		v3 -= other.v3;
-		v4 -= other.v4;
-	};
-	void operator-=(const T other)
-	{
-		v1 -= other;
-		v2 -= other;
-		v3 -= other;
-		v4 -= other;
-	};
-
-	Vector4<T> operator*(const Vector4<T>& other) const
-	{
-		Vector2<T> result;
-		result.v1 = v1 * other.v1;
-		result.v2 = v2 * other.v2;
-		result.v3 = v3 * other.v3;
-		result.v4 = v4 * other.v4;
-		return result;
-	};
-	Vector4<T> operator*(const T other) const
-	{
-		Vector4<T> result;
-		result.v1 = v1 * other;
-		result.v2 = v2 * other;
-		result.v3 = v3 * other;
-		result.v4 = v4 * other;
-		return result;
-	};
-	void operator*=(const Vector4<T>& other)
-	{
-		v1 *= other.v1;
-		v2 *= other.v2;
-		v3 *= other.v3;
-		v4 *= other.v4;
-	};
-	void operator*=(const T other)
-	{
-		v1 *= other;
-		v2 *= other;
-		v3 *= other;
-		v4 *= other;
-	};
-
-	Vector4<T> operator/(const Vector4<T>& other) const
-	{
-		Vector4<T> result;
-		result.v1 = v1 / other.v1;
-		result.v2 = v2 / other.v2;
-		result.v3 = v3 / other.v3;
-		result.v4 = v4 / other.v4;
-		return result;
-	};
-	Vector4<T> operator/(const T other) const
-	{
-		Vector4<T> result;
-		result.v1 = v1 / other;
-		result.v2 = v2 / other;
-		result.v3 = v3 / other;
-		result.v4 = v4 / other;
-		return result;
-	};
-	void operator/=(const Vector4<T>& other)
-	{
-		v1 /= other.v1;
-		v2 /= other.v2;
-		v3 /= other.v3;
-		v4 /= other.v4;
-	};
-	void operator/=(const T other)
-	{
-		v1 /= other;
-		v2 /= other;
-		v3 /= other;
-		v4 /= other;
-	};
 };
-
+template<typename T>
+Vector4<T> operator+(const Vector4<T>& one, const Vector4<T>& other)
+{
+	Vector4<T> result;
+	result.v1 = one.v1 + other.v1;
+	result.v2 = one.v2 + other.v2;
+	result.v3 = one.v3 + other.v3;
+	result.v4 = one.v4 + other.v4;
+	return result;
+};
+template<typename T>
+Vector4<T> operator+(const Vector4<T>& one, const T other)
+{
+	Vector4<T> result;
+	result.v1 = one.v1 + other;
+	result.v2 = one.v2 + other;
+	result.v3 = one.v3 + other;
+	result.v4 = one.v4 + other;
+	return result;
+};
+template<typename T>
+void operator+=(const Vector4<T>& one, const Vector4<T>& other)
+{
+	one.v1 += other.v1;
+	one.v2 += other.v2;
+	one.v3 += other.v3;
+	one.v4 += other.v4;
+};
+template<typename T>
+void operator+=(const Vector4<T>& one, const T other)
+{
+	one.v1 += other;
+	one.v2 += other;
+	one.v3 += other;
+	one.v4 += other;
+};
+template<typename T>
+Vector4<T> operator-(const Vector4<T>& one, const Vector4<T>& other)
+{
+	Vector4<T> result;
+	result.v1 = one.v1 - other.v1;
+	result.v2 = one.v2 - other.v2;
+	result.v3 = one.v3 - other.v3;
+	result.v4 = one.v4 - other.v4;
+	return result;
+};
+template<typename T>
+Vector4<T> operator-(const Vector4<T>& one, const T& other)
+{
+	Vector4<T> result;
+	result.v1 = one.v1 - other;
+	result.v2 = one.v2 - other;
+	result.v3 = one.v3 - other;
+	result.v4 = one.v4 - other;
+	return result;
+};
+template<typename T>
+void operator-=(const Vector4<T>& one, const Vector4<T>& other)
+{
+	one.v1 -= other.v1;
+	one.v2 -= other.v2;
+	one.v3 -= other.v3;
+	one.v4 -= other.v4;
+};
+template<typename T>
+void operator-=(const Vector4<T>& one, const T other)
+{
+	one.v1 -= other;
+	one.v2 -= other;
+	one.v3 -= other;
+	one.v4 -= other;
+};
+template<typename T>
+Vector4<T> operator*(const Vector4<T>& one, const Vector4<T>& other)
+{
+	Vector2<T> result;
+	result.v1 = one.v1 * other.v1;
+	result.v2 = one.v2 * other.v2;
+	result.v3 = one.v3 * other.v3;
+	result.v4 = one.v4 * other.v4;
+	return result;
+};
+template<typename T>
+Vector4<T> operator*(const Vector4<T>& one, const T other)
+{
+	Vector4<T> result;
+	result.v1 = one.v1 * other;
+	result.v2 = one.v2 * other;
+	result.v3 = one.v3 * other;
+	result.v4 = one.v4 * other;
+	return result;
+};
+template<typename T>
+void operator*=(const Vector4<T>& one, const Vector4<T>& other)
+{
+	one.v1 *= other.v1;
+	one.v2 *= other.v2;
+	one.v3 *= other.v3;
+	one.v4 *= other.v4;
+};
+template<typename T>
+void operator*=(const Vector4<T>& one, const T other)
+{
+	one.v1 *= other;
+	one.v2 *= other;
+	one.v3 *= other;
+	one.v4 *= other;
+};
+template<typename T>
+Vector4<T> operator/(const Vector4<T>& one, const Vector4<T>& other)
+{
+	Vector4<T> result;
+	result.v1 = one.v1 / other.v1;
+	result.v2 = one.v2 / other.v2;
+	result.v3 = one.v3 / other.v3;
+	result.v4 = one.v4 / other.v4;
+	return result;
+};
+template<typename T>
+Vector4<T> operator/(const Vector4<T>& one, const T other)
+{
+	Vector4<T> result;
+	result.v1 = one.v1 / other;
+	result.v2 = one.v2 / other;
+	result.v3 = one.v3 / other;
+	result.v4 = one.v4 / other;
+	return result;
+};
+template<typename T>
+void operator/=(const Vector4<T>& one, const Vector4<T>& other)
+{
+	one.v1 /= other.v1;
+	one.v2 /= other.v2;
+	one.v3 /= other.v3;
+	one.v4 /= other.v4;
+};
+template<typename T>
+void operator/=(const Vector4<T>& one, const T other)
+{
+	one.v1 /= other;
+	one.v2 /= other;
+	one.v3 /= other;
+	one.v4 /= other;
+};
 using Vector4f = Vector4<float>;
 using Vector4b = Vector4<uint8_t>;
 using Vector4i = Vector4<uint32_t>;
