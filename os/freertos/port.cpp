@@ -89,8 +89,17 @@ namespace wibot::os
 	Result EventGroup::wait(uint32_t flags, uint32_t& actualFlags, EventOptions options,
 		uint32_t timeout)
 	{
+		uint32_t freertosOptions = 0;
+		if ((options & EventOptions_Clear_Flag) == EventOptions_NoClear)
+		{
+			freertosOptions |= osFlagsNoClear;
+		}
+		if ((options & EventOptions_Wait_Flag) == EventOptions_WaitForAll)
+		{
+			freertosOptions |= osFlagsWaitAll;
+		}
 		//TODO: HANDLE options
-		auto rst = osEventFlagsWait(&(this->_instance), flags, options, timeout);
+		auto rst = osEventFlagsWait(&(this->_instance), flags, freertosOptions, timeout);
 		if ((int32_t)rst < 0)
 		{
 			return (Result)rst;
