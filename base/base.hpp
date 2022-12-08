@@ -25,7 +25,8 @@
 #define _SQRT3 1.73205080756887729352f
 #define _SQRT3_2 0.86602540378443864676f
 #define _1_SQRT3 0.57735026918962576450f
-
+#define _2_SQRT3 1.15470053837925152900f
+#define _1_3 0.33333333333333333333f
 template<typename E>
 constexpr auto to_underlying(E e) noexcept
 {
