@@ -12,7 +12,6 @@ namespace wibot
 	{
 	};
 
-
 	void WaitHandler::set_value(void* value)
 	{
 		_value = value;
@@ -53,8 +52,16 @@ namespace wibot
 		Result rst = Result::OK;
 		for (; timeout > duration; duration = Utils::tick_diff(startTick))
 		{
-			rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
-				EventOptions_WaitForAny | EventOptions_NoClear, timeout - duration);
+			if (config.disableAutoReset)
+			{
+				rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
+					EventOptions_WaitForAny | EventOptions_NoClear, timeout - duration);
+			}
+			else
+			{
+				rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
+					EventOptions_WaitForAny | EventOptions_Clear, timeout - duration);
+			}
 			if (rst == Result::OK)
 			{
 				if (events & _errorFlag)
@@ -86,10 +93,6 @@ namespace wibot
 				rst = Result::Timeout;
 				break;
 			}
-		}
-		if (!config.disableAutoReset)
-		{
-			_eventGroup.reset(_doneFlag | _errorFlag);
 		}
 		return rst;
 	};
