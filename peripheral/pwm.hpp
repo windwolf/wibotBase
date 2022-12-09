@@ -36,6 +36,7 @@ namespace wibot::peripheral
 		Result _init() override;
 		void _deinit() override;
 
+		void config_apply(PwmConfig& config);
 
 		Result all_enable();
 		Result all_disable();
