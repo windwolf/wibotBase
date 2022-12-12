@@ -97,7 +97,7 @@ namespace wibot::peripheral
 		}
 		this->_waitHandler = &waitHandler;
 #if PERIPHERAL_I2C_READ_DMA_ENABLED
-		_status.isReadDmaEnabled = false;
+		_status.isReadDmaEnabled = true;
 		return (Result)HAL_I2C_Master_Receive_DMA(&_handle, config.slaveAddress, (uint8_t*)data,
 			size * (to_underlying(config.dataWidth) + 1));
 #endif
