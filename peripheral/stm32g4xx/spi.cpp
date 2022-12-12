@@ -227,7 +227,7 @@ namespace wibot::peripheral
 		}
 		if (_rw)
 		{
-			_dc->config.inverse = _pinconfig.rwPinHighIsWrite;
+			_rw->config.inverse = _pinconfig.rwPinHighIsWrite;
 		}
 		HAL_SPI_RegisterCallback(&_handle, HAL_SPI_TX_COMPLETE_CB_ID,
 			&wibot::peripheral::SpiWithPins::_on_write_complete_callback);

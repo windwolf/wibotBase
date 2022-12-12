@@ -220,14 +220,17 @@ namespace wibot::peripheral
 		if (_cs)
 		{
 			_cs->config.inverse = _pinconfig.csPinHighIsDisable;
+			_cs->apply_config();
 		}
 		if (_dc)
 		{
 			_dc->config.inverse = _pinconfig.dcPinHighIsCmd;
+			_dc->apply_config();
 		}
 		if (_rw)
 		{
-			_dc->config.inverse = _pinconfig.rwPinHighIsWrite;
+			_rw->config.inverse = _pinconfig.rwPinHighIsWrite;
+			_rw->apply_config();
 		}
 		HAL_SPI_RegisterCallback(&_handle, HAL_SPI_TX_COMPLETE_CB_ID,
 			&wibot::peripheral::SpiWithPins::_on_write_complete_callback);

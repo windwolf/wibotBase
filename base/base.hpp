@@ -114,10 +114,10 @@ template<typename T>
 class Configurable
 {
  public:
-//	void config_apply(T& config)
-//	{
-//		this->config = config;
-//	}
+	virtual void apply_config()
+	{
+		;
+	}
 
  public:
 	T config;

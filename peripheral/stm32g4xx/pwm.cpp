@@ -68,11 +68,6 @@ namespace wibot::peripheral
 		LL_TIM_CC_DisableChannel(_handle.Instance, config.channelsEnable);
 		return Result::OK;
 	}
-	void Pwm::config_apply(PwmConfig& config)
-	{
-		this->config = config;
-
-	};
 
 } // namespace wibot::peripheral
 
