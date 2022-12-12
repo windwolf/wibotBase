@@ -13,15 +13,15 @@ namespace wibot::peripheral
 	{
 		struct
 		{
-			uint8_t txDmaThreshold: 8;
-			uint8_t rxDmaThreshold: 8;
+			//uint8_t txDmaThreshold: 8;
+			//uint8_t rxDmaThreshold: 8;
 			/**
 			 * @brief 7bit, must be shifted left 1 bit
 			 */
 			uint8_t slaveAddress: 8;
 			DataWidth dataWidth: 2;
-			bool useTxDma: 1;
-			bool useRxDma: 1;
+			//bool useTxDma: 1;
+			//bool useRxDma: 1;
 			uint32_t : 4;
 		};
 		uint32_t value;

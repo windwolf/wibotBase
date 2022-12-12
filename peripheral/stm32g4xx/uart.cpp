@@ -102,18 +102,16 @@ namespace wibot::peripheral
 		}
 		_readWaitHandler = &waitHandler;
 
-		if (config.useRxDma && (size > config.rxDmaThreshold))
-		{
-			_status.isRxDmaEnabled = 1;
-			// TODO: if size greater then uint16_t max, should slice the data and
-			// send in multiple DMA transfers
-			return (Result)HAL_UART_Receive_DMA(&_handle, (uint8_t*)data, (uint16_t)size);
-		}
-		else
-		{
-			_status.isRxDmaEnabled = 0;
-			return (Result)HAL_UART_Receive_IT(&_handle, (uint8_t*)data, (uint16_t)size);
-		}
+#if PERIPHERAL_UART_READ_DMA_ENABLED
+		_status.isRxDmaEnabled = true;
+		// TODO: if size greater then uint16_t max, should slice the data and
+		// send in multiple DMA transfers
+		return (Result)HAL_UART_Receive_DMA(&_handle, (uint8_t*)data, (uint16_t)size);
+#endif
+#if PERIPHERAL_UART_READ_IT_ENABLED
+		_status.isRxDmaEnabled = false;
+		return (Result)HAL_UART_Receive_IT(&_handle, (uint8_t*)data, (uint16_t)size);
+#endif
 	};
 	Result UART::write(void* data, uint32_t size, WaitHandler& waitHandler)
 	{
@@ -134,18 +132,16 @@ namespace wibot::peripheral
 		}
 		_writeWaitHandler = &waitHandler;
 
-		if (config.useTxDma && (size > config.txDmaThreshold))
-		{
-			_status.isTxDmaEnabled = 1;
-			// TODO: if size greater then uint16_t max, should slice the data and
-			// send in multiple DMA transfers
-			return (Result)HAL_UART_Transmit_DMA(&_handle, (uint8_t*)data, (uint16_t)size);
-		}
-		else
-		{
-			_status.isTxDmaEnabled = 0;
-			return (Result)HAL_UART_Transmit_IT(&_handle, (uint8_t*)data, (uint16_t)size);
-		}
+#if PERIPHERAL_UART_WRITE_DMA_ENABLED
+		_status.isTxDmaEnabled = 1;
+		// TODO: if size greater then uint16_t max, should slice the data and
+		// send in multiple DMA transfers
+		return (Result)HAL_UART_Transmit_DMA(&_handle, (uint8_t*)data, (uint16_t)size);
+#endif
+#if PERIPHERAL_UART_WRITE_IT_ENABLED
+		_status.isTxDmaEnabled = 0;
+		return (Result)HAL_UART_Transmit_IT(&_handle, (uint8_t*)data, (uint16_t)size);
+#endif
 	};
 
 	Result UART::start(uint8_t* data, uint32_t size, WaitHandler& waitHandler)
@@ -168,13 +164,17 @@ namespace wibot::peripheral
 			return Result::Busy;
 		}
 		_readWaitHandler = &waitHandler;
-
+#if PERIPHERAL_UART_READ_DMA_ENABLED
 		return (Result)HAL_UARTEx_ReceiveToIdle_DMA(&_handle, data, size);
+#else
+		return Result::NotSupport;
+#endif
+
 	};
 
 	Result UART::stop()
 	{
-
+#if PERIPHERAL_UART_READ_DMA_ENABLED
 		Result rst = Result::OK;
 		if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_RX) != HAL_UART_STATE_BUSY_RX)
 		{
@@ -191,6 +191,9 @@ namespace wibot::peripheral
 			wh->done_set(this);
 		}
 		return rst;
+#else
+		return Result::NotSupport;
+#endif
 	};
 
 }; // namespace wibot::peripheral
