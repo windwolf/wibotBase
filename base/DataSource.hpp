@@ -14,6 +14,25 @@ namespace wibot
 		virtual uint32_t get_data() = 0;
 	};
 
+	class MemoryDataSource : public DataSource
+	{
+	 public:
+		MemoryDataSource(uint32_t* data) : _data(data)
+		{
+		}
+		uint32_t get_data() override;
+	 private:
+		uint32_t* _data;
+	};
+
+	class DummyDataSource : public DataSource
+	{
+	 public:
+		uint32_t get_data() override;
+
+		static DummyDataSource instance;
+	};
+
 } // wibot
 
 #endif //WWMOTOR_LIBS_WWBASE_BASE_DATASOURCE_HPP_
