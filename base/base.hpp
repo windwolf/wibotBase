@@ -114,9 +114,9 @@ template<typename T>
 class Configurable
 {
  public:
-	virtual void apply_config()
+	virtual Result apply_config()
 	{
-		;
+		return Result::OK;
 	}
 
  public:
