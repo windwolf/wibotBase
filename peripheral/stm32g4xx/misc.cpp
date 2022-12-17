@@ -40,7 +40,7 @@ namespace wibot::peripheral
 
 	uint64_t Misc::get_tick_us()
 	{
-		/* Ensure COUNTFLAG is reset by reading SysTick control and status register */
+		/* Ensure COUNTFLAG is reset by reading SysTick control and status register_instance */
 		LL_SYSTICK_IsActiveCounterFlag();
 		__IO uint32_t m = HAL_GetTick();
 		__IO uint32_t tms = SysTick->LOAD + 1;
@@ -55,7 +55,7 @@ namespace wibot::peripheral
 
 	uint64_t Misc::get_tick_ns()
 	{
-		/* Ensure COUNTFLAG is reset by reading SysTick control and status register */
+		/* Ensure COUNTFLAG is reset by reading SysTick control and status register_instance */
 		LL_SYSTICK_IsActiveCounterFlag();
 		__IO uint32_t m = HAL_GetTick();
 		__IO uint32_t tms = SysTick->LOAD + 1;

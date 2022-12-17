@@ -18,12 +18,12 @@ Result QSPI::_init()
     HAL_QSPI_RegisterCallback(&_handle, HAL_QSPI_STATUS_MATCH_CB_ID,
                               &QSPI::_on_status_match_callback);
     HAL_QSPI_RegisterCallback(&_handle, HAL_QSPI_ERROR_CB_ID, &QSPI::_on_error_callback);
-    Peripherals::peripheral_register("qspi", this, &_handle);
+    Peripherals::register_peripheral("qspi", this, &_handle);
     return Result::OK;
 };
 void QSPI::_deinit()
 {
-    Peripherals::peripheral_unregister("qspi", this);
+    Peripherals::unregister_peripheral("qspi", this);
 };
 
 static void _command_qspi_cmd_tranlate(CommandFrame *cmd, QSPI_CommandTypeDef *cmdhandler)

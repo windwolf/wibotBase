@@ -6,7 +6,7 @@
 namespace wibot::peripheral
 {
 
-void Peripherals::peripheral_register(const char *peripheralName,
+void Peripherals::register_peripheral(const char *peripheralName,
                                       void *peripheral, void *instance)
 {
     for (uint32_t i = 0; i < MAX_PERIPHERAL_COUNT; i++)
@@ -25,7 +25,7 @@ void Peripherals::peripheral_register(const char *peripheralName,
     return;
 }
 
-void Peripherals::peripheral_unregister(const char *peripheralName,
+void Peripherals::unregister_peripheral(const char *peripheralName,
                                         void *peripheral)
 {
     for (uint32_t i = 0; i < MAX_PERIPHERAL_COUNT; i++)
@@ -42,7 +42,7 @@ void Peripherals::peripheral_unregister(const char *peripheralName,
     return;
 }
 
-void *Peripherals::peripheral_get_by_instance(void *instance)
+void *Peripherals::get_peripheral(void *instance)
 {
     for (uint32_t i = 0; i < MAX_PERIPHERAL_COUNT; i++)
     {

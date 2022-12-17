@@ -22,13 +22,19 @@ namespace wibot::peripheral
 		struct PeripheralItem
 		{
 			const char* peripheralName;
-			void* peripheral;
+			/**
+			 * @brief  Pointer of wibot peripheral
+			 */
+            void* peripheral;
+            /**
+             * @brief  Pointer of HAL port instance
+             */
 			void* instance;
 		};
 
-		static void peripheral_register(const char* peripheralName, void* peripheral, void* instance);
-		static void peripheral_unregister(const char* peripheralName, void* peripheral);
-		static void* peripheral_get_by_instance(void* instance);
+		static void register_peripheral(const char* peripheralName, void* peripheral, void* instance);
+		static void unregister_peripheral(const char* peripheralName, void* peripheral);
+		static void* get_peripheral(void* instance);
 
 	 private:
 		static PeripheralItem _peripherals[MAX_PERIPHERAL_COUNT];

@@ -17,7 +17,7 @@ namespace wibot::peripheral
 
 	void Spi::_on_write_complete_callback(SPI_HandleTypeDef* instance)
 	{
-		Spi* perip = (Spi*)Peripherals::peripheral_get_by_instance(instance);
+		Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
 		auto wh = perip->_writeWaitHandler;
 		if (wh != nullptr)
 		{
@@ -28,7 +28,7 @@ namespace wibot::peripheral
 
 	void Spi::_on_read_complete_callback(SPI_HandleTypeDef* instance)
 	{
-		Spi* perip = (Spi*)Peripherals::peripheral_get_by_instance(instance);
+		Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
 		auto wh = perip->_readWaitHandler;
 		if (wh != nullptr)
 		{
@@ -39,7 +39,7 @@ namespace wibot::peripheral
 
 	void Spi::_on_error_callback(SPI_HandleTypeDef* instance)
 	{
-		Spi* perip = (Spi*)Peripherals::peripheral_get_by_instance(instance);
+		Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
 		auto wh = perip->_readWaitHandler;
 		if (wh != nullptr)
 		{
@@ -146,12 +146,12 @@ namespace wibot::peripheral
 			&wibot::peripheral::Spi::_on_read_complete_callback);
 		HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
 			&wibot::peripheral::Spi::_on_error_callback);
-		Peripherals::peripheral_register("spi", this, &_handle);
+		Peripherals::register_peripheral("spi", this, &_handle);
 		return Result::OK;
 	};
 	void Spi::_deinit()
 	{
-		Peripherals::peripheral_unregister("spi", this);
+		Peripherals::unregister_peripheral("spi", this);
 	};
 
 	Result Spi::read(void* data, uint32_t size, WaitHandler& waitHandler)
@@ -235,12 +235,12 @@ namespace wibot::peripheral
 			&wibot::peripheral::SpiWithPins::_on_read_complete_callback);
 		HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
 			&wibot::peripheral::Spi::_on_error_callback);
-		Peripherals::peripheral_register("spiwithpin", this, &_handle);
+		Peripherals::register_peripheral("spiwithpin", this, &_handle);
 		INIT_END()
 	};
 	void SpiWithPins::_deinit()
 	{
-		Peripherals::peripheral_unregister("spiwithpin", this);
+		Peripherals::unregister_peripheral("spiwithpin", this);
 		PTR_DEINIT(_cs)
 		PTR_DEINIT(_rw)
 		PTR_DEINIT(_dc)
@@ -293,7 +293,7 @@ namespace wibot::peripheral
 
 	void SpiWithPins::_on_read_complete_callback(SPI_HandleTypeDef* instance)
 	{
-		SpiWithPins* spi = (SpiWithPins*)Peripherals::peripheral_get_by_instance(instance);
+		SpiWithPins* spi = (SpiWithPins*)Peripherals::get_peripheral(instance);
 		if (spi->_pinconfig.autoCs || !spi->_status.busy)
 		{
 			spi->cs_set(false);
@@ -302,7 +302,7 @@ namespace wibot::peripheral
 	};
 	void SpiWithPins::_on_write_complete_callback(SPI_HandleTypeDef* instance)
 	{
-		SpiWithPins* spi = (SpiWithPins*)Peripherals::peripheral_get_by_instance(instance);
+		SpiWithPins* spi = (SpiWithPins*)Peripherals::get_peripheral(instance);
 		if (spi->_pinconfig.autoCs || !spi->_status.busy)
 		{
 			spi->cs_set(false);

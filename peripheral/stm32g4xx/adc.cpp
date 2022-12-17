@@ -20,12 +20,12 @@ namespace wibot::peripheral
 		HAL_ADC_RegisterCallback(&_handle, HAL_ADC_CONVERSION_COMPLETE_CB_ID,
 			&Adc::_on_conversion_complete_callback);
 		HAL_ADC_RegisterCallback(&_handle, HAL_ADC_ERROR_CB_ID, &Adc::_on_error_callback);
-		Peripherals::peripheral_register("adc", this, &_handle);
+        Peripherals::register_peripheral("adc", this, &_handle);
 		return Result::OK;
 	};
 	void Adc::_deinit()
 	{
-		Peripherals::peripheral_unregister("adc", this);
+        Peripherals::unregister_peripheral("adc", this);
 	};
 
 //	Result Adc::read(Buffer32 buffer)
@@ -52,7 +52,7 @@ namespace wibot::peripheral
 
 	void Adc::_on_conversion_complete_callback(ADC_HandleTypeDef* instance)
 	{
-		Adc* perip = (Adc*)Peripherals::peripheral_get_by_instance(instance);
+		Adc* perip = (Adc*)Peripherals::get_peripheral(instance);
 		auto wh = perip->_waitHandler;
 		if (wh != nullptr)
 		{
@@ -61,7 +61,7 @@ namespace wibot::peripheral
 	};
 	void Adc::_on_error_callback(ADC_HandleTypeDef* instance)
 	{
-		Adc* perip = (Adc*)Peripherals::peripheral_get_by_instance(instance);
+		Adc* perip = (Adc*)Peripherals::get_peripheral(instance);
 		auto wh = perip->_waitHandler;
 		if (wh != nullptr)
 		{

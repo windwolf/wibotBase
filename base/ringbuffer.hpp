@@ -20,6 +20,12 @@ namespace wibot
 	 public:
 		typedef void (* OperationNotify)(RingBufferOperationType type);
 
+        /**
+         * @brief Construct a new Ring Buffer object
+         * @param data buffer pointer
+         * @param dataWidth element data width in bytes
+         * @param maxSize buffer size in elements
+         */
 		RingBuffer(void* data, uint32_t dataWidth, uint32_t maxSize);
 		bool is_full();
 		bool is_empty();

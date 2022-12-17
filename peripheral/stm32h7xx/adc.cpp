@@ -16,12 +16,12 @@ Result Adc::_init()
     HAL_ADC_RegisterCallback(&_handle, HAL_ADC_CONVERSION_COMPLETE_CB_ID,
                              &Adc::_on_conversion_complete_callback);
     HAL_ADC_RegisterCallback(&_handle, HAL_ADC_ERROR_CB_ID, &Adc::_on_error_callback);
-    Peripherals::peripheral_register("adc", this, &_handle);
+    Peripherals::register_peripheral("adc", this, &_handle);
     return Result::OK;
 };
 void Adc::_deinit()
 {
-    Peripherals::peripheral_unregister("adc", this);
+    Peripherals::unregister_peripheral("adc", this);
 };
 
 //Result Adc::read(Buffer32 buffer)

@@ -18,6 +18,21 @@ Result Pin::read(PinStatus &value)
     PinStatus rst;
     rst = static_cast<PinStatus>(HAL_GPIO_ReadPin(&_port, this->_pinMask));
     value = static_cast<PinStatus>(to_underlying(rst) ^ this->config.inverse);
+    if (config.enable_debounce) {
+        if (rst != last_buffered_status_) {
+            last_buffered_status_ = rst;
+            last_debounce_time_ = HAL_GetTick();
+        }
+        else {
+            if (HAL_GetTick() - last_debounce_time_ > this->config.debounce_time) {
+                last_output_status_ = rst;
+            }
+        }
+        value = last_output_status_;
+    }
+    else {
+        value = rst;
+    }
     return Result::OK;
 };
 
