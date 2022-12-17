@@ -22,12 +22,12 @@ namespace wibot::peripheral
 		HAL_I2C_RegisterCallback(&_handle, HAL_I2C_MEM_RX_COMPLETE_CB_ID,
 			&I2cMaster::_on_read_complete_callback);
 		HAL_I2C_RegisterCallback(&_handle, HAL_I2C_ERROR_CB_ID, &I2cMaster::_on_error_callback);
-		Peripherals::peripheral_register("i2c", this, &_handle);
+        Peripherals::register_peripheral("i2c", this, &_handle);
 		return Result::OK;
 	};
 	void I2cMaster::_deinit()
 	{
-		Peripherals::peripheral_unregister("i2c", this);
+        Peripherals::unregister_peripheral("i2c", this);
 	};
 
 	Result I2cMaster::read(uint32_t address, void* data, uint32_t size, WaitHandler& waitHandler)
@@ -132,7 +132,7 @@ namespace wibot::peripheral
 
 	void I2cMaster::_on_read_complete_callback(I2C_HandleTypeDef* instance)
 	{
-		I2cMaster* perip = (I2cMaster*)Peripherals::peripheral_get_by_instance(instance);
+		I2cMaster* perip = (I2cMaster*)Peripherals::get_peripheral(instance);
 		auto wh = perip->_waitHandler;
 		if (wh != nullptr)
 		{
@@ -142,7 +142,7 @@ namespace wibot::peripheral
 	};
 	void I2cMaster::_on_write_complete_callback(I2C_HandleTypeDef* instance)
 	{
-		I2cMaster* perip = (I2cMaster*)Peripherals::peripheral_get_by_instance(instance);
+		I2cMaster* perip = (I2cMaster*)Peripherals::get_peripheral(instance);
 		auto wh = perip->_waitHandler;
 		if (wh != nullptr)
 		{
@@ -152,7 +152,7 @@ namespace wibot::peripheral
 	};
 	void I2cMaster::_on_error_callback(I2C_HandleTypeDef* instance)
 	{
-		I2cMaster* perip = (I2cMaster*)Peripherals::peripheral_get_by_instance(instance);
+		I2cMaster* perip = (I2cMaster*)Peripherals::get_peripheral(instance);
 		auto wh = perip->_waitHandler;
 		if (wh != nullptr)
 		{

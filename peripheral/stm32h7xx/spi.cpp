@@ -163,12 +163,12 @@ namespace wibot::peripheral
 			&wibot::peripheral::Spi::_on_read_complete_callback);
 		HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
 			&wibot::peripheral::Spi::_on_error_callback);
-		Peripherals::peripheral_register("spi", this, &_handle);
+		Peripherals::register_peripheral("spi", this, &_handle);
 		return Result::OK;
 	};
 	void Spi::_deinit()
 	{
-		Peripherals::peripheral_unregister("spi", this);
+		Peripherals::unregister_peripheral("spi", this);
 	};
 
 	Result Spi::read(void* data, uint32_t size, WaitHandler& waitHandler)
@@ -256,12 +256,12 @@ namespace wibot::peripheral
 			&wibot::peripheral::SpiWithPins::_on_read_complete_callback);
 		HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
 			&wibot::peripheral::Spi::_on_error_callback);
-		Peripherals::peripheral_register("spiwithpin", this, &_handle);
+		Peripherals::register_peripheral("spiwithpin", this, &_handle);
 		INIT_END()
 	};
 	void SpiWithPins::_deinit()
 	{
-		Peripherals::peripheral_unregister("spiwithpin", this);
+		Peripherals::unregister_peripheral("spiwithpin", this);
 		PTR_DEINIT(_cs)
 		PTR_DEINIT(_rw)
 		PTR_DEINIT(_dc)

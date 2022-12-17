@@ -23,9 +23,16 @@ union PinConfig {
     struct
     {
         bool inverse : 1;
-        uint32_t : 31;
+        bool enable_debounce : 1;
+        uint8_t : 6;
+        /**
+         * Debounce time in ms.
+         */
+        uint8_t debounce_time : 8;
+        uint32_t : 16;
     };
     uint32_t value;
+
 };
 
 class Pin : public Initializable, public Configurable<PinConfig>
@@ -44,6 +51,9 @@ class Pin : public Initializable, public Configurable<PinConfig>
   private:
     PIN_FIELD_DECL;
     uint16_t _pinMask;
+    PinStatus last_output_status_ = PinStatus::Reset;
+    PinStatus last_buffered_status_ = PinStatus::Reset;
+    uint32_t last_debounce_time_ = 0;
 };
 } // namespace wibot::peripheral
 

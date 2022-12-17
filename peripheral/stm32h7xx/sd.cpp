@@ -53,12 +53,12 @@ Result SdCard::_init()
     HAL_SD_RegisterCallback(instance, HAL_SD_RX_CPLT_CB_ID, &_on_read_complete_callback);
     HAL_SD_RegisterCallback(instance, HAL_SD_TX_CPLT_CB_ID, &_on_write_complete_callback);
     HAL_SD_RegisterCallback(instance, HAL_SD_ERROR_CB_ID, &_on_error_callback);
-    Peripherals::peripheral_register("sd", this, &_handle);
+    Peripherals::register_peripheral("sd", this, &_handle);
     return Result::OK;
 };
 void SdCard::_deinit()
 {
-    Peripherals::peripheral_unregister("sd", this);
+    Peripherals::unregister_peripheral("sd", this);
 };
 
 CardInfo &SdCard::card_info_get()

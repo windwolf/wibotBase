@@ -88,12 +88,12 @@ namespace wibot::peripheral
 			&wibot::peripheral::UART::_on_circular_data_received_callback);
 		HAL_UART_RegisterCallback(&_handle, HAL_UART_ERROR_CB_ID,
 			&wibot::peripheral::UART::_on_error_callback);
-		Peripherals::peripheral_register("uart", this, &_handle);
+		Peripherals::register_peripheral("uart", this, &_handle);
 		return Result::OK;
 	};
 	void UART::_deinit()
 	{
-		Peripherals::peripheral_unregister("uart", this);
+		Peripherals::unregister_peripheral("uart", this);
 	};
 
 	Result UART::read(void* data, uint32_t size, WaitHandler& waitHandler)
