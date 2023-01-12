@@ -70,5 +70,35 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions opti
                : Result::GeneralError;
 };
 
+MessageQueue::MessageQueue(const char* name, void* msg_addr, uint32_t msg_size, uint32_t queue_size)
+{
+    tx_queue_create(&(this->_instance), const_cast<CHAR*>(name), msg_size, msg_addr, queue_size);
+}
+
+MessageQueue::~MessageQueue()
+{
+    tx_queue_delete(&(this->_instance));
+}
+
+Result MessageQueue::send(const void* msg, uint32_t timeout)
+{
+    return (tx_queue_send(&(this->_instance), const_cast<void*>(msg), timeout) ==
+        TX_SUCCESS)
+           ? Result::OK
+           : Result::GeneralError;
+}
+
+Result MessageQueue::receive(void* msg, uint32_t timeout)
+{
+    return (tx_queue_receive(&(this->_instance), const_cast<void*>(msg), timeout) ==
+        TX_SUCCESS)
+           ? Result::OK
+           : Result::GeneralError;
+}
+Result MessageQueue::flush()
+{
+    tx_queue_flush(&(this->_instance));
+}
+
 } // namespace wibot::os
 

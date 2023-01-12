@@ -5,7 +5,7 @@
 #include "cmsis_os2.h"
 
 namespace wibot::os {
-#define QUEUE_TYPEDEF StaticQueue_t
+#define MESSAGEQUEUE_TYPEDEF StaticQueue_t
 #define MUTEX_TYPEDEF const char *_name; StaticSemaphore_t
 #define EVENTGROUP_TYPEDEF const char *_name; StaticEventGroup_t
 #define SEMAPHORE_TYPEDEF StaticSemaphore_t

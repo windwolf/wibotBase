@@ -1,5 +1,6 @@
 #include "os.hpp"
 #include "soc.hpp"
+#include "ringbuffer.hpp"
 
 namespace wibot::os
 {
@@ -135,4 +136,35 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions opti
     actualFlags = this->_instance;
     return Result::OK;
 };
+
+    MessageQueue::MessageQueue(const char* name, void* msg_addr, uint32_t msg_size, uint32_t queue_size):
+    _instance{
+        .buffer(msg_addr, msg_size*sizeof(uint32_t), queue_size);
+    }
+    {
+    }
+
+    MessageQueue::~MessageQueue()
+    {
+    }
+
+    Result MessageQueue::send(const void* msg, uint32_t timeout)
+    {
+        Result rst = Result::OK;
+        if (!_instance.is_full()) {
+            _instance.write(const_cast<void*>(msg), sizeof(uint32_t)*,)
+        }
+        else {
+
+        }
+    }
+
+    Result MessageQueue::receive(void* msg, uint32_t timeout)
+    {
+
+    }
+    Result MessageQueue::flush()
+    {
+    }
+
 } // namespace wibot::os
