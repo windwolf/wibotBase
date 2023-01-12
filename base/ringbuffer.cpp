@@ -162,15 +162,15 @@ namespace wibot
 
 		if (length <= spaceFromWriteToEnd)
 		{
-			memcpy(POINTER_ADD(_data, write, _dataWidth), valuePtr, length);
+			memcpy(POINTER_ADD(_data, write, _dataWidth), valuePtr, length * _dataWidth);
 			write += length;
 			write = (write == size) ? 0 : write;
 		}
 		else
 		{
-			memcpy(POINTER_ADD(_data, write, _dataWidth), valuePtr, spaceFromWriteToEnd);
+			memcpy(POINTER_ADD(_data, write, _dataWidth), valuePtr, spaceFromWriteToEnd * _dataWidth);
 			memcpy(_data, POINTER_ADD(valuePtr, spaceFromWriteToEnd, _dataWidth),
-				(length - spaceFromWriteToEnd));
+				(length - spaceFromWriteToEnd) * _dataWidth);
 
 			write = length - spaceFromWriteToEnd;
 		}
@@ -270,7 +270,7 @@ namespace wibot
 
 		if (countFormTailToBufferEnd >= length)
 		{
-			memcpy(valuePtr, data + read, length);
+			memcpy(valuePtr, POINTER_ADD(data, read, _dataWidth), length * _dataWidth);
 			read += length;
 			read = (read >= size) ? (read - size) : read;
 		}
@@ -383,6 +383,6 @@ namespace wibot
 	void* RingBuffer::data_ptr_get()
 	{
 		return _data;
-	};
+	}
 
 } // namespace wibot
