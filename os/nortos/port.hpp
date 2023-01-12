@@ -8,11 +8,18 @@
 namespace wibot::os
 {
 
-    struct _MessageQueueInstance_ {
-        RingBuffer buffer;
-        uint32_t message_size;
-        uint32_t queue_size;
-    };
+	struct _MessageQueueInstance_
+	{
+		_MessageQueueInstance_(void* queue_addr, uint32_t message_size, uint32_t queue_size)
+			: buffer(queue_addr, message_size, queue_size),
+			  message_size(message_size),
+			  queue_size(queue_size)
+		{
+		};
+		RingBuffer buffer;
+		uint32_t message_size;
+		uint32_t queue_size;
+	};
 #define MESSAGEQUEUE_TYPEDEF _MessageQueueInstance_
 #define MUTEX_TYPEDEF bool
 #define EVENTGROUP_TYPEDEF uint32_t

@@ -16,7 +16,7 @@ namespace wibot
 		_dataWidth = dataWidth;
 		_write = 0;
 		_read = 0;
-		_operationNotify = 0;
+		_operationNotify = nullptr;
 	};
 	bool RingBuffer::is_full()
 	{
@@ -125,7 +125,7 @@ namespace wibot
 		return Result::OK;
 	};
 	Result RingBuffer::write(void* valuePtr, uint32_t length, uint8_t allowCoverTail,
-		uint32_t* actualLength)
+		uint32_t& actualLength)
 	{
 		if (length <= 0)
 		{
@@ -186,11 +186,11 @@ namespace wibot
 		{
 			_operationNotify(RingBufferOperationType::Enqueue);
 		}
-		*actualLength = length;
+		actualLength = length;
 		return Result::OK;
 	};
 	Result RingBuffer::write_fill(uint8_t* value, uint32_t length, uint8_t allowCoverTail,
-		uint32_t* actualLength)
+		uint32_t& actualLength)
 	{
 		if (length <= 0)
 		{
@@ -249,7 +249,7 @@ namespace wibot
 		{
 			_operationNotify(RingBufferOperationType::Enqueue);
 		}
-		*actualLength = length;
+		actualLength = length;
 		return Result::OK;
 	};
 	Result RingBuffer::read(void* valuePtr, uint32_t length, uint32_t& actualLength)
@@ -383,6 +383,12 @@ namespace wibot
 	void* RingBuffer::data_ptr_get()
 	{
 		return _data;
+	}
+	Result RingBuffer::clear()
+	{
+		_read = _write;
+		_status.overflowed = 0;
+		return Result::OK;
 	}
 
 } // namespace wibot

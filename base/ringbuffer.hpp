@@ -20,12 +20,12 @@ namespace wibot
 	 public:
 		typedef void (* OperationNotify)(RingBufferOperationType type);
 
-        /**
-         * @brief Construct a new Ring Buffer object
-         * @param data buffer pointer
-         * @param dataWidth element data width in bytes
-         * @param maxSize buffer size in elements
-         */
+		/**
+		 * @brief Construct a new Ring Buffer object
+		 * @param data buffer pointer
+		 * @param dataWidth element data width in bytes
+		 * @param maxSize buffer size in elements
+		 */
 		RingBuffer(void* data, uint32_t dataWidth, uint32_t maxSize);
 		bool is_full();
 		bool is_empty();
@@ -37,9 +37,8 @@ namespace wibot
 		Result write_index_sync(uint32_t newWrite);
 		Result read_index_sync(uint32_t newRead);
 		Result read_offset_sync(uint32_t offset);
-		Result write(void* valuePtr, uint32_t length, uint8_t allowCoverTail, uint32_t* actualLength);
-		Result write_fill(uint8_t* value, uint32_t length, uint8_t allowCoverTail,
-			uint32_t* actualLength);
+		Result write(void* valuePtr, uint32_t length, uint8_t allowCoverTail, uint32_t& actualLength);
+		Result write_fill(uint8_t* value, uint32_t length, uint8_t allowCoverTail, uint32_t& actualLength);
 		Result read(void* valuePtr, uint32_t length, uint32_t& actualLength);
 		Result peek(void*& data);
 		Result index_peek(uint32_t index, void*& data);
@@ -49,6 +48,8 @@ namespace wibot
 		void* offset_peek_directly(uint32_t offset);
 		uint32_t offset_to_index_convert(uint32_t offset);
 		uint32_t index_wrap(int32_t index);
+
+		Result clear();
 
 		void operation_notify_register(OperationNotify operationNotify);
 
