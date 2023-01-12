@@ -91,6 +91,7 @@ namespace wibot::peripheral
         {
             return Result::Busy;
         }
+
         if ((HAL_UART_GetState(&_handle) & HAL_UART_STATE_BUSY_RX) == HAL_UART_STATE_BUSY_RX)
         {
             return Result::Busy;
@@ -184,10 +185,10 @@ namespace wibot::peripheral
         {
             rst = (Result)HAL_UART_DMAStop(&_handle);
         }
-        auto wh = waitHandler_;
+        auto wh = _readWaitHandler;
         if (wh != nullptr)
         {
-            waitHandler_ = nullptr;
+            _readWaitHandler = nullptr;
             wh->done_set(this);
         }
         return rst;
@@ -202,7 +203,6 @@ void uart_send_byte(const char* data, uint16_t len)
 {
     for (uint16_t todo = 0; todo < len; todo++)
     {
-
         /* 堵塞判断串口是否发送完成 */
         while (LL_USART_IsActiveFlag_TC(USART1) == 0);
 

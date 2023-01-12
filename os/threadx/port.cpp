@@ -97,7 +97,10 @@ Result MessageQueue::receive(void* msg, uint32_t timeout)
 }
 Result MessageQueue::flush()
 {
-    tx_queue_flush(&(this->_instance));
+    return (tx_queue_flush(&(this->_instance)) ==
+        TX_SUCCESS)
+           ? Result::OK
+           : Result::GeneralError;
 }
 
 } // namespace wibot::os
