@@ -15,10 +15,17 @@ namespace wibot::os
 		static uint32_t tick_diff(uint32_t tick);
 	};
 
+    //template<uint32_t stack_size>
 	class Thread
 	{
 	 public:
+        //Thread(const char* name, void (*func)(void*), void* arg, uint32_t priority);
+        //void start();
 		static void sleep(uint32_t ms);
+
+     private :
+        //uint8_t _stack[stack_size];
+        //THREAD_TYPEDEF _instance;
 	};
 
 	class Mutex

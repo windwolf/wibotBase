@@ -13,10 +13,18 @@ uint32_t Utils::tick_get()
     return tx_time_get();
 };
 
-void Thread::sleep(uint32_t ms)
-{
-    tx_thread_sleep(ms);
-};
+//template<uint32_t stack_size>
+//void Thread<stack_size>::sleep(uint32_t ms)
+//{
+//    tx_thread_sleep(ms);
+//}
+
+//template<uint32_t stack_size>
+//Thread<stack_size>::Thread(const char* name, void (* func)(void*), void* arg, uint32_t priority)
+//{
+//    tx_thread_create(&_instance, const_cast<CHAR*>(name), func, arg, _stack, stack_size, priority, priority, TX_NO_TIME_SLICE, TX_AUTO_START);
+//
+//};
 
 Mutex::Mutex(const char *name)
 {
