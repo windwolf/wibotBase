@@ -76,7 +76,8 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions opti
             TX_SUCCESS)
                ? Result::OK
                : Result::GeneralError;
-};
+}
+
 
 MessageQueue::MessageQueue(const char* name, void* msg_addr, uint32_t msg_size, uint32_t queue_size)
 {

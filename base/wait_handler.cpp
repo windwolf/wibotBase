@@ -44,6 +44,7 @@ namespace wibot
 // {
 //     return wait(level, TIMEOUT_FOREVER);
 // };
+
 	Result WaitHandler::wait(uint32_t level, uint32_t timeout)
 	{
 		uint32_t events;
@@ -96,6 +97,7 @@ namespace wibot
 		}
 		return rst;
 	};
+
 
 	bool WaitHandler::is_busy()
 	{

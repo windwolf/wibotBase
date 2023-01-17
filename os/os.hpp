@@ -48,6 +48,9 @@ namespace wibot::os
 #define EventOptions_NoClear 0x00
 #define EventOptions_Clear EventOptions_Clear_Flag
 
+    /**
+     *
+     */
 	class EventGroup
 	{
 	 public:
@@ -56,9 +59,10 @@ namespace wibot::os
 		Result set(uint32_t flags);
 		Result reset(uint32_t flags);
 		Result wait(uint32_t flags, uint32_t& actualFlags, EventOptions options, uint32_t timeout);
-
+        uint32_t fetch_empty_flag();
 	 private:
 		EVENTGROUP_TYPEDEF _instance;
+        uint8_t used_flags_;
 	};
 
 
