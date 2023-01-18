@@ -27,22 +27,24 @@ namespace wibot
 	class WaitHandler: public Configurable<WaitHandlerConfig>
 	{
 	 public:
+        WaitHandler(EventGroup& eventGroup);
 		WaitHandler(EventGroup& eventGroup, uint32_t doneFlag, uint32_t errorFlag);
+
+        WaitHandler folk();
+        WaitHandler folk(uint32_t doneFlag, uint32_t errorFlag);
+
+        WaitHandler merge(const WaitHandler& other);
+
 		void set_value(void* value);
 		void* get_value();
 		void* get_sender();
 		Result reset();
-		bool is_busy();
-		// Result wait();
-		// Result wait(uint32_t level);
-		Result wait(uint32_t level, uint32_t timeout);
+
+		Result wait(uint32_t timeout);
 		void done_set(void* sender);
 		void error_set(void* sender);
 		void done_callback_set(void* receiver, Callback onDone);
 		void error_callback_set(void* receiver, Callback onError);
-		uint32_t scope_begin();
-		void scope_end();
-		uint32_t scope_get();
 
 	 protected:
 		void* _sender;
@@ -53,7 +55,8 @@ namespace wibot
 		void* _receiver;
 		Callback _onDone;
 		Callback _onError;
-		uint32_t _level;
+     private:
+        bool is_busy();
 	};
 
 } // namespace wibot

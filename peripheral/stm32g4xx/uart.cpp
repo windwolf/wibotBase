@@ -115,16 +115,11 @@ namespace wibot::peripheral
         {
             return Result::Busy;
         }
-
-        if (rst != Result::OK)
-        {
-            return Result::Busy;
-        }
         _readWaitHandler = &waitHandler;
 
 #if PERIPHERAL_UART_READ_DMA_ENABLED
         _status.isRxDmaEnabled = true;
-        // TODO: if size greater then uint16_t max, should slice the data and
+        //TODO: if size greater then uint16_t max, should slice the data and
         // send in multiple DMA transfers
         return (Result)HAL_UART_Receive_DMA(&_handle, (uint8_t*)data, (uint16_t)size);
 #endif

@@ -8,18 +8,31 @@ namespace wibot
 	using namespace wibot::os;
 
 	WaitHandler::WaitHandler(EventGroup& eventGroup, uint32_t doneFlag, uint32_t errorFlag)
-		: _eventGroup(eventGroup), _doneFlag(doneFlag), _errorFlag(errorFlag)
+		: _eventGroup(eventGroup),
+        _doneFlag(doneFlag),
+        _errorFlag(errorFlag)
 	{
+
 	};
+
+    WaitHandler::WaitHandler(EventGroup& eventGroup)
+        : _eventGroup(eventGroup),
+        _doneFlag(_eventGroup.fetch_empty_flag()),
+        _errorFlag(_eventGroup.fetch_empty_flag())
+    {
+
+    };
 
 	void WaitHandler::set_value(void* value)
 	{
 		_value = value;
 	};
+
 	void* WaitHandler::get_value()
 	{
 		return _value;
 	};
+
 	void* WaitHandler::get_sender()
 	{
 		return _sender;
@@ -45,56 +58,36 @@ namespace wibot
 //     return wait(level, TIMEOUT_FOREVER);
 // };
 
-	Result WaitHandler::wait(uint32_t level, uint32_t timeout)
+	Result WaitHandler::wait(uint32_t timeout)
 	{
 		uint32_t events;
-		uint32_t startTick = Utils::tick_get();
-		uint32_t duration = 0;
 		Result rst = Result::OK;
-		for (; timeout > duration; duration = Utils::tick_diff(startTick))
-		{
-			if (config.disableAutoReset)
-			{
-				rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
-					EventOptions_WaitForAny | EventOptions_NoClear, timeout - duration);
-			}
-			else
-			{
-				rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
-					EventOptions_WaitForAny | EventOptions_Clear, timeout - duration);
-			}
+
+			rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
+					EventOptions_WaitForAny | (config.disableAutoReset?EventOptions_NoClear:EventOptions_Clear),
+                    timeout);
+
 			if (rst == Result::OK)
 			{
 				if (events & _errorFlag)
 				{
 					rst = Result::GeneralError;
-					break;
 				}
 				else if (events & _doneFlag)
 				{
-					if (level == _level)
-					{
-						rst = Result::OK;
-						break;
-					}
-					else
-					{
-						_eventGroup.reset(_doneFlag);
-					}
+					rst = Result::OK;
 				}
 				else
 				{
 					// TODO: no possible to reach here
 					rst = Result::StatusReserved;
-					break;
 				}
 			}
 			else
 			{
 				rst = Result::Timeout;
-				break;
 			}
-		}
+
 		return rst;
 	};
 
@@ -144,19 +137,18 @@ namespace wibot
 		_eventGroup.set(_errorFlag);
 	};
 
-	uint32_t WaitHandler::scope_begin()
-	{
-		return ++_level;
-	};
 
-	void WaitHandler::scope_end()
-	{
-		--_level;
-	};
-
-	uint32_t WaitHandler::scope_get()
-	{
-		return _level;
-	};
+    WaitHandler WaitHandler::folk()
+    {
+        return WaitHandler(this->_eventGroup);
+    }
+    WaitHandler WaitHandler::folk(uint32_t doneFlag, uint32_t errorFlag)
+    {
+        return WaitHandler(this->_eventGroup, doneFlag, errorFlag);
+    }
+    WaitHandler WaitHandler::merge(const WaitHandler& other)
+    {
+        return WaitHandler(this->_eventGroup, this->_doneFlag | other._doneFlag, this->_errorFlag | other._errorFlag);
+    }
 
 } // namespace wibot

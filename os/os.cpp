@@ -12,5 +12,10 @@ uint32_t Utils::tick_diff(uint32_t tick)
         return __sync_add_and_fetch(&used_flags_, 1);
     };
 
+    bool EventGroup::isFlagOverflow()
+    {
+        return used_flags_ > 32;
+    }
+
 
 } // namespace wibot::os

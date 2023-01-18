@@ -41,12 +41,15 @@ namespace wibot::os
 	};
 
 	typedef uint8_t EventOptions;
+
 #define EventOptions_Wait_Flag 0x02
 #define EventOptions_WaitForAny 0x00
 #define EventOptions_WaitForAll EventOptions_Wait_Flag
 #define EventOptions_Clear_Flag 0x01
 #define EventOptions_NoClear 0x00
 #define EventOptions_Clear EventOptions_Clear_Flag
+
+    typedef uint32_t EventFlag;
 
     /**
      *
@@ -59,10 +62,12 @@ namespace wibot::os
 		Result set(uint32_t flags);
 		Result reset(uint32_t flags);
 		Result wait(uint32_t flags, uint32_t& actualFlags, EventOptions options, uint32_t timeout);
-        uint32_t fetch_empty_flag();
+        EventFlag fetch_empty_flag();
+        bool isFlagOverflow();
 	 private:
 		EVENTGROUP_TYPEDEF _instance;
         uint8_t used_flags_;
+
 	};
 
 
@@ -88,6 +93,7 @@ namespace wibot::os
      private:
         MESSAGEQUEUE_TYPEDEF _instance;
     };
+
 } // namespace wibot::os
 
 #endif // ___OS_PORT_HPP__

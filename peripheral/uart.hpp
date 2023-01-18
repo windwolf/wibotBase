@@ -47,8 +47,6 @@ namespace wibot::peripheral
 
 		WaitHandler* _writeWaitHandler;
 		WaitHandler* _readWaitHandler;
-		Buffer8 _txBuffer;
-		Buffer8 _rxBuffer;
 
 	 protected:
 		static void _on_read_complete_callback(UART_CALLBACK_ARG);
