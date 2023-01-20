@@ -27,11 +27,11 @@ namespace wibot
 	class WaitHandler: public Configurable<WaitHandlerConfig>
 	{
 	 public:
+
         WaitHandler(EventGroup& eventGroup);
 		WaitHandler(EventGroup& eventGroup, uint32_t doneFlag, uint32_t errorFlag);
-
+        ~WaitHandler();
         WaitHandler folk();
-        WaitHandler folk(uint32_t doneFlag, uint32_t errorFlag);
 
         WaitHandler merge(const WaitHandler& other);
 
@@ -43,8 +43,8 @@ namespace wibot
 		Result wait(uint32_t timeout);
 		void done_set(void* sender);
 		void error_set(void* sender);
-		void done_callback_set(void* receiver, Callback onDone);
-		void error_callback_set(void* receiver, Callback onError);
+//		void done_callback_set(void* receiver, Callback onDone);
+//		void error_callback_set(void* receiver, Callback onError);
 
 	 protected:
 		void* _sender;
@@ -53,8 +53,9 @@ namespace wibot
 		uint32_t _doneFlag;
 		uint32_t _errorFlag;
 		void* _receiver;
-		Callback _onDone;
-		Callback _onError;
+        bool isMerge_;
+//		Callback _onDone;
+//		Callback _onError;
      private:
         bool is_busy();
 	};

@@ -296,7 +296,7 @@ namespace wibot::peripheral
 
 	Result SpiWithPins::session_begin()
 	{
-		cs_set(false);
+		cs_set(true);
 		if (_status.busy)
 		{
 			return Result::Busy;

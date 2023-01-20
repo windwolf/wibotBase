@@ -12,15 +12,15 @@ namespace wibot
         _doneFlag(doneFlag),
         _errorFlag(errorFlag)
 	{
-
+        isMerge_ = true;
 	};
 
     WaitHandler::WaitHandler(EventGroup& eventGroup)
         : _eventGroup(eventGroup),
-        _doneFlag(_eventGroup.fetch_empty_flag()),
-        _errorFlag(_eventGroup.fetch_empty_flag())
+        _doneFlag(_eventGroup.fetch_flag()),
+        _errorFlag(_eventGroup.fetch_flag())
     {
-
+        isMerge_ = false;
     };
 
 	void WaitHandler::set_value(void* value)
@@ -38,16 +38,16 @@ namespace wibot
 		return _sender;
 	};
 
-	void WaitHandler::done_callback_set(void* receiver, Callback onDone)
-	{
-		_receiver = receiver;
-		_onDone = onDone;
-	};
-	void WaitHandler::error_callback_set(void* receiver, Callback onError)
-	{
-		_receiver = receiver;
-		_onError = onError;
-	};
+//	void WaitHandler::done_callback_set(void* receiver, Callback onDone)
+//	{
+//		_receiver = receiver;
+//		_onDone = onDone;
+//	};
+//	void WaitHandler::error_callback_set(void* receiver, Callback onError)
+//	{
+//		_receiver = receiver;
+//		_onError = onError;
+//	};
 
 // Result WaitHandler::wait()
 // {
@@ -63,34 +63,33 @@ namespace wibot
 		uint32_t events;
 		Result rst = Result::OK;
 
-			rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
-					EventOptions_WaitForAny | (config.disableAutoReset?EventOptions_NoClear:EventOptions_Clear),
-                    timeout);
+		rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
+				EventOptions_WaitForAny | (config.disableAutoReset?EventOptions_NoClear:EventOptions_Clear),
+                timeout);
 
-			if (rst == Result::OK)
+		if (rst == Result::OK)
+		{
+			if (events & _errorFlag)
 			{
-				if (events & _errorFlag)
-				{
-					rst = Result::GeneralError;
-				}
-				else if (events & _doneFlag)
-				{
-					rst = Result::OK;
-				}
-				else
-				{
-					// TODO: no possible to reach here
-					rst = Result::StatusReserved;
-				}
+				rst = Result::GeneralError;
+			}
+			else if (events & _doneFlag)
+			{
+				rst = Result::OK;
 			}
 			else
 			{
-				rst = Result::Timeout;
+				// TODO: no possible to reach here
+				rst = Result::StatusReserved;
 			}
+		}
+		else
+		{
+			rst = Result::Timeout;
+		}
 
 		return rst;
 	};
-
 
 	bool WaitHandler::is_busy()
 	{
@@ -120,35 +119,46 @@ namespace wibot
 	void WaitHandler::done_set(void* sender)
 	{
 		_sender = sender;
-		if (_onDone)
-		{
-			_onDone(_sender, _value, _receiver);
-		}
+//		if (_onDone)
+//		{
+//			_onDone(_sender, _value, _receiver);
+//		}
 		_eventGroup.set(_doneFlag);
 	};
 
 	void WaitHandler::error_set(void* sender)
 	{
 		_sender = sender;
-		if (_onError)
-		{
-			_onError(_sender, _value, _receiver);
-		}
+//		if (_onError)
+//		{
+//			_onError(_sender, _value, _receiver);
+//		}
 		_eventGroup.set(_errorFlag);
 	};
 
 
     WaitHandler WaitHandler::folk()
     {
-        return WaitHandler(this->_eventGroup);
+        if (isMerge_) {
+            //TODO : merged wait handler is not allowed to folk.
+        }
+        else {
+            return WaitHandler(this->_eventGroup);
+        }
     }
-    WaitHandler WaitHandler::folk(uint32_t doneFlag, uint32_t errorFlag)
-    {
-        return WaitHandler(this->_eventGroup, doneFlag, errorFlag);
-    }
+
     WaitHandler WaitHandler::merge(const WaitHandler& other)
     {
         return WaitHandler(this->_eventGroup, this->_doneFlag | other._doneFlag, this->_errorFlag | other._errorFlag);
+    }
+
+    WaitHandler::~WaitHandler()
+    {
+        if (!isMerge_)
+        {
+            _eventGroup.release_flag(_doneFlag);
+            _eventGroup.release_flag(_errorFlag);
+        }
     }
 
 } // namespace wibot

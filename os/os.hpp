@@ -62,11 +62,11 @@ namespace wibot::os
 		Result set(uint32_t flags);
 		Result reset(uint32_t flags);
 		Result wait(uint32_t flags, uint32_t& actualFlags, EventOptions options, uint32_t timeout);
-        EventFlag fetch_empty_flag();
-        bool isFlagOverflow();
+        EventFlag fetch_flag();
+        void release_flag(EventFlag flag);
 	 private:
 		EVENTGROUP_TYPEDEF _instance;
-        uint8_t used_flags_;
+        uint32_t used_flags_;
 
 	};
 
