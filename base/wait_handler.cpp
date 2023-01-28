@@ -141,6 +141,7 @@ namespace wibot
     {
         if (isMerge_) {
             //TODO : merged wait handler is not allowed to folk.
+            return WaitHandler(this->_eventGroup, this->_doneFlag, this->_errorFlag);
         }
         else {
             return WaitHandler(this->_eventGroup);

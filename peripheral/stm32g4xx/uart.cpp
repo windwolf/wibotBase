@@ -105,7 +105,6 @@ namespace wibot::peripheral
 
     Result UART::read(void* data, uint32_t size, WaitHandler& waitHandler)
     {
-        Result rst = Result::OK;
         if (_readWaitHandler != nullptr)
         {
             return Result::Busy;
@@ -161,7 +160,6 @@ namespace wibot::peripheral
 
     Result UART::start(RingBuffer &rxBuffer, WaitHandler& waitHandler)
     {
-        Result rst = Result::OK;
         if (_readWaitHandler != nullptr)
         {
             return Result::Busy;
