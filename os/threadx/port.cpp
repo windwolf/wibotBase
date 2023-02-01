@@ -13,10 +13,18 @@ uint32_t Utils::tick_get()
     return tx_time_get();
 };
 
-void Thread::sleep(uint32_t ms)
-{
-    tx_thread_sleep(ms);
-};
+//template<uint32_t stack_size>
+//void Thread<stack_size>::sleep(uint32_t ms)
+//{
+//    tx_thread_sleep(ms);
+//}
+
+//template<uint32_t stack_size>
+//Thread<stack_size>::Thread(const char* name, void (* func)(void*), void* arg, uint32_t priority)
+//{
+//    tx_thread_create(&_instance, const_cast<CHAR*>(name), func, arg, _stack, stack_size, priority, priority, TX_NO_TIME_SLICE, TX_AUTO_START);
+//
+//};
 
 Mutex::Mutex(const char *name)
 {
@@ -69,6 +77,39 @@ Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions opti
                ? Result::OK
                : Result::GeneralError;
 };
+
+MessageQueue::MessageQueue(const char* name, void* msg_addr, uint32_t msg_size, uint32_t queue_size)
+{
+    tx_queue_create(&(this->_instance), const_cast<CHAR*>(name), msg_size, msg_addr, queue_size);
+}
+
+MessageQueue::~MessageQueue()
+{
+    tx_queue_delete(&(this->_instance));
+}
+
+Result MessageQueue::send(const void* msg, uint32_t timeout)
+{
+    return (tx_queue_send(&(this->_instance), const_cast<void*>(msg), timeout) ==
+        TX_SUCCESS)
+           ? Result::OK
+           : Result::GeneralError;
+}
+
+Result MessageQueue::receive(void* msg, uint32_t timeout)
+{
+    return (tx_queue_receive(&(this->_instance), const_cast<void*>(msg), timeout) ==
+        TX_SUCCESS)
+           ? Result::OK
+           : Result::GeneralError;
+}
+Result MessageQueue::flush()
+{
+    return (tx_queue_flush(&(this->_instance)) ==
+        TX_SUCCESS)
+           ? Result::OK
+           : Result::GeneralError;
+}
 
 } // namespace wibot::os
 

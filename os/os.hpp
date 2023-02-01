@@ -15,10 +15,17 @@ namespace wibot::os
 		static uint32_t tick_diff(uint32_t tick);
 	};
 
+    //template<uint32_t stack_size>
 	class Thread
 	{
 	 public:
+        //Thread(const char* name, void (*func)(void*), void* arg, uint32_t priority);
+        //void start();
 		static void sleep(uint32_t ms);
+
+     private :
+        //uint8_t _stack[stack_size];
+        //THREAD_TYPEDEF _instance;
 	};
 
 	class Mutex
@@ -53,6 +60,30 @@ namespace wibot::os
 	 private:
 		EVENTGROUP_TYPEDEF _instance;
 	};
+
+
+    class MessageQueue
+    {
+     public:
+        /**
+         *
+         * @param name
+         * @param msg_addr message queue buffer address
+         * @param msg_size message size in WORD
+         * @param queue_size queue size in message
+         */
+        MessageQueue(const char* name, void* msg_addr, uint32_t msg_size, uint32_t queue_size);
+        ~MessageQueue();
+        Result send(const void* msg, uint32_t timeout);
+        Result receive(void* msg, uint32_t timeout);
+        /**
+         * @brief Clear the message queue
+         * @return
+         */
+        Result flush();
+     private:
+        MESSAGEQUEUE_TYPEDEF _instance;
+    };
 } // namespace wibot::os
 
 #endif // ___OS_PORT_HPP__

@@ -108,6 +108,13 @@ class Initializable
 #define MEMBER_DEINIT(instance) instance.deinit();
 #define PTR_DEINIT(instance) instance->deinit();
 
+#define FUNCTION_CALL_INIT(function_call) \
+    rst = function_call; \
+    if (rst != Result::OK) \
+    { \
+        return rst; \
+    }
+
 // -------------------------------
 // Configurable
 template<typename T>

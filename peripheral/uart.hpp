@@ -12,12 +12,11 @@ namespace wibot::peripheral
 		struct
 		{
 			DataWidth dataWidth: 2;
-			//bool useTxDma : 1;
-			//bool useRxDma : 1;
-			uint32_t : 4;
-			//uint8_t txDmaThreshold : 8;
-			//uint8_t rxDmaThreshold : 8;
-			uint32_t : 8;
+            bool ignore_parity_error: 1;
+            bool ignore_frame_error: 1;
+            bool ignore_overrun_error: 1;
+            bool ignore_noise_error: 1;
+			uint32_t : 26;
 		};
 		uint32_t value;
 	};
