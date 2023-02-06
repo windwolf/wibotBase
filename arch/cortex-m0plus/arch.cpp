@@ -3,6 +3,7 @@
 //
 
 #include "arch.hpp"
+#include "peripheral.hpp"
 namespace wibot::arch
 {
     bool sync_compare_and_swap(volatile uint32_t* ptr, uint32_t old_value, uint32_t new_value)
@@ -17,13 +18,23 @@ namespace wibot::arch
 //            : "r" (ptr), "Ir" (old_value), "r" (new_value)
 //            : "cc");
 //        return res;
+        auto prim = __get_PRIMASK();
+        __disable_irq();
         if (*ptr == old_value)
         {
             *ptr = new_value;
+            if (!prim)
+            {
+                __enable_irq();
+            }
             return true;
         }
         else
         {
+            if (!prim)
+            {
+                __enable_irq();
+            }
             return false;
         }
 
