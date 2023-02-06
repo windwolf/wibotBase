@@ -7,40 +7,41 @@
 namespace wibot::os
 {
 
-	class Utils
-	{
-	 public:
-		static void delay(uint32_t ms);
-		static uint32_t tick_get();
-		static uint32_t tick_diff(uint32_t tick);
-	};
+    class Utils
+    {
+     public:
+        static void delay(uint32_t ms);
+        static uint32_t tick_get();
+        static uint32_t tick_diff(uint32_t tick);
+    };
 
     //template<uint32_t stack_size>
-	class Thread
-	{
-	 public:
+    class Thread
+    {
+     public:
         //Thread(const char* name, void (*func)(void*), void* arg, uint32_t priority);
         //void start();
-		static void sleep(uint32_t ms);
+        static void sleep(uint32_t ms);
 
      private :
         //uint8_t _stack[stack_size];
         //THREAD_TYPEDEF _instance;
-	};
+    };
 
-	class Mutex
-	{
-	 public:
-		Mutex(const char* name);
-		~Mutex();
-		bool lock(uint32_t timeout);
-		void unlock();
+    class Mutex
+    {
+     public:
+        Mutex(const char* name);
+        ~Mutex();
+        bool lock(uint32_t timeout);
+        void unlock();
 
-	 private:
-		MUTEX_TYPEDEF _instance;
-	};
+     private:
+        MUTEX_TYPEDEF _instance;
+        const char* name_;
+    };
 
-	typedef uint8_t EventOptions;
+    typedef uint8_t EventOptions;
 
 #define EventOptions_Wait_Flag 0x02
 #define EventOptions_WaitForAny 0x00
@@ -54,22 +55,21 @@ namespace wibot::os
     /**
      *
      */
-	class EventGroup
-	{
-	 public:
-		EventGroup(const char* name);
-		~EventGroup();
-		Result set(uint32_t flags);
-		Result reset(uint32_t flags);
-		Result wait(uint32_t flags, uint32_t& actualFlags, EventOptions options, uint32_t timeout);
+    class EventGroup
+    {
+     public:
+        EventGroup(const char* name);
+        ~EventGroup();
+        Result set(uint32_t flags);
+        Result reset(uint32_t flags);
+        Result wait(uint32_t flags, uint32_t& actualFlags, EventOptions options, uint32_t timeout);
         EventFlag fetch_flag();
         void release_flag(EventFlag flag);
-	 private:
-		EVENTGROUP_TYPEDEF _instance;
+     private:
+        EVENTGROUP_TYPEDEF _instance;
         uint32_t used_flags_;
-
-	};
-
+        const char* name_;
+    };
 
     class MessageQueue
     {

@@ -3,15 +3,15 @@
 
 namespace wibot::os
 {
-void Utils::delay(uint32_t ms)
-{
-    tx_thread_sleep(ms);
-};
+    void Utils::delay(uint32_t ms)
+    {
+        tx_thread_sleep(ms);
+    };
 
-uint32_t Utils::tick_get()
-{
-    return tx_time_get();
-};
+    uint32_t Utils::tick_get()
+    {
+        return tx_time_get();
+    };
 
 //template<uint32_t stack_size>
 //void Thread<stack_size>::sleep(uint32_t ms)
@@ -26,91 +26,92 @@ uint32_t Utils::tick_get()
 //
 //};
 
-Mutex::Mutex(const char *name)
-{
-    tx_mutex_create(&(this->_instance), const_cast<CHAR*>(name), 0);
-};
+    Mutex::Mutex(const char* name) : name_(name)
+    {
+        tx_mutex_create(&(this->_instance), const_cast<CHAR*>(name), 0);
+    };
 
-Mutex::~Mutex(){
-    // TODO:
-};
+    Mutex::~Mutex()
+    {
+        // TODO:
+    };
 
-bool Mutex::lock(uint32_t timeout)
-{
-    return tx_mutex_get(&(this->_instance), timeout) == TX_SUCCESS;
-};
+    bool Mutex::lock(uint32_t timeout)
+    {
+        return tx_mutex_get(&(this->_instance), timeout) == TX_SUCCESS;
+    };
 
-void Mutex::unlock()
-{
-    tx_mutex_put(&(this->_instance));
-};
+    void Mutex::unlock()
+    {
+        tx_mutex_put(&(this->_instance));
+    };
 
-EventGroup::EventGroup(const char *name)
-{
-    tx_event_flags_create(&(this->_instance), const_cast<CHAR*>(name));
-};
+    EventGroup::EventGroup(const char* name) : name_(name)
+    {
+        tx_event_flags_create(&(this->_instance), const_cast<CHAR*>(name));
+    };
 
-EventGroup::~EventGroup(){
-    // TODO:
-};
+    EventGroup::~EventGroup()
+    {
+        // TODO:
+    };
 
-Result EventGroup::set(uint32_t flags)
-{
-    return (tx_event_flags_set(&(this->_instance), flags, TX_OR) == TX_SUCCESS)
+    Result EventGroup::set(uint32_t flags)
+    {
+        return (tx_event_flags_set(&(this->_instance), flags, TX_OR) == TX_SUCCESS)
                ? Result::OK
                : Result::GeneralError;
-};
+    };
 
-Result EventGroup::reset(uint32_t flags)
-{
-    return (tx_event_flags_set(&(this->_instance), flags, TX_AND) == TX_SUCCESS)
+    Result EventGroup::reset(uint32_t flags)
+    {
+        return (tx_event_flags_set(&(this->_instance), flags, TX_AND) == TX_SUCCESS)
                ? Result::OK
                : Result::GeneralError;
-};
+    };
 
-Result EventGroup::wait(uint32_t flags, uint32_t &actualFlags, EventOptions options,
-                        uint32_t timeout)
-{
-    // TODO: handler TX_OPTION
-    return (tx_event_flags_get(&(this->_instance), flags, options, &actualFlags, timeout) ==
+    Result EventGroup::wait(uint32_t flags, uint32_t& actualFlags, EventOptions options,
+        uint32_t timeout)
+    {
+        // TODO: handler TX_OPTION
+        return (tx_event_flags_get(&(this->_instance), flags, options, &actualFlags, timeout) ==
             TX_SUCCESS)
                ? Result::OK
                : Result::GeneralError;
-}
-
+    }
 
     MessageQueue::MessageQueue(const char* name, void* msg_addr, uint32_t msg_size, uint32_t queue_size)
-{
-    tx_queue_create(&(this->_instance), const_cast<CHAR*>(name), msg_size, msg_addr, queue_size);
-}
+    {
+        tx_queue_create(&(this->_instance), const_cast<CHAR*>(name), msg_size, msg_addr, queue_size);
+    }
 
-MessageQueue::~MessageQueue()
-{
-    tx_queue_delete(&(this->_instance));
-}
+    MessageQueue::~MessageQueue()
+    {
+        tx_queue_delete(&(this->_instance));
+    }
 
-Result MessageQueue::send(const void* msg, uint32_t timeout)
-{
-    return (tx_queue_send(&(this->_instance), const_cast<void*>(msg), timeout) ==
-        TX_SUCCESS)
-           ? Result::OK
-           : Result::GeneralError;
-}
+    Result MessageQueue::send(const void* msg, uint32_t timeout)
+    {
+        return (tx_queue_send(&(this->_instance), const_cast<void*>(msg), timeout) ==
+            TX_SUCCESS)
+               ? Result::OK
+               : Result::GeneralError;
+    }
 
-Result MessageQueue::receive(void* msg, uint32_t timeout)
-{
-    return (tx_queue_receive(&(this->_instance), const_cast<void*>(msg), timeout) ==
-        TX_SUCCESS)
-           ? Result::OK
-           : Result::GeneralError;
-}
-Result MessageQueue::flush()
-{
-    return (tx_queue_flush(&(this->_instance)) ==
-        TX_SUCCESS)
-           ? Result::OK
-           : Result::GeneralError;
-}
+    Result MessageQueue::receive(void* msg, uint32_t timeout)
+    {
+        return (tx_queue_receive(&(this->_instance), const_cast<void*>(msg), timeout) ==
+            TX_SUCCESS)
+               ? Result::OK
+               : Result::GeneralError;
+    }
+    Result MessageQueue::flush()
+    {
+        return (tx_queue_flush(&(this->_instance)) ==
+            TX_SUCCESS)
+               ? Result::OK
+               : Result::GeneralError;
+    }
 
 } // namespace wibot::os
 

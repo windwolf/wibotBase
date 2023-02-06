@@ -1,6 +1,9 @@
 #include "os.hpp"
 #include "arch.hpp"
 
+#define LOG_MODULE "os"
+#include "log.h"
+
 namespace wibot::os
 {
     uint32_t Utils::tick_diff(uint32_t tick)
@@ -17,13 +20,22 @@ namespace wibot::os
             cf = 1;
             while (of & cf)
             {
-                if (cf == 32)
+                if (cf == 0x80000000)
                 {
-                    return 0;
+                    cf = 0;
+                    break;
                 }
-                cf <<= 1;
+                else
+                {
+                    cf <<= 1;
+                }
+            }
+            if (cf == 0)
+            {
+                return cf;
             }
         } while (!arch::sync_compare_and_swap(&used_flags_, of, of | cf));
+        LOG_D("eg:%s flags:%#010x", name_, cf);
         return static_cast<EventFlag>(cf);
     };
 
