@@ -34,12 +34,11 @@ namespace wibot::peripheral
     void UART::_on_circular_data_received_callback(UART_HandleTypeDef* instance, uint16_t pos)
     {
         UART* perip = (UART*)Peripherals::get_peripheral(instance);
+        perip->cirRxBuffer_->write_index_sync((uint32_t)pos);
         auto wh = perip->_readWaitHandler;
         if (wh != nullptr)
         {
-            wh->set_value((void*)(uint32_t)pos);
             wh->done_set(perip);
-            wh->reset(); //TODO: EventGroup have auto reset, is this reset nessecory?
         }
     };
 
@@ -98,6 +97,7 @@ namespace wibot::peripheral
         Peripherals::register_peripheral("uart", this, &_handle);
         return Result::OK;
     };
+
     void UART::_deinit()
     {
         Peripherals::unregister_peripheral("uart", this);
@@ -105,7 +105,6 @@ namespace wibot::peripheral
 
     Result UART::read(void* data, uint32_t size, WaitHandler& waitHandler)
     {
-        Result rst = Result::OK;
         if (_readWaitHandler != nullptr)
         {
             return Result::Busy;
@@ -115,16 +114,11 @@ namespace wibot::peripheral
         {
             return Result::Busy;
         }
-
-        if (rst != Result::OK)
-        {
-            return Result::Busy;
-        }
         _readWaitHandler = &waitHandler;
 
 #if PERIPHERAL_UART_READ_DMA_ENABLED
         _status.isRxDmaEnabled = true;
-        // TODO: if size greater then uint16_t max, should slice the data and
+        //TODO: if size greater then uint16_t max, should slice the data and
         // send in multiple DMA transfers
         return (Result)HAL_UART_Receive_DMA(&_handle, (uint8_t*)data, (uint16_t)size);
 #endif
@@ -164,9 +158,8 @@ namespace wibot::peripheral
 #endif
     };
 
-    Result UART::start(uint8_t* data, uint32_t size, WaitHandler& waitHandler)
+    Result UART::start(RingBuffer &rxBuffer, WaitHandler& waitHandler)
     {
-        Result rst = Result::OK;
         if (_readWaitHandler != nullptr)
         {
             return Result::Busy;
@@ -179,15 +172,12 @@ namespace wibot::peripheral
         {
             return Result::Busy;
         }
-        if (rst != Result::OK)
-        {
-            return Result::Busy;
-        }
         _readWaitHandler = &waitHandler;
+        cirRxBuffer_ = &rxBuffer;
 #if PERIPHERAL_UART_READ_DMA_ENABLED
-        return (Result)HAL_UARTEx_ReceiveToIdle_DMA(&_handle, data, size);
+        return (Result)HAL_UARTEx_ReceiveToIdle_DMA(&_handle, (uint8_t *)rxBuffer.data_ptr_get(), rxBuffer.mem_size_get());
 #else
-        return (Result)HAL_UARTEx_ReceiveToIdle_IT(&_handle, data, size);
+        return (Result)HAL_UARTEx_ReceiveToIdle_IT(&_handle, (uint8_t *)rxBuffer.data_ptr_get(), rxBuffer.mem_size_get());
 #endif
 
     };
@@ -211,6 +201,10 @@ namespace wibot::peripheral
         {
             _readWaitHandler = nullptr;
             wh->done_set(this);
+        }
+        if (cirRxBuffer_ != nullptr)
+        {
+            cirRxBuffer_ = nullptr;
         }
         return rst;
 

@@ -80,8 +80,8 @@ namespace wibot::peripheral
         SpiWithPinsConfig& pinconfig_get();
         Result read(bool isData, void* data, uint32_t size, WaitHandler& waitHandler);
         Result write(bool isData, void* data, uint32_t size, WaitHandler& waitHandler);
-        Result session_begin();
-        Result session_end();
+        Result session_begin(WaitHandler& waitHandler);
+        Result session_end(WaitHandler& waitHandler);
 
      private:
         SPI_FIELD_DECL

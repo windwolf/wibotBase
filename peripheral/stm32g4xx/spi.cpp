@@ -17,6 +17,7 @@ namespace wibot::peripheral
 
     void Spi::_on_write_complete_callback(SPI_HandleTypeDef* instance)
     {
+        LL_SPI_Disable(instance->Instance);
         Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
         auto wh = perip->waitHandler_;
         if (wh != nullptr)
@@ -28,6 +29,7 @@ namespace wibot::peripheral
 
     void Spi::_on_read_complete_callback(SPI_HandleTypeDef* instance)
     {
+        LL_SPI_Disable(instance->Instance);
         Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
         auto wh = perip->waitHandler_;
         if (wh != nullptr)
@@ -39,6 +41,7 @@ namespace wibot::peripheral
 
     void Spi::_on_write_read_complete_callback(SPI_HandleTypeDef* instance)
     {
+        LL_SPI_Disable(instance->Instance);
         Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
         auto wh = perip->waitHandler_;
         if (wh != nullptr)
@@ -50,6 +53,7 @@ namespace wibot::peripheral
 
     void Spi::_on_error_callback(SPI_HandleTypeDef* instance)
     {
+        LL_SPI_Disable(instance->Instance);
         Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
         auto wh = perip->waitHandler_;
         if (wh != nullptr)
@@ -310,21 +314,23 @@ namespace wibot::peripheral
         return Spi::write(data, size, waitHandler);
     };
 
-    Result SpiWithPins::session_begin()
+    Result SpiWithPins::session_begin(WaitHandler& waitHandler)
     {
-        cs_set(false);
+        cs_set(true);
         if (_status.busy)
         {
             return Result::Busy;
         }
 
         _status.busy = 1;
+        waitHandler.done_set(this);
         return Result::OK;
     };
-    Result SpiWithPins::session_end()
+    Result SpiWithPins::session_end(WaitHandler& waitHandler)
     {
         _status.busy = 0;
         cs_set(false);
+        waitHandler.done_set(this);
         return Result::OK;
     };
 

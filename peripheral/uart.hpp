@@ -2,6 +2,7 @@
 #define __WWDEVICE_PERIPHERAL_UART_HPP__
 
 #include "peripheral.hpp"
+#include "ringbuffer.hpp"
 
 namespace wibot::peripheral
 {
@@ -30,7 +31,7 @@ namespace wibot::peripheral
 
 		Result read(void* data, uint32_t size, WaitHandler& waitHandler);
 		Result write(void* data, uint32_t size, WaitHandler& waitHandler);
-		Result start(uint8_t* data, uint32_t size, WaitHandler& waitHandler);
+		Result start(RingBuffer &rxBuffer, WaitHandler& waitHandler);
 		Result stop();
 
 	 private:
@@ -47,8 +48,7 @@ namespace wibot::peripheral
 
 		WaitHandler* _writeWaitHandler;
 		WaitHandler* _readWaitHandler;
-		Buffer8 _txBuffer;
-		Buffer8 _rxBuffer;
+        RingBuffer* cirRxBuffer_;
 
 	 protected:
 		static void _on_read_complete_callback(UART_CALLBACK_ARG);

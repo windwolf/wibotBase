@@ -73,10 +73,10 @@ struct CanvasInfo
     CanvasMemoryLayoutDirection direction;
 };
 
-bool FONTS_CalcSpace(uint16_t x, uint16_t y, char *str, FontInfo *fontInfo, uint8_t spacing,
+bool FONTS_CalcSpace(uint16_t x, uint16_t y, const char *str, FontInfo *fontInfo, uint8_t spacing,
                      SpaceInfo *spaceInfo);
 
-bool FONTS_FillData(uint8_t *buffer, CanvasInfo *canvas, uint16_t x, uint16_t y, char *str,
+bool FONTS_FillData(uint8_t *buffer, CanvasInfo *canvas, uint16_t x, uint16_t y, const char *str,
                     FontInfo *fontInfo, FontDrawInfo *fontDrawInfo);
 } // namespace wibot::graph
 #endif //__WWBASE_GRAPH_FONTS_HPP_

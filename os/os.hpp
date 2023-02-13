@@ -41,6 +41,7 @@ namespace wibot::os
 	};
 
 	typedef uint8_t EventOptions;
+
 #define EventOptions_Wait_Flag 0x02
 #define EventOptions_WaitForAny 0x00
 #define EventOptions_WaitForAll EventOptions_Wait_Flag
@@ -48,6 +49,11 @@ namespace wibot::os
 #define EventOptions_NoClear 0x00
 #define EventOptions_Clear EventOptions_Clear_Flag
 
+    typedef uint32_t EventFlag;
+
+    /**
+     *
+     */
 	class EventGroup
 	{
 	 public:
@@ -56,9 +62,12 @@ namespace wibot::os
 		Result set(uint32_t flags);
 		Result reset(uint32_t flags);
 		Result wait(uint32_t flags, uint32_t& actualFlags, EventOptions options, uint32_t timeout);
-
+        EventFlag fetch_flag();
+        void release_flag(EventFlag flag);
 	 private:
 		EVENTGROUP_TYPEDEF _instance;
+        uint32_t used_flags_;
+
 	};
 
 
@@ -84,6 +93,7 @@ namespace wibot::os
      private:
         MESSAGEQUEUE_TYPEDEF _instance;
     };
+
 } // namespace wibot::os
 
 #endif // ___OS_PORT_HPP__
