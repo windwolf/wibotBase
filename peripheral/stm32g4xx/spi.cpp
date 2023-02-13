@@ -17,6 +17,7 @@ namespace wibot::peripheral
 
     void Spi::_on_write_complete_callback(SPI_HandleTypeDef* instance)
     {
+        LL_SPI_Disable(instance->Instance);
         Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
         auto wh = perip->waitHandler_;
         if (wh != nullptr)
@@ -28,6 +29,7 @@ namespace wibot::peripheral
 
     void Spi::_on_read_complete_callback(SPI_HandleTypeDef* instance)
     {
+        LL_SPI_Disable(instance->Instance);
         Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
         auto wh = perip->waitHandler_;
         if (wh != nullptr)
@@ -39,6 +41,7 @@ namespace wibot::peripheral
 
     void Spi::_on_write_read_complete_callback(SPI_HandleTypeDef* instance)
     {
+        LL_SPI_Disable(instance->Instance);
         Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
         auto wh = perip->waitHandler_;
         if (wh != nullptr)
@@ -50,6 +53,7 @@ namespace wibot::peripheral
 
     void Spi::_on_error_callback(SPI_HandleTypeDef* instance)
     {
+        LL_SPI_Disable(instance->Instance);
         Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
         auto wh = perip->waitHandler_;
         if (wh != nullptr)
