@@ -2,21 +2,21 @@
 // Created by zhouj on 2023/2/21.
 //
 
-#ifndef WWMOTOR_LIBS_WWTALK_BASIC_CHECKPARITYVALIDATOR_HPP_
-#define WWMOTOR_LIBS_WWTALK_BASIC_CHECKPARITYVALIDATOR_HPP_
+#ifndef BASE_CHECKPARITYVALIDATOR_HPP_
+#define BASE_CHECKPARITYVALIDATOR_HPP_
 #include "base.hpp"
 
 namespace wibot
 {
 
-    class CheckParityValidator
+    class ParityCalculator
     {
      public:
         /**
          * @brief Construct a new Check Parity Validator object
          * @param odd 是否偶校验
          */
-        CheckParityValidator(bool even = false) : even_(even)
+        ParityCalculator(bool even = false) : even_(even)
         {
         };
         void reset();
@@ -29,4 +29,4 @@ namespace wibot
 
 } // wibot
 
-#endif //WWMOTOR_LIBS_WWTALK_BASIC_CHECKPARITYVALIDATOR_HPP_
+#endif //BASE_CHECKPARITYVALIDATOR_HPP_

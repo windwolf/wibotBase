@@ -2,14 +2,14 @@
 // Created by zhouj on 2023/2/20.
 //
 
-#ifndef AQ_DJ_2022_LIBS_WIBOTTALK_BASIC_CHECKSUMVALIDATOR_HPP_
-#define AQ_DJ_2022_LIBS_WIBOTTALK_BASIC_CHECKSUMVALIDATOR_HPP_
+#ifndef BASE_CHECKSUMVALIDATOR_HPP_
+#define BASE_CHECKSUMVALIDATOR_HPP_
 #include "base.hpp"
 
 namespace wibot
 {
 
-    class CheckSum8Validator
+    class CheckSum8Calculator
     {
      public:
         void reset();
@@ -21,4 +21,4 @@ namespace wibot
 
 } // wibot
 
-#endif //AQ_DJ_2022_LIBS_WIBOTTALK_BASIC_CHECKSUMVALIDATOR_HPP_
+#endif //BASE_CHECKSUMVALIDATOR_HPP_
