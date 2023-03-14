@@ -19,7 +19,7 @@ namespace wibot::peripheral
             uint8_t dummyCycles: 4;
             //uint8_t txDmaThreshold : 8;
             //uint8_t rxDmaThreshold : 8;
-            bool autoDisable: 1;
+            bool autoDisable: 1 = true;
             uint32_t : 8;
         };
         uint32_t value;
