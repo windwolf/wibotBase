@@ -101,6 +101,22 @@
 
 #define CACHE_LINE_SIZE 4
 
+/********** UART **************************/
+
+/********** NVM **************************/
+
+#ifdef HAL_FLASH_MODULE_ENABLED
+#define NVM_FIELD_DECL
+#define NVM_CTOR_ARG UART_HandleTypeDef &handle
+#else
+#define UART_PER_DECL
+#define UART_CTOR_ARG uint32_t dummy
+#endif // HAL_FLASH_MODULE_ENABLED
+
+#define CACHE_LINE_SIZE 4
+
+/********** NVM **************************/
+
 #define DMA_ALIGN __attribute__((aligned(CACHE_LINE_SIZE)))
 
 #define AXI_BUFFER
