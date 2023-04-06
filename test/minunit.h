@@ -5,7 +5,6 @@
 extern "C" {
 #endif
 
-#define LOG_MODULE "minunit"
 #include "log.h"
 
 /* file: minunit.h */

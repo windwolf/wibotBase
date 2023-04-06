@@ -27,7 +27,7 @@ class ParityValidator : Validator<uint8_t> {
 
    private:
     uint8_t parity_;  //
-    bool even_;       // 是否偶校验
+    bool    even_;    // 是否偶校验
 };
 
 }  // namespace wibot

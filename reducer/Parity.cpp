@@ -5,7 +5,9 @@
 #include "Parity.hpp"
 
 namespace wibot {
-void ParityValidator::reset() { parity_ = 0; }
+void ParityValidator::reset() {
+    parity_ = 0;
+}
 void ParityValidator::calculate(uint8_t* data, uint32_t length) {
     for (uint32_t i = 0; i < length; i++) {
         parity_ = parity_ ^ data[i];

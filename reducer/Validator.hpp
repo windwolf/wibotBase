@@ -12,9 +12,9 @@ namespace wibot {
 template <typename TE>
 class Validator {
    public:
-    virtual void reset() = 0;
+    virtual void reset()                              = 0;
     virtual void calculate(TE* data, uint32_t length) = 0;
-    virtual bool validate(TE* sum) = 0;
+    virtual bool validate(TE* sum)                    = 0;
 };
 
 }  // namespace wibot

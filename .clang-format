@@ -5,27 +5,27 @@ AccessModifierOffset: -1
 AlignAfterOpenBracket: Align
 AlignArrayOfStructures: None
 AlignConsecutiveAssignments:
-  Enabled: false
+  Enabled: true
   AcrossEmptyLines: false
-  AcrossComments: false
+  AcrossComments: true
   AlignCompound: false
   PadOperators: true
 AlignConsecutiveBitFields:
-  Enabled: false
+  Enabled: true
   AcrossEmptyLines: false
-  AcrossComments: false
+  AcrossComments: true
   AlignCompound: false
   PadOperators: false
 AlignConsecutiveDeclarations:
-  Enabled: false
+  Enabled: true
   AcrossEmptyLines: false
-  AcrossComments: false
+  AcrossComments: true
   AlignCompound: false
   PadOperators: false
 AlignConsecutiveMacros:
-  Enabled: false
+  Enabled: true
   AcrossEmptyLines: false
-  AcrossComments: false
+  AcrossComments: true
   AlignCompound: false
   PadOperators: false
 AlignEscapedNewlines: Left
@@ -33,13 +33,13 @@ AlignOperands: Align
 AlignTrailingComments: true
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
-AllowShortEnumsOnASingleLine: true
+AllowShortEnumsOnASingleLine: false
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: All
+AllowShortFunctionsOnASingleLine: None
 AllowShortLambdasOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: WithoutElse
-AllowShortLoopsOnASingleLine: true
+AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: true
@@ -91,7 +91,7 @@ EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: LogicalBlock
 ExperimentalAutoDetectBinPacking: false
 PackConstructorInitializers: NextLine
-BasedOnStyle: ''
+BasedOnStyle: 'Google'
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 AllowAllConstructorInitializersOnNextLine: true
 FixNamespaceComments: true
@@ -193,7 +193,7 @@ RemoveBracesLLVM: false
 RequiresClausePosition: OwnLine
 SeparateDefinitionBlocks: Leave
 ShortNamespaceLines: 1
-SortIncludes: CaseSensitive
+SortIncludes: Never
 SortJavaStaticImport: Before
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: false

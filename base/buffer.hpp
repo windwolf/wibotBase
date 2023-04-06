@@ -1,6 +1,7 @@
 #ifndef __WWBASE_BUFFER_HPP__
 #define __WWBASE_BUFFER_HPP__
 
+#include "base.hpp"
 #include "arch.hpp"
 #include "stdint.h"
 
@@ -18,10 +19,18 @@ struct Buffer8 {
         }
     };
 
-    uint8_t getUint8(uint32_t index) const { return data[index]; };
-    void setUint8(uint32_t index, uint8_t value) { data[index] = value; };
-    int8_t getInt8(uint32_t index) const { return *PTR_TO_INT8(data + index); };
-    void setInt8(uint32_t index, int8_t value) { data[index] = value; };
+    uint8_t getUint8(uint32_t index) const {
+        return data[index];
+    };
+    void setUint8(uint32_t index, uint8_t value) {
+        data[index] = value;
+    };
+    int8_t getInt8(uint32_t index) const {
+        return *PTR_TO_INT8(data + index);
+    };
+    void setInt8(uint32_t index, int8_t value) {
+        data[index] = value;
+    };
     uint16_t getUint16(uint32_t index, bool littleEndian = true) const {
         auto v = arch::getUint16(data + index, littleEndian);
         return *PTR_TO_UINT16(&v);
@@ -73,7 +82,7 @@ struct Buffer8 {
 struct Buffer16 {
    public:
     uint16_t* data;
-    uint32_t size;
+    uint32_t  size;
 
    public:
     void clear() {
@@ -96,7 +105,7 @@ struct Buffer16 {
 struct Buffer32 {
    public:
     uint32_t* data;
-    uint32_t size;
+    uint32_t  size;
 
    public:
     void clear() {

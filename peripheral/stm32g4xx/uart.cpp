@@ -3,8 +3,10 @@
 #include "peripheral.hpp"
 #include "stm32g4xx_ll_dma.h"
 #include "stm32g4xx_ll_usart.h"
-#define LOG_MODULE "uart"
+
 #include "log.h"
+LOGGER("uart")
+
 #ifdef HAL_UART_MODULE_ENABLED
 
 namespace wibot::peripheral {
@@ -30,8 +32,8 @@ void UART::_on_read_complete_callback(UART_HandleTypeDef *instance) {
 };
 
 void UART::_on_circular_data_received_callback(UART_HandleTypeDef *instance, uint16_t pos) {
-    UART *perip = (UART *)Peripherals::get_peripheral(instance);
-    auto length = perip->cirRxBuffer_->getLengthByMemIndex(pos, perip->_lastPos);
+    UART *perip  = (UART *)Peripherals::get_peripheral(instance);
+    auto  length = perip->cirRxBuffer_->getLengthByMemIndex(pos, perip->_lastPos);
     perip->_rxCount++;
     perip->_lastPos = pos;
     perip->cirRxBuffer_->writeVirtual(length);
@@ -76,7 +78,9 @@ Result UART::_init() {
     return Result::OK;
 };
 
-void UART::_deinit() { Peripherals::unregister_peripheral("uart", this); };
+void UART::_deinit() {
+    Peripherals::unregister_peripheral("uart", this);
+};
 
 Result UART::read(void *data, uint32_t size, WaitHandler &waitHandler) {
     if (_readWaitHandler != nullptr) {
@@ -121,7 +125,7 @@ Result UART::write(void *data, uint32_t size, WaitHandler &waitHandler) {
 #endif
 };
 
-Result UART::start(CircularBuffer<uint8_t>& rxBuffer, WaitHandler& waitHandler) {
+Result UART::start(CircularBuffer<uint8_t> &rxBuffer, WaitHandler &waitHandler) {
     if (_readWaitHandler != nullptr) {
         return Result::Busy;
     }
@@ -132,12 +136,12 @@ Result UART::start(CircularBuffer<uint8_t>& rxBuffer, WaitHandler& waitHandler) 
         return Result::Busy;
     }
     _readWaitHandler = &waitHandler;
-    cirRxBuffer_ = &rxBuffer;
+    cirRxBuffer_     = &rxBuffer;
 #if PERIPHERAL_UART_READ_DMA_ENABLED
-    return (Result)HAL_UARTEx_ReceiveToIdle_DMA(&_handle, (uint8_t*)rxBuffer.getDataPtr(),
+    return (Result)HAL_UARTEx_ReceiveToIdle_DMA(&_handle, (uint8_t *)rxBuffer.getDataPtr(),
                                                 rxBuffer.getMemCapacity());
 #else
-    return (Result)HAL_UARTEx_ReceiveToIdle_IT(&_handle, (uint8_t*)rxBuffer.getDataPtr(),
+    return (Result)HAL_UARTEx_ReceiveToIdle_IT(&_handle, (uint8_t *)rxBuffer.getDataPtr(),
                                                rxBuffer.getMemCapacity());
 #endif
 };

@@ -3,9 +3,13 @@
 #include "os/os.hpp"
 
 namespace wibot::os {
-void Utils::delay(uint32_t ms) { tx_thread_sleep(ms); };
+void Utils::delay(uint32_t ms) {
+    tx_thread_sleep(ms);
+};
 
-uint32_t Utils::tick_get() { return tx_time_get(); };
+uint32_t Utils::tick_get() {
+    return tx_time_get();
+};
 
 // template<uint32_t stack_size>
 // void Thread<stack_size>::sleep(uint32_t ms)
@@ -21,7 +25,9 @@ uint32_t Utils::tick_get() { return tx_time_get(); };
 //
 // };
 
-Mutex::Mutex(const char* name) { name_ = name; };
+Mutex::Mutex(const char* name) {
+    name_ = name;
+};
 
 Mutex::~Mutex(){
     // TODO:
@@ -31,13 +37,19 @@ bool Mutex::lock(uint32_t timeout) {
     return tx_mutex_get(&(this->_instance), timeout) == TX_SUCCESS;
 };
 
-void Mutex::unlock() { tx_mutex_put(&(this->_instance)); }
+void Mutex::unlock() {
+    tx_mutex_put(&(this->_instance));
+}
 Result Mutex::_init() {
     return (Result)tx_mutex_create(&(this->_instance), const_cast<CHAR*>(name_), 0);
 }
-void Mutex::_deinit() { tx_mutex_delete(&(this->_instance)); };
+void Mutex::_deinit() {
+    tx_mutex_delete(&(this->_instance));
+};
 
-EventGroup::EventGroup(const char* name) { name_ = name; };
+EventGroup::EventGroup(const char* name) {
+    name_ = name;
+};
 
 EventGroup::~EventGroup(){
     // TODO:
@@ -46,7 +58,9 @@ EventGroup::~EventGroup(){
 Result EventGroup::_init() {
     return (Result)tx_event_flags_create(&(this->_instance), const_cast<CHAR*>(name_));
 }
-void EventGroup::_deinit() { tx_event_flags_delete(&(this->_instance)); };
+void EventGroup::_deinit() {
+    tx_event_flags_delete(&(this->_instance));
+};
 
 Result EventGroup::set(uint32_t flags) {
     return (tx_event_flags_set(&(this->_instance), flags, TX_OR) == TX_SUCCESS)
@@ -71,18 +85,22 @@ Result EventGroup::wait(uint32_t flags, uint32_t& actualFlags, EventOptions opti
 
 MessageQueue::MessageQueue(const char* name, void* msg_addr, uint32_t msg_size,
                            uint32_t queue_size) {
-    name_ = name;
-    msg_addr_ = msg_addr;
-    msg_size_ = msg_size;
+    name_       = name;
+    msg_addr_   = msg_addr;
+    msg_size_   = msg_size;
     queue_size_ = queue_size;
 }
 
-MessageQueue::~MessageQueue() { tx_queue_delete(&(this->_instance)); }
+MessageQueue::~MessageQueue() {
+    tx_queue_delete(&(this->_instance));
+}
 Result MessageQueue::_init() {
     return (Result)tx_queue_create(&(this->_instance), const_cast<CHAR*>(name_), msg_size_,
                                    msg_addr_, queue_size_);
 }
-void MessageQueue::_deinit() { tx_queue_delete(&(this->_instance)); };
+void MessageQueue::_deinit() {
+    tx_queue_delete(&(this->_instance));
+};
 
 Result MessageQueue::send(const void* msg, uint32_t timeout) {
     return (tx_queue_send(&(this->_instance), const_cast<void*>(msg), timeout) == TX_SUCCESS)

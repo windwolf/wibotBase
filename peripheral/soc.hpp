@@ -4,8 +4,8 @@
 #include "i2c.hpp"
 #include "misc.hpp"
 #include "pin.hpp"
+#include "pwm.hpp"
 #include "spi.hpp"
 #include "uart.hpp"
-#include "pwm.hpp"
 
-#endif // __WW_PERIPHERAL_SOC_HPP__
+#endif  // __WW_PERIPHERAL_SOC_HPP__

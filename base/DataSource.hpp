@@ -5,33 +5,30 @@
 #ifndef WWMOTOR_LIBS_WWBASE_BASE_DATASOURCE_HPP_
 #define WWMOTOR_LIBS_WWBASE_BASE_DATASOURCE_HPP_
 #include "base.hpp"
-namespace wibot
-{
+namespace wibot {
 
-    class DataSource
-    {
-     public:
-        virtual uint32_t get_data() = 0;
-    };
+class DataSource {
+   public:
+    virtual uint32_t get_data() = 0;
+};
 
-    class MemoryDataSource : public DataSource
-    {
-     public:
-        MemoryDataSource(uint32_t* data) : _data(data) {
-        }
-        uint32_t get_data() override;
-     private:
-        uint32_t* _data;
-    };
+class MemoryDataSource : public DataSource {
+   public:
+    MemoryDataSource(uint32_t* data) : _data(data) {
+    }
+    uint32_t get_data() override;
 
-    class DummyDataSource : public DataSource
-    {
-     public:
-        uint32_t get_data() override;
+   private:
+    uint32_t* _data;
+};
 
-        static DummyDataSource instance;
-    };
+class DummyDataSource : public DataSource {
+   public:
+    uint32_t get_data() override;
 
-} // wibot
+    static DummyDataSource instance;
+};
 
-#endif //WWMOTOR_LIBS_WWBASE_BASE_DATASOURCE_HPP_
+}  // namespace wibot
+
+#endif  // WWMOTOR_LIBS_WWBASE_BASE_DATASOURCE_HPP_

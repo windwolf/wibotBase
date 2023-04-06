@@ -8,24 +8,24 @@
 
 #ifdef HAL_ADC_MODULE_ENABLED
 #define ADC_PER_DECL
-#define ADC_CTOR_ARG ADC_HandleTypeDef &handle
-#define ADC_FIELD_DECL ADC_HandleTypeDef &_handle;
+#define ADC_CTOR_ARG     ADC_HandleTypeDef &handle
+#define ADC_FIELD_DECL   ADC_HandleTypeDef & _handle;
 #define ADC_CALLBACK_ARG ADC_HandleTypeDef *handle
 #else
 #define ADC_PER_DECL
-#define ADC_CTOR_ARG uint32_t dummy
-#define ADC_FIELD_DECL uint32_t dummy;
+#define ADC_CTOR_ARG     uint32_t dummy
+#define ADC_FIELD_DECL   uint32_t dummy;
 #define ADC_CALLBACK_ARG uint32_t dummy
-#endif // HAL_ADC_MODULE_ENABLED
+#endif  // HAL_ADC_MODULE_ENABLED
 
 /********** ADC **************************/
 
 /********** I2C **************************/
 #define I2C_PER_DECL class Pin;
 #define I2C_CTOR_ARG Pin &scl, Pin &sda
-#define I2C_FIELD_DECL                                                                             \
-    Pin &_scl;                                                                                     \
-    Pin &_sda;
+#define I2C_FIELD_DECL \
+    Pin & _scl;        \
+    Pin & _sda;
 #define I2C_CALLBACK_ARG
 
 /********** I2C **************************/
@@ -34,15 +34,15 @@
 
 #ifdef HAL_SPI_MODULE_ENABLED
 #define SPI_PER_DECL
-#define SPI_CTOR_ARG SPI_HandleTypeDef &handle
-#define SPI_FIELD_DECL SPI_HandleTypeDef &_handle;
+#define SPI_CTOR_ARG     SPI_HandleTypeDef &handle
+#define SPI_FIELD_DECL   SPI_HandleTypeDef & _handle;
 #define SPI_CALLBACK_ARG SPI_HandleTypeDef *handle
 #else
 #define SPI_PER_DECL
-#define SPI_CTOR_ARG uint32_t dummy
-#define SPI_FIELD_DECL uint32_t dummy;
+#define SPI_CTOR_ARG     uint32_t dummy
+#define SPI_FIELD_DECL   uint32_t dummy;
 #define SPI_CALLBACK_ARG uint32_t dummy
-#endif // HAL_SPI_MODULE_ENABLED
+#endif  // HAL_SPI_MODULE_ENABLED
 
 /********** SPI **************************/
 
@@ -50,15 +50,15 @@
 
 #ifdef HAL_GPIO_MODULE_ENABLED
 #define PIN_PER_DECL
-#define PIN_CTOR_ARG GPIO_TypeDef &port
-#define PIN_FIELD_DECL GPIO_TypeDef &_port;
+#define PIN_CTOR_ARG     GPIO_TypeDef &port
+#define PIN_FIELD_DECL   GPIO_TypeDef & _port;
 #define PIN_CALLBACK_ARG GPIO_TypeDef *port
 #else
 #define PIN_PER_DECL
-#define PIN_CTOR_ARG uint32_t dummy
-#define PIN_FIELD_DECL uint32_t dummy;
+#define PIN_CTOR_ARG     uint32_t dummy
+#define PIN_FIELD_DECL   uint32_t dummy;
 #define PIN_CALLBACK_ARG uint32_t dummy
-#endif // HAL_GPIO_MODULE_ENABLED
+#endif  // HAL_GPIO_MODULE_ENABLED
 
 /********** PIN **************************/
 
@@ -66,15 +66,15 @@
 
 #ifdef HAL_TIM_MODULE_ENABLED
 #define PWM_PER_DECL
-#define PWM_CTOR_ARG TIM_HandleTypeDef &handle
-#define PWM_FIELD_DECL TIM_HandleTypeDef &_handle;
+#define PWM_CTOR_ARG     TIM_HandleTypeDef &handle
+#define PWM_FIELD_DECL   TIM_HandleTypeDef & _handle;
 #define PWM_CALLBACK_ARG TIM_HandleTypeDef *handle
 #else
 #define PWM_PER_DECL
-#define PWM_CTOR_ARG uint32_t dummy
-#define PWM_FIELD_DECL uint32_t dummy;
+#define PWM_CTOR_ARG     uint32_t dummy
+#define PWM_FIELD_DECL   uint32_t dummy;
 #define PWM_CALLBACK_ARG uint32_t dummy
-#endif // HAL_TIM_MODULE_ENABLED
+#endif  // HAL_TIM_MODULE_ENABLED
 
 /********** PWM **************************/
 
@@ -82,23 +82,23 @@
 
 #ifdef HAL_UART_MODULE_ENABLED
 #define UART_PER_DECL
-#define UART_CTOR_ARG UART_HandleTypeDef &handle
-#define UART_FIELD_DECL UART_HandleTypeDef &_handle;
+#define UART_CTOR_ARG     UART_HandleTypeDef &handle
+#define UART_FIELD_DECL   UART_HandleTypeDef & _handle;
 #define UART_CALLBACK_ARG UART_HandleTypeDef *handle
 #else
 #define UART_PER_DECL
-#define UART_CTOR_ARG uint32_t dummy
-#define UART_FIELD_DECL uint32_t dummy;
+#define UART_CTOR_ARG     uint32_t dummy
+#define UART_FIELD_DECL   uint32_t dummy;
 #define UART_CALLBACK_ARG uint32_t dummy
-#endif // HAL_UART_MODULE_ENABLED
+#endif  // HAL_UART_MODULE_ENABLED
 
 /********** UART **************************/
 
 /********** QSPI **************************/
 
 #define QSPI_PER_DECL
-#define QSPI_CTOR_ARG uint32_t dummy
-#define QSPI_FIELD_DECL uint32_t dummy;
+#define QSPI_CTOR_ARG     uint32_t dummy
+#define QSPI_FIELD_DECL   uint32_t dummy;
 #define QSPI_CALLBACK_ARG uint32_t dummy
 
 /********** QSPI **************************/
@@ -121,4 +121,4 @@
 #define RAM4_DATA
 #define BACKUP_DATA
 
-#endif // __PERIP_PORT_HPP__
+#endif  // __PERIP_PORT_HPP__

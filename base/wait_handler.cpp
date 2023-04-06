@@ -12,17 +12,22 @@ WaitHandler::WaitHandler(EventGroup& eventGroup, uint32_t doneFlag, uint32_t err
 };
 
 WaitHandler::WaitHandler(EventGroup& eventGroup)
-    : _eventGroup(eventGroup),
-      _doneFlag(_eventGroup.fetch_flag()),
+    : _eventGroup(eventGroup), _doneFlag(_eventGroup.fetch_flag()),
       _errorFlag(_eventGroup.fetch_flag()) {
     isMerge_ = false;
 };
 
-void WaitHandler::set_value(void* value) { _value = value; };
+void WaitHandler::set_value(void* value) {
+    _value = value;
+};
 
-void* WaitHandler::get_value() { return _value; };
+void* WaitHandler::get_value() {
+    return _value;
+};
 
-void* WaitHandler::get_sender() { return _sender; };
+void* WaitHandler::get_sender() {
+    return _sender;
+};
 
 //	void WaitHandler::done_callback_set(void* receiver, Callback onDone)
 //	{
@@ -46,7 +51,7 @@ void* WaitHandler::get_sender() { return _sender; };
 
 Result WaitHandler::wait(uint32_t timeout) {
     uint32_t events;
-    Result rst = Result::OK;
+    Result   rst = Result::OK;
 
     rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
                            EventOptions_WaitForAny | (config.disableAutoReset ? EventOptions_NoClear
@@ -71,8 +76,8 @@ Result WaitHandler::wait(uint32_t timeout) {
 
 bool WaitHandler::is_busy() {
     uint32_t events;
-    auto rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
-                                EventOptions_WaitForAny | EventOptions_NoClear, 0);
+    auto     rst = _eventGroup.wait(_doneFlag | _errorFlag, events,
+                                    EventOptions_WaitForAny | EventOptions_NoClear, 0);
     if (rst == Result::OK) {
         return false;
     } else {

@@ -3,7 +3,9 @@
 #include "arch.hpp"
 
 namespace wibot::os {
-uint32_t Utils::tick_diff(uint32_t tick) { return Utils::tick_get() - tick; };
+uint32_t Utils::tick_diff(uint32_t tick) {
+    return Utils::tick_get() - tick;
+};
 
 EventFlag EventGroup::fetch_flag() {
     uint32_t of, cf;

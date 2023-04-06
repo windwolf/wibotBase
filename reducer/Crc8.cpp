@@ -6,7 +6,9 @@
 
 namespace wibot {
 
-void Crc8Validator::reset() { crc_ = init_; }
+void Crc8Validator::reset() {
+    crc_ = init_;
+}
 void Crc8Validator::calculate(uint8_t* data, uint32_t length) {
     for (uint32_t i = 0; i < length; i++) {
         uint8_t d = data[i];

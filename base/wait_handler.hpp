@@ -30,9 +30,9 @@ class WaitHandler : public Configurable<WaitHandlerConfig> {
 
     WaitHandler merge(const WaitHandler& other);
 
-    void set_value(void* value);
-    void* get_value();
-    void* get_sender();
+    void   set_value(void* value);
+    void*  get_value();
+    void*  get_sender();
     Result reset();
     /**
      * @brief Check if the handler is triggered by done or error.
@@ -45,12 +45,12 @@ class WaitHandler : public Configurable<WaitHandlerConfig> {
             return Result::NoResource;
         }
         if (_currentFlag & handler._doneFlag) {
-            this->_value = handler._value;
+            this->_value  = handler._value;
             this->_sender = handler._sender;
             return Result::OK;
         }
         if (_currentFlag & handler._errorFlag) {
-            this->_value = handler._value;
+            this->_value  = handler._value;
             this->_sender = handler._sender;
             return Result::GeneralError;
         }
@@ -58,17 +58,17 @@ class WaitHandler : public Configurable<WaitHandlerConfig> {
     }
 
     Result wait(uint32_t timeout);
-    void done_set(void* sender);
-    void error_set(void* sender);
+    void   done_set(void* sender);
+    void   error_set(void* sender);
 
    protected:
-    void* _sender;
-    void* _value;
+    void*       _sender;
+    void*       _value;
     EventGroup& _eventGroup;
-    uint32_t _currentFlag;
-    uint32_t _doneFlag;
-    uint32_t _errorFlag;
-    bool isMerge_;
+    uint32_t    _currentFlag;
+    uint32_t    _doneFlag;
+    uint32_t    _errorFlag;
+    bool        isMerge_;
 
    private:
     bool is_busy();

@@ -23,21 +23,21 @@ class Crc8Validator : Validator<uint8_t> {
     uint8_t poly_;
     uint8_t init_;
     uint8_t xorout_;
-    bool ref_in_;
-    bool ref_out_;
+    bool    ref_in_;
+    bool    ref_out_;
     uint8_t crc_;
 
    public:
-    constexpr static uint8_t CRC8_DVB_S2 = 0xD5;
-    constexpr static uint8_t CRC8_AUTOSAR = 0x2F;
-    constexpr static uint8_t CRC8_BLUETOOTH = 0xA7;
-    constexpr static uint8_t CRC8_CCITT = 0x07;
+    constexpr static uint8_t CRC8_DVB_S2       = 0xD5;
+    constexpr static uint8_t CRC8_AUTOSAR      = 0x2F;
+    constexpr static uint8_t CRC8_BLUETOOTH    = 0xA7;
+    constexpr static uint8_t CRC8_CCITT        = 0x07;
     constexpr static uint8_t CRC8_DALLAS_MAXIM = 0x31;
-    constexpr static uint8_t CRC8_DARC = 0x39;
-    constexpr static uint8_t CRC8_GSM_B = 0x49;
-    constexpr static uint8_t CRC8_SAE_J1850 = 0x1D;
-    constexpr static uint8_t CRC8_WCDMA = 0x9B;
-    constexpr static uint8_t CRC8_GSM_A = 0x37;
+    constexpr static uint8_t CRC8_DARC         = 0x39;
+    constexpr static uint8_t CRC8_GSM_B        = 0x49;
+    constexpr static uint8_t CRC8_SAE_J1850    = 0x1D;
+    constexpr static uint8_t CRC8_WCDMA        = 0x9B;
+    constexpr static uint8_t CRC8_GSM_A        = 0x37;
 };
 
 }  // namespace wibot

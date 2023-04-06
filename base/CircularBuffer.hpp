@@ -11,7 +11,7 @@
 #include "stdint.h"
 
 #define WRAP_LOGIC_INDEX(a) ((a) & (2 * _capacity - 1))
-#define WRAP_MEM_INDEX(a) ((a) & (_capacity - 1))
+#define WRAP_MEM_INDEX(a)   ((a) & (_capacity - 1))
 
 namespace wibot {
 /**
@@ -21,7 +21,7 @@ namespace wibot {
 template <typename TE>
 class CircularBuffer {
    private:
-    TE *_buffer;
+    TE      *_buffer;
     uint32_t _capacity;
     uint32_t _write;
     uint32_t _read;
@@ -35,19 +35,33 @@ class CircularBuffer {
      */
     CircularBuffer(TE *buffer, uint32_t capacity) : _buffer(buffer), _capacity(capacity) {
         _write = 0;
-        _read = 0;
+        _read  = 0;
     };
-    uint32_t getCapacity() { return _capacity; };
-    uint32_t getMemCapacity() { return _capacity * sizeof(TE); };
-    uint32_t getDataWidth() { return sizeof(TE); };
+    uint32_t getCapacity() {
+        return _capacity;
+    };
+    uint32_t getMemCapacity() {
+        return _capacity * sizeof(TE);
+    };
+    uint32_t getDataWidth() {
+        return sizeof(TE);
+    };
 
-    bool isFull() { return _read == (_write ^ _capacity); };
+    bool isFull() {
+        return _read == (_write ^ _capacity);
+    };
 
-    bool isEmpty() { return _write == _read; };
+    bool isEmpty() {
+        return _write == _read;
+    };
 
-    uint32_t getSize() { return (_write - _read) & ((_capacity << 1) - 1); };
+    uint32_t getSize() {
+        return (_write - _read) & ((_capacity << 1) - 1);
+    };
 
-    uint32_t getSpace() { return _capacity - getSize(); };
+    uint32_t getSpace() {
+        return _capacity - getSize();
+    };
 
     /**
      * Wirte data into buffer
@@ -61,7 +75,7 @@ class CircularBuffer {
      */
     uint32_t write(TE *data, uint32_t length, bool allowCover = true) {
         auto overflow = false;
-        auto space = getSpace();
+        auto space    = getSpace();
         if (length > space) {
             if (allowCover) {
                 if (length > _capacity) {
@@ -74,7 +88,7 @@ class CircularBuffer {
             }
         } else {
         }
-        auto write_mem_index = WRAP_MEM_INDEX(_write);
+        auto write_mem_index       = WRAP_MEM_INDEX(_write);
         auto roomFromWriteToBotton = _capacity - write_mem_index;
         if (length <= roomFromWriteToBotton) {
             memcpy(_buffer + write_mem_index, data, length * sizeof(TE));
@@ -105,7 +119,7 @@ class CircularBuffer {
      * @return If overflow occurs, return true, otherwise return false.
      */
     bool writeVirtual(uint32_t length) {
-        auto space = getSpace();
+        auto space    = getSpace();
         auto overflow = false;
         if (length > space) {
             if (length > _capacity) {
@@ -131,7 +145,7 @@ class CircularBuffer {
         if (length > size) {
             length = size;
         }
-        auto read_mem_index = WRAP_MEM_INDEX(_read);
+        auto read_mem_index       = WRAP_MEM_INDEX(_read);
         auto roomFromReadToBotton = _capacity - read_mem_index;
         if (length <= roomFromReadToBotton) {
             memcpy(data, _buffer + read_mem_index, length * sizeof(TE));
@@ -153,11 +167,11 @@ class CircularBuffer {
      * @return If overflow occurs, return true, otherwise return false.
      * */
     bool readVirtual(uint32_t length) {
-        auto size = getSize();
+        auto size     = getSize();
         auto overflow = false;
         if (length > size) {
             overflow = true;
-            length = size;
+            length   = size;
         }
         _read = WRAP_LOGIC_INDEX(_read + length);
         if (overflow) {
@@ -182,7 +196,7 @@ class CircularBuffer {
         if (length > size - start) {
             length = size - start;
         }
-        auto read_mem_index = WRAP_MEM_INDEX(_read + start);
+        auto read_mem_index       = WRAP_MEM_INDEX(_read + start);
         auto roomFromReadToBotton = _capacity - read_mem_index;
         if (length <= roomFromReadToBotton) {
             memcpy(data, _buffer + read_mem_index, length * sizeof(TE));
@@ -213,15 +227,21 @@ class CircularBuffer {
 
     Result clear() {
         _write = 0;
-        _read = 0;
+        _read  = 0;
         return Result::OK;
     };
 
-    TE *getDataPtr() { return _buffer; };
+    TE *getDataPtr() {
+        return _buffer;
+    };
 
-    TE *getWritePtr() { return &_buffer[WRAP_MEM_INDEX(_write)]; };
+    TE *getWritePtr() {
+        return &_buffer[WRAP_MEM_INDEX(_write)];
+    };
 
-    TE *getReadPtr() { return &_buffer[WRAP_MEM_INDEX(_read)]; };
+    TE *getReadPtr() {
+        return &_buffer[WRAP_MEM_INDEX(_read)];
+    };
 
     /**
      * @brief Get the size of data from read index to the end of the buffer or data.

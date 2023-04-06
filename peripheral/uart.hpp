@@ -10,12 +10,12 @@ namespace wibot::peripheral {
 
 union UARTConfig {
     struct {
-        DataWidth dataWidth : 2;
-        bool ignore_parity_error : 1;
-        bool ignore_frame_error : 1;
-        bool ignore_overrun_error : 1;
-        bool ignore_noise_error : 1;
-        uint32_t : 26;
+        DataWidth dataWidth            : 2;
+        bool      ignore_parity_error  : 1;
+        bool      ignore_frame_error   : 1;
+        bool      ignore_overrun_error : 1;
+        bool      ignore_noise_error   : 1;
+        uint32_t                       : 26;
     };
     uint32_t value;
 };
@@ -24,7 +24,7 @@ class UART : public Initializable, public Configurable<UARTConfig> {
    public:
     UART(UART_CTOR_ARG, const char* name);
     Result _init() override;
-    void _deinit() override;
+    void   _deinit() override;
 
     Result read(void* data, uint32_t size, WaitHandler& waitHandler);
     Result write(void* data, uint32_t size, WaitHandler& waitHandler);
@@ -43,11 +43,11 @@ class UART : public Initializable, public Configurable<UARTConfig> {
         bool isRxDmaEnabled : 1;
     } _status;
 
-    WaitHandler* _writeWaitHandler;
-    WaitHandler* _readWaitHandler;
+    WaitHandler*             _writeWaitHandler;
+    WaitHandler*             _readWaitHandler;
     CircularBuffer<uint8_t>* cirRxBuffer_;
-    uint16_t _lastPos;
-    const char* name_;
+    uint16_t                 _lastPos;
+    const char*              name_;
 
    protected:
     static void _on_read_complete_callback(UART_CALLBACK_ARG);
