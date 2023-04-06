@@ -18,7 +18,7 @@ void Thread::sleep(uint32_t ms) {
     return;
 };
 
-Mutex::Mutex(const char* name): name_(name) {
+Mutex::Mutex(const char* name) : name_(name) {
     _instance = 0;
 };
 Mutex::~Mutex() {
@@ -49,7 +49,7 @@ void Mutex::unlock() {
     this->_instance = 0;
 };
 
-EventGroup::EventGroup(const char* name): name_(name) {
+EventGroup::EventGroup(const char* name) : name_(name) {
     _instance = 0;
 };
 EventGroup::~EventGroup() {

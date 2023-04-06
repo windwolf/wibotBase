@@ -29,5 +29,22 @@ void EventGroup::release_flag(EventFlag flag) {
         cf = of & ~flag;
     } while (!arch::sync_compare_and_swap(&used_flags_, of, cf));
 }
+Result EventGroup::_init() {
+    return Result::OK;
+}
+void EventGroup::_deinit() {
+}
+
+Result MessageQueue::_init() {
+    return Result::OK;
+}
+void MessageQueue::_deinit() {
+}
+
+Result Mutex::_init() {
+    return Result::OK;
+}
+void Mutex::_deinit() {
+}
 
 }  // namespace wibot::os

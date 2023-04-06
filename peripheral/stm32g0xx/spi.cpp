@@ -15,11 +15,11 @@ struct SizeInfo {
 };
 
 void Spi::_on_write_complete_callback(SPI_HandleTypeDef* instance) {
+    Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
     if (perip->config.autoDisable) {
         LL_SPI_Disable(instance->Instance);
     }
-    Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
-    auto wh    = perip->waitHandler_;
+    auto wh = perip->waitHandler_;
     if (wh != nullptr) {
         perip->waitHandler_ = nullptr;
         wh->done_set(perip);
@@ -27,11 +27,11 @@ void Spi::_on_write_complete_callback(SPI_HandleTypeDef* instance) {
 };
 
 void Spi::_on_read_complete_callback(SPI_HandleTypeDef* instance) {
+    Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
     if (perip->config.autoDisable) {
         LL_SPI_Disable(instance->Instance);
     }
-    Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
-    auto wh    = perip->waitHandler_;
+    auto wh = perip->waitHandler_;
     if (wh != nullptr) {
         perip->waitHandler_ = nullptr;
         wh->done_set(perip);
@@ -39,11 +39,11 @@ void Spi::_on_read_complete_callback(SPI_HandleTypeDef* instance) {
 };
 
 void Spi::_on_write_read_complete_callback(SPI_HandleTypeDef* instance) {
+    Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
     if (perip->config.autoDisable) {
         LL_SPI_Disable(instance->Instance);
     }
-    Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
-    auto wh    = perip->waitHandler_;
+    auto wh = perip->waitHandler_;
     if (wh != nullptr) {
         perip->waitHandler_ = nullptr;
         wh->done_set(perip);
@@ -51,11 +51,11 @@ void Spi::_on_write_read_complete_callback(SPI_HandleTypeDef* instance) {
 };
 
 void Spi::_on_error_callback(SPI_HandleTypeDef* instance) {
+    Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
     if (perip->config.autoDisable) {
         LL_SPI_Disable(instance->Instance);
     }
-    Spi* perip = (Spi*)Peripherals::get_peripheral(instance);
-    auto wh    = perip->waitHandler_;
+    auto wh = perip->waitHandler_;
     if (wh != nullptr) {
         perip->waitHandler_ = nullptr;
         wh->set_value((void*)instance->ErrorCode);

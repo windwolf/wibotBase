@@ -25,8 +25,7 @@ uint32_t Utils::tick_get() {
 //
 // };
 
-Mutex::Mutex(const char* name): name_(name) {
-};
+Mutex::Mutex(const char* name) : name_(name){};
 
 Mutex::~Mutex(){
     // TODO:
@@ -46,8 +45,7 @@ void Mutex::_deinit() {
     tx_mutex_delete(&(this->_instance));
 };
 
-EventGroup::EventGroup(const char* name): name_(name) {
-};
+EventGroup::EventGroup(const char* name) : name_(name){};
 
 EventGroup::~EventGroup(){
     // TODO:
