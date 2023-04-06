@@ -46,7 +46,7 @@ void UART::_on_circular_data_received_callback(UART_HandleTypeDef *instance, uin
 void UART::_on_error_callback(UART_HandleTypeDef *instance) {
     UART *perip = (UART *)Peripherals::get_peripheral(instance);
     perip->_errorCount++;
-    LOG_E("%s: on error ISR=%lX,err=%lX,uec=%lu", perip->name_, perip->_handle.Instance->ISR,
+    LOG_E("%s: on error ISR=%lX,err=%lX,uec=%lu", perip->name_, perip->_handle.Instance->SR,
           HAL_UART_GetError(instance), perip->_errorCount);
 
     auto wh = perip->_readWaitHandler;

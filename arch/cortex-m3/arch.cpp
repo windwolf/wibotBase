@@ -6,14 +6,6 @@
 namespace wibot::arch {
 bool sync_compare_and_swap(volatile uint32_t* ptr, uint32_t old_value, uint32_t new_value) {
     return __sync_bool_compare_and_swap(ptr, old_value, new_value);
-
-    uint32_t parseUint32(uint8_t * data, bool little_endian) {
-        if (little_endian) {
-            return *static_cast<uint32_t*>(static_cast<void*>(data));
-        } else {
-            return (data[0] << 24) + (data[1] << 16) + (data[2] << 8) + data[3];
-        }
-    };
 };
 
 uint32_t getUint32(uint8_t* data, bool littleEndian) {

@@ -168,4 +168,22 @@ Result MessageQueue::flush() {
     return Result::OK;
 }
 
+Result EventGroup::_init() {
+    return Result::OK;
+}
+void EventGroup::_deinit() {
+}
+
+Result MessageQueue::_init() {
+    return Result::OK;
+}
+void MessageQueue::_deinit() {
+}
+
+Result Mutex::_init() {
+    return Result::OK;
+}
+void Mutex::_deinit() {
+}
+
 }  // namespace wibot::os

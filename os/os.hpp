@@ -59,7 +59,7 @@ typedef uint32_t EventFlag;
  */
 class EventGroup : public Initializable {
    public:
-    EventGroup(const char* name);
+    explicit EventGroup(const char* name);
     ~EventGroup();
     Result _init() override;
     void   _deinit() override;
@@ -72,8 +72,8 @@ class EventGroup : public Initializable {
     void      release_flag(EventFlag flag);
 
    private:
-    EVENTGROUP_TYPEDEF _instance;
-    uint32_t           used_flags_;
+    EVENTGROUP_TYPEDEF _instance{};
+    uint32_t           used_flags_{};
     const char*        name_;
 };
 
