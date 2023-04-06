@@ -3,17 +3,14 @@
 
 #include "os.hpp"
 
-namespace wibot
-{
+namespace wibot {
 
-	using namespace wibot::os;
+using namespace wibot::os;
 
-	struct WaitHandlerConfig
-	{
-		bool disableAutoReset: 1;
-	};
+struct WaitHandlerConfig {
+    bool disableAutoReset : 1;
+};
 
-	typedef void (* Callback)(void* sender, void* event, void* receiver);
 /**
  * @brief Implement the sender receiver async pattern.
  * Sender maintain the handler's state, then receiver wait for sender's done or
@@ -24,42 +21,59 @@ namespace wibot
  * 2. sender will return immediatly
  *
  */
-	class WaitHandler: public Configurable<WaitHandlerConfig>
-	{
-	 public:
+class WaitHandler : public Configurable<WaitHandlerConfig> {
+   public:
+    WaitHandler(EventGroup& eventGroup);
+    WaitHandler(EventGroup& eventGroup, uint32_t doneFlag, uint32_t errorFlag);
+    ~WaitHandler();
+    WaitHandler folk();
 
-        WaitHandler(EventGroup& eventGroup);
-		WaitHandler(EventGroup& eventGroup, uint32_t doneFlag, uint32_t errorFlag);
-        ~WaitHandler();
-        WaitHandler folk();
+    WaitHandler merge(const WaitHandler& other);
 
-        WaitHandler merge(const WaitHandler& other);
+    void set_value(void* value);
+    void* get_value();
+    void* get_sender();
+    Result reset();
+    /**
+     * @brief Check if the handler is triggered by done or error.
+     * @param handler
+     * @return Result::OK if triggered by done, Result::GeneralError if triggered,
+     * Result::NoResource if not triggered.
+     */
+    Result triggeredFor(WaitHandler& handler) {
+        if (&_eventGroup != &handler._eventGroup) {
+            return Result::NoResource;
+        }
+        if (_currentFlag & handler._doneFlag) {
+            this->_value = handler._value;
+            this->_sender = handler._sender;
+            return Result::OK;
+        }
+        if (_currentFlag & handler._errorFlag) {
+            this->_value = handler._value;
+            this->_sender = handler._sender;
+            return Result::GeneralError;
+        }
+        return Result::NoResource;
+    }
 
-		void set_value(void* value);
-		void* get_value();
-		void* get_sender();
-		Result reset();
+    Result wait(uint32_t timeout);
+    void done_set(void* sender);
+    void error_set(void* sender);
 
-		Result wait(uint32_t timeout);
-		void done_set(void* sender);
-		void error_set(void* sender);
-//		void done_callback_set(void* receiver, Callback onDone);
-//		void error_callback_set(void* receiver, Callback onError);
+   protected:
+    void* _sender;
+    void* _value;
+    EventGroup& _eventGroup;
+    uint32_t _currentFlag;
+    uint32_t _doneFlag;
+    uint32_t _errorFlag;
+    bool isMerge_;
 
-	 protected:
-		void* _sender;
-		void* _value;
-		EventGroup& _eventGroup;
-		uint32_t _doneFlag;
-		uint32_t _errorFlag;
-		void* _receiver;
-        bool isMerge_;
-//		Callback _onDone;
-//		Callback _onError;
-     private:
-        bool is_busy();
-	};
+   private:
+    bool is_busy();
+};
 
-} // namespace wibot
+}  // namespace wibot
 
-#endif // __WWBASE_EVENT_HPP__
+#endif  // __WWBASE_EVENT_HPP__

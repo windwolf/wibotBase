@@ -5,17 +5,17 @@
 
 namespace wibot
 {
-	struct Tree;
-	typedef int (* CompareFunction)(const Tree* node, const void* b);
-	struct Tree
-	{
-		Tree* parent;
-		Tree* next;
-		Tree* child;
-		bool child_append(Tree* node);
-		bool child_remove(Tree* node);
-		Tree* child_find(const void* item, const CompareFunction compare);
-	};
+    struct Tree;
+    typedef int (* CompareFunction)(const Tree* node, const void* b);
+    struct Tree
+    {
+        Tree* parent;
+        Tree* next;
+        Tree* child;
+        bool child_append(Tree* node);
+        bool child_remove(Tree* node);
+        Tree* child_find(const void* item, const CompareFunction compare);
+    };
 
 } // namespace wibot
 

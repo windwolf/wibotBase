@@ -8,30 +8,29 @@
 namespace wibot
 {
 
-	class DataSource
-	{
-	 public:
-		virtual uint32_t get_data() = 0;
-	};
+    class DataSource
+    {
+     public:
+        virtual uint32_t get_data() = 0;
+    };
 
-	class MemoryDataSource : public DataSource
-	{
-	 public:
-		MemoryDataSource(uint32_t* data) : _data(data)
-		{
-		}
-		uint32_t get_data() override;
-	 private:
-		uint32_t* _data;
-	};
+    class MemoryDataSource : public DataSource
+    {
+     public:
+        MemoryDataSource(uint32_t* data) : _data(data) {
+        }
+        uint32_t get_data() override;
+     private:
+        uint32_t* _data;
+    };
 
-	class DummyDataSource : public DataSource
-	{
-	 public:
-		uint32_t get_data() override;
+    class DummyDataSource : public DataSource
+    {
+     public:
+        uint32_t get_data() override;
 
-		static DummyDataSource instance;
-	};
+        static DummyDataSource instance;
+    };
 
 } // wibot
 

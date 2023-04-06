@@ -5,16 +5,16 @@
 
 namespace wibot
 {
-	struct List;
-	struct List
-	{
-		void* data;
-		List* previous;
-		List* next;
-		void next_append(List* node);
-		void previous_append(List* node);
-		void remove();
-	};
+    struct List;
+    struct List
+    {
+        void* data;
+        List* previous;
+        List* next;
+        void next_append(List* node);
+        void previous_append(List* node);
+        void remove();
+    };
 
 } // namespace wibot
 

@@ -10,15 +10,15 @@
 namespace wibot
 {
 
-	class StopWatch
-	{
-	 public:
-		void start();
-		uint64_t tick();
+    class StopWatch
+    {
+     public:
+        void start();
+        uint64_t tick();
 
-	 private :
-		uint64_t _start_time;
-	};
+     private :
+        uint64_t _start_time;
+    };
 
 } // wibot
 

@@ -6,12 +6,10 @@
 
 namespace wibot
 {
-	uint32_t MemoryDataSource::get_data()
-	{
-		return *_data;
-	}
-	uint32_t DummyDataSource::get_data()
-	{
-		return 0;
-	}
+    uint32_t MemoryDataSource::get_data() {
+        return *_data;
+    }
+    uint32_t DummyDataSource::get_data() {
+        return 0;
+    }
 } // wibot

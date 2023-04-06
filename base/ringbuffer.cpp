@@ -8,8 +8,7 @@
 namespace wibot
 {
 
-    RingBuffer::RingBuffer(void* data, uint32_t dataWidth, uint32_t maxSize)
-    {
+    RingBuffer::RingBuffer(void* data, uint32_t dataWidth, uint32_t maxSize) {
         _size = maxSize;
         _status.overflowed = 0;
         _data = data;
@@ -18,44 +17,34 @@ namespace wibot
         _read = 0;
         _operationNotify = nullptr;
     };
-    bool RingBuffer::is_full()
-    {
+    bool RingBuffer::is_full() {
         return _write + 1 == _read;
     };
-    bool RingBuffer::is_empty()
-    {
+    bool RingBuffer::is_empty() {
         return _write == _read;
     };
-    bool RingBuffer::is_space_enough(uint32_t length)
-    {
+    bool RingBuffer::is_space_enough(uint32_t length) {
         return (_size - 1) - count_get() >= length;
     };
-    uint32_t RingBuffer::mem_size_get()
-    {
+    uint32_t RingBuffer::mem_size_get() {
         return _size * _dataWidth;
     };
-    uint32_t RingBuffer::count_get()
-    {
+    uint32_t RingBuffer::count_get() {
         int32_t len = _write - _read;
-        if (len < 0)
-        {
+        if (len < 0) {
             len += _size;
         }
         return len;
     };
-    void* RingBuffer::write_ptr_get()
-    {
+    void* RingBuffer::write_ptr_get() {
         return ((uint8_t*)_data) + ((_write >= _size) ? (_write - _size) : _write);
     };
-    void* RingBuffer::read_ptr_get()
-    {
+    void* RingBuffer::read_ptr_get() {
         return ((uint8_t*)_data) + ((_read >= _size) ? (_read - _size) : _read);
     };
-    Result RingBuffer::write_index_sync(uint32_t newWrite)
-    {
+    Result RingBuffer::write_index_sync(uint32_t newWrite) {
         uint32_t size = _size;
-        if (newWrite >= size)
-        {
+        if (newWrite >= size) {
             newWrite %= size;
         }
         uint32_t write = _write;
@@ -65,70 +54,57 @@ namespace wibot
 
         uint32_t read = _read;
         int32_t space = read - write - 1;
-        if (space <= -1)
-        {
+        if (space <= -1) {
             space += size;
         }
 
-        if (space < (int32_t)length)
-        {
+        if (space < (int32_t)length) {
             _status.overflowed = 1;
             _read = newWrite + 1;
         }
         _write = newWrite;
-        if (_operationNotify != nullptr)
-        {
+        if (_operationNotify != nullptr) {
             _operationNotify(RingBufferOperationType::SyncHead);
         }
         return Result::OK;
     };
-    Result RingBuffer::read_index_sync(uint32_t newRead)
-    {
+    Result RingBuffer::read_index_sync(uint32_t newRead) {
         uint32_t read = _read;
 
         int32_t readDiff = newRead - read;
         uint32_t length = readDiff >= 0 ? readDiff : readDiff + _size;
 
         int32_t count = _write - read;
-        if (count < 0)
-        {
+        if (count < 0) {
             count += _size;
         }
-        if (count < (int32_t)length)
-        {
+        if (count < (int32_t)length) {
             return Result::GeneralError;
         }
         _read = newRead;
 
-        if (_operationNotify != nullptr)
-        {
+        if (_operationNotify != nullptr) {
             _operationNotify(RingBufferOperationType::SyncTail);
         }
         return Result::OK;
     };
-    Result RingBuffer::read_offset_sync(uint32_t offset)
-    {
-        if (offset > count_get())
-        {
+    Result RingBuffer::read_offset_sync(uint32_t offset) {
+        if (offset > count_get()) {
             return Result::InvalidParameter;
         }
         uint32_t index = _read + offset;
-        if (index >= _size)
-        {
+        if (index >= _size) {
             index -= _size;
         }
         _read = index;
-        if (_operationNotify != nullptr)
-        {
+        if (_operationNotify != nullptr) {
             _operationNotify(RingBufferOperationType::SyncTail);
         }
         return Result::OK;
     };
     Result RingBuffer::write(void* valuePtr, uint32_t length, uint8_t allowCoverTail,
-        uint32_t& actualLength)
-    {
-        if (length <= 0)
-        {
+        uint32_t& actualLength) {
+        if (length <= 0) {
             return Result::InvalidParameter;
         }
         uint32_t write = _write;
@@ -136,38 +112,31 @@ namespace wibot
         uint32_t cap = size - 1;
         uint32_t read = _read;
         int32_t space = read - write - 1;
-        if (space <= -1)
-        {
+        if (space <= -1) {
             space += size;
         }
 
-        if (space < (int32_t)length)
-        {
-            if (allowCoverTail)
-            {
-                if (length > cap)
-                {
+        if (space < (int32_t)length) {
+            if (allowCoverTail) {
+                if (length > cap) {
                     valuePtr = POINTER_ADD(valuePtr, (length - cap), _dataWidth);
                     length = cap;
                 }
                 _status.overflowed = 1;
             }
-            else
-            {
+            else {
                 length = space;
             }
         }
 
         uint32_t spaceFromWriteToEnd = (read == 0) ? (cap - write) : (cap - write + 1);
 
-        if (length <= spaceFromWriteToEnd)
-        {
+        if (length <= spaceFromWriteToEnd) {
             memcpy(POINTER_ADD(_data, write, _dataWidth), valuePtr, length * _dataWidth);
             write += length;
             write = (write == size) ? 0 : write;
         }
-        else
-        {
+        else {
             memcpy(POINTER_ADD(_data, write, _dataWidth), valuePtr, spaceFromWriteToEnd * _dataWidth);
             memcpy(_data, POINTER_ADD(valuePtr, spaceFromWriteToEnd, _dataWidth),
                 (length - spaceFromWriteToEnd) * _dataWidth);
@@ -175,25 +144,21 @@ namespace wibot
             write = length - spaceFromWriteToEnd;
         }
 
-        if (space < (int32_t)length)
-        {
+        if (space < (int32_t)length) {
             read = write + 1;
             _read = read;
         }
         _write = write;
 
-        if (_operationNotify != NULL)
-        {
+        if (_operationNotify != NULL) {
             _operationNotify(RingBufferOperationType::Enqueue);
         }
         actualLength = length;
         return Result::OK;
     };
     Result RingBuffer::write_fill(uint8_t* value, uint32_t length, uint8_t allowCoverTail,
-        uint32_t& actualLength)
-    {
-        if (length <= 0)
-        {
+        uint32_t& actualLength) {
+        if (length <= 0) {
             return Result::InvalidParameter;
         }
         uint32_t write = _write;
@@ -201,81 +166,67 @@ namespace wibot
         uint32_t cap = size - 1;
         uint32_t read = _read;
         int32_t space = read - write - 1;
-        if (space <= -1)
-        {
+        if (space <= -1) {
             space += size;
         }
 
-        if (space < (int32_t)length)
-        {
-            if (allowCoverTail)
-            {
-                if (length > cap)
-                {
+        if (space < (int32_t)length) {
+            if (allowCoverTail) {
+                if (length > cap) {
                     length = cap;
                 }
                 _status.overflowed = 1;
             }
-            else
-            {
+            else {
                 length = space;
             }
         }
 
         uint32_t spaceFromWriteToEnd = (read == 0) ? (cap - write) : (cap - write + 1);
 
-        if (length <= spaceFromWriteToEnd)
-        {
+        if (length <= spaceFromWriteToEnd) {
             memset(POINTER_ADD(_data, write, _dataWidth), *value, length * _dataWidth);
             write += length;
             write = (write == size) ? 0 : write;
         }
-        else
-        {
+        else {
             memset(POINTER_ADD(_data, write, _dataWidth), *value, spaceFromWriteToEnd * _dataWidth);
             memcpy(_data, (void*)value, (length - spaceFromWriteToEnd) * _dataWidth);
 
             write = length - spaceFromWriteToEnd;
         }
 
-        if (space < (int32_t)length)
-        {
+        if (space < (int32_t)length) {
             read = write + 1;
             _read = read;
         }
         _write = write;
 
-        if (_operationNotify != NULL)
-        {
+        if (_operationNotify != NULL) {
             _operationNotify(RingBufferOperationType::Enqueue);
         }
         actualLength = length;
         return Result::OK;
     };
-    Result RingBuffer::read(void* valuePtr, uint32_t length, uint32_t& actualLength)
-    {
+    Result RingBuffer::read(void* valuePtr, uint32_t length, uint32_t& actualLength) {
         uint8_t* data = (uint8_t*)_data;
         uint32_t size = _size;
         uint32_t read = _read;
         int32_t count = _write - read;
-        if (count < 0)
-        {
+        if (count < 0) {
             count += _size;
         }
-        if (count < (int32_t)length)
-        {
+        if (count < (int32_t)length) {
             length = count;
         }
         uint32_t countFormTailToBufferEnd = size - read;
 
-        if (countFormTailToBufferEnd >= length)
-        {
+        if (countFormTailToBufferEnd >= length) {
             memcpy(valuePtr, POINTER_ADD(data, read, _dataWidth), length * _dataWidth);
             read += length;
             read = (read >= size) ? (read - size) : read;
         }
-        else
-        {
+        else {
             memcpy(valuePtr, POINTER_ADD(data, read, _dataWidth),
                 countFormTailToBufferEnd * _dataWidth);
             memcpy(POINTER_ADD(valuePtr, countFormTailToBufferEnd, _dataWidth), data,
@@ -287,105 +238,82 @@ namespace wibot
         _read = read;
         _status.overflowed = 0;
 
-        if (_operationNotify != NULL)
-        {
+        if (_operationNotify != NULL) {
             _operationNotify(RingBufferOperationType::Dequeue);
         }
         actualLength = length;
         return Result::OK;
     };
-    Result RingBuffer::peek(void*& data)
-    {
-        if (is_empty())
-        {
+    Result RingBuffer::peek(void*& data) {
+        if (is_empty()) {
             return Result::GeneralError;
         }
         data = POINTER_ADD(_data, _read, _dataWidth);
         return Result::OK;
     };
-    Result RingBuffer::index_peek(uint32_t index, void*& data)
-    {
-        if (_write > _read)
-        {
-            if (index >= _write || index < _read)
-            {
+    Result RingBuffer::index_peek(uint32_t index, void*& data) {
+        if (_write > _read) {
+            if (index >= _write || index < _read) {
                 return Result::InvalidParameter;
             }
         }
-        else if (_write < _read)
-        {
-            if (index >= _write && index < _read)
-            {
+        else if (_write < _read) {
+            if (index >= _write && index < _read) {
                 return Result::InvalidParameter;
             }
         }
-        else
-        {
+        else {
             return Result::InvalidParameter;
         }
         data = POINTER_ADD(_data, index, _dataWidth);
         return Result::OK;
     };
-    Result RingBuffer::offset_peek(uint32_t offset, void*& data)
-    {
-        if (offset > count_get())
-        {
+    Result RingBuffer::offset_peek(uint32_t offset, void*& data) {
+        if (offset > count_get()) {
             return Result::InvalidParameter;
         }
         uint32_t index = _read + offset;
-        if (index >= _size)
-        {
+        if (index >= _size) {
             index -= _size;
         }
         data = POINTER_ADD(_data, index, _dataWidth);
         return Result::OK;
     };
-    void RingBuffer::operation_notify_register(OperationNotify operationNotify)
-    {
+    void RingBuffer::operation_notify_register(OperationNotify operationNotify) {
         _operationNotify = operationNotify;
     };
 
-    void* RingBuffer::index_peek_directly(uint32_t index)
-    {
+    void* RingBuffer::index_peek_directly(uint32_t index) {
         return POINTER_ADD(_data, index, _dataWidth);
     };
-    void* RingBuffer::offset_peek_directly(uint32_t offset)
-    {
+    void* RingBuffer::offset_peek_directly(uint32_t offset) {
         uint32_t index = _read + offset;
-        if (index >= _size)
-        {
+        if (index >= _size) {
             index -= _size;
         }
         return POINTER_ADD(_data, index, _dataWidth);
     };
-    uint32_t RingBuffer::offset_to_index_convert(uint32_t offset)
-    {
+    uint32_t RingBuffer::offset_to_index_convert(uint32_t offset) {
         uint32_t index = _read + offset;
-        if (index >= _size)
-        {
+        if (index >= _size) {
             index -= _size;
         }
         return index;
     };
-    uint32_t RingBuffer::index_wrap(int32_t index)
-    {
-        if (index >= (int32_t)_size)
-        {
+    uint32_t RingBuffer::index_wrap(int32_t index) {
+        if (index >= (int32_t)_size) {
             index %= _size;
         }
-        if (index < 0)
-        {
+        if (index < 0) {
             index += _size;
         }
         return index;
     };
 
-    void* RingBuffer::data_ptr_get()
-    {
+    void* RingBuffer::data_ptr_get() {
         return _data;
     }
-    Result RingBuffer::clear()
-    {
+    Result RingBuffer::clear() {
         _read = _write;
         _status.overflowed = 0;
         return Result::OK;
