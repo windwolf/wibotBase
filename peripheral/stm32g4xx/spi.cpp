@@ -154,6 +154,7 @@ Result Spi::_init() {
     Peripherals::register_peripheral("spi", this, &_handle);
     return Result::OK;
 };
+
 void Spi::_deinit() {
     Peripherals::unregister_peripheral("spi", this);
 };
@@ -233,10 +234,9 @@ SpiWithPins::SpiWithPins(SPI_HandleTypeDef& handle, Pin* cs, Pin* rw, Pin* dc)
     : Spi(handle), _handle(handle), _cs(cs), _rw(rw), _dc(dc){};
 
 Result SpiWithPins::_init() {
-    INIT_BEGIN()
-    PTR_INIT_ERROR_CHECK(_cs)
-    PTR_INIT_ERROR_CHECK(_rw)
-    PTR_INIT_ERROR_CHECK(_dc)
+    _cs->init();
+    _rw->init();
+    _dc->init();
     if (_cs) {
         _cs->config.inverse = _pinconfig.csPinHighIsDisable;
     }
@@ -252,14 +252,14 @@ Result SpiWithPins::_init() {
                              &wibot::peripheral::SpiWithPins::_on_read_complete_callback);
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
                              &wibot::peripheral::Spi::_on_error_callback);
-    Peripherals::register_peripheral("spiwithpin", this, &_handle);
-    INIT_END()
+    return Peripherals::register_peripheral("spiwithpin", this, &_handle);
 };
+
 void SpiWithPins::_deinit() {
     Peripherals::unregister_peripheral("spiwithpin", this);
-    PTR_DEINIT(_cs)
-    PTR_DEINIT(_rw)
-    PTR_DEINIT(_dc)
+    _cs->deinit();
+    _rw->deinit();
+    _dc->deinit();
 };
 
 SpiWithPinsConfig& SpiWithPins::pinconfig_get() {

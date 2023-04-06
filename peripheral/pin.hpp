@@ -33,14 +33,16 @@ union PinConfig {
 class Pin : public Initializable, public Configurable<PinConfig> {
    public:
     Pin(PIN_CTOR_ARG, uint16_t pinMask);
-    Result _init() override;
-    void   _deinit() override;
 
     Result read(PinStatus &value);
     Result write(PinStatus value);
 
     Result toggle();
     Result mode_set(PinMode mode);
+
+   protected:
+    Result _init() override;
+    void   _deinit() override;
 
    private:
     PIN_FIELD_DECL;

@@ -28,13 +28,15 @@ class I2cMaster : public Initializable, public Configurable<I2cMasterConfig> {
    public:
     I2cMaster(I2C_CTOR_ARG);
     ~I2cMaster();
-    Result _init() override;
-    void   _deinit() override;
 
     Result read(uint32_t address, void* data, uint32_t size, WaitHandler& waitHandler);
     Result write(uint32_t address, void* data, uint32_t size, WaitHandler& waitHandler);
     Result read(void* data, uint32_t size, WaitHandler& waitHandler);
     Result write(void* data, uint32_t size, WaitHandler& waitHandler);
+
+   protected:
+    Result _init() override;
+    void   _deinit() override;
 
    private:
     I2C_FIELD_DECL

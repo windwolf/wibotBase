@@ -1,5 +1,6 @@
 #include "base.hpp"
-
+#include "log.h"
+LOGGER("init")
 char *strtrim(char *str, char delimit) {
     while (*str != 0x00) {
         if (*str == delimit) {
@@ -26,16 +27,19 @@ uint32_t fast_log2(uint32_t _val) {
     return ret;
 };
 
-Result Initializable::init() {
+void Initializable::init() {
     if (initState.inited) {
-        return initState.initErrorCode;
+        return;
     }
-    initState.initErrorCode = _init();
-    initState.inited        = true;
-    return initState.initErrorCode;
+    auto rst = _init();
+    if (rst != Result::OK) {
+        LOG_E("init failed, error code: 0X%lX", rst);
+        while (true) {
+        }
+    }
+    initState.inited = true;
 };
 
 void Initializable::deinit() {
-    initState.initErrorCode = Result::OK;
-    initState.inited        = false;
+    initState.inited = false;
 };

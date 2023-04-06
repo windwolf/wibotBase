@@ -64,8 +64,8 @@ uint32_t fast_log2(uint32_t _val);
 
 class Initializable {
    public:
-    Result init();
-    void   deinit();
+    void init();
+    void deinit();
 
    protected:
     virtual Result _init()   = 0;
@@ -73,33 +73,9 @@ class Initializable {
 
    private:
     struct {
-        Result initErrorCode;
-        bool   inited : 1;
+        bool inited : 1;
     } initState;
 };
-
-#define INIT_BEGIN() Result rst;
-#define INIT_END()   return rst;
-
-#define BASE_INIT_ERROR_CHECK(className) \
-    rst = className::init();             \
-    if (rst != Result::OK) {             \
-        return rst;                      \
-    }
-#define MEMBER_INIT_ERROR_CHECK(instance) \
-    rst = instance.init();                \
-    if (rst != Result::OK) {              \
-        return rst;                       \
-    }
-#define PTR_INIT_ERROR_CHECK(instance) \
-    rst = instance->init();            \
-    if (rst != Result::OK) {           \
-        return rst;                    \
-    }
-
-#define BASE_DEINIT(className)  className::deinit();
-#define MEMBER_DEINIT(instance) instance.deinit();
-#define PTR_DEINIT(instance)    instance->deinit();
 
 #define FUNCTION_CALL_INIT(function_call) \
     rst = function_call;                  \
