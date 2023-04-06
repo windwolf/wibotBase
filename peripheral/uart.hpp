@@ -22,7 +22,7 @@ union UARTConfig {
 
 class UART : public Initializable, public Configurable<UARTConfig> {
    public:
-    UART(UART_CTOR_ARG);
+    UART(UART_CTOR_ARG, const char* name);
     Result _init() override;
     void _deinit() override;
 
@@ -31,20 +31,23 @@ class UART : public Initializable, public Configurable<UARTConfig> {
     Result start(CircularBuffer<uint8_t>& rxBuffer, WaitHandler& waitHandler);
     Result stop();
 
+   public:
+    uint32_t _errorCount;
+    uint32_t _rxCount;
+    uint32_t _txCount;
+
    private:
     UART_FIELD_DECL
-    union {
-        struct {
-            bool isTxDmaEnabled : 1;
-            bool isRxDmaEnabled : 1;
-        };
-        uint32_t value;
+    struct {
+        bool isTxDmaEnabled : 1;
+        bool isRxDmaEnabled : 1;
     } _status;
 
     WaitHandler* _writeWaitHandler;
     WaitHandler* _readWaitHandler;
     CircularBuffer<uint8_t>* cirRxBuffer_;
     uint16_t _lastPos;
+    const char* name_;
 
    protected:
     static void _on_read_complete_callback(UART_CALLBACK_ARG);
