@@ -56,11 +56,11 @@ Revision: $Rev: 24316 $
 */
 
 #ifdef USE_UART_PRINT
-#if (defined __GNUC__) && !(defined __SES_ARM) &&                              \
-    !(defined __CROSSWORKS_ARM) && !(defined __ARMCC_VERSION) &&               \
-    !(defined __CC_ARM)
+#if (defined __GNUC__) && !(defined __SES_ARM) && !(defined __CROSSWORKS_ARM) && \
+    !(defined __ARMCC_VERSION) && !(defined __CC_ARM)
 
-#include <reent.h> // required for _write_r
+#include <reent.h>  // required for _write_r
+
 #include "bsp_uart.h"
 
 /*********************************************************************
@@ -101,8 +101,7 @@ _ssize_t _write_r(struct _reent *r, int file, const void *ptr, size_t len);
  *   including stdout.
  *   Write data via RTT.
  */
-_ssize_t _write(int file, const void *ptr, size_t len)
-{
+_ssize_t _write(int file, const void *ptr, size_t len) {
     (void)file; /* Not used, avoid warning */
     uart_send_byte(ptr, len);
     return len;
@@ -118,8 +117,7 @@ _ssize_t _write(int file, const void *ptr, size_t len)
  *   including stdout.
  *   Write data via RTT.
  */
-_ssize_t _write_r(struct _reent *r, int file, const void *ptr, size_t len)
-{
+_ssize_t _write_r(struct _reent *r, int file, const void *ptr, size_t len) {
     (void)file; /* Not used, avoid warning */
     (void)r;    /* Not used, avoid warning */
     uart_send_byte(ptr, len);
@@ -129,8 +127,7 @@ _ssize_t _write_r(struct _reent *r, int file, const void *ptr, size_t len)
 #endif
 
 #include "log.h"
-void log_init()
-{
+void log_init() {
 }
-#endif // USE_UART_PRINT
+#endif  // USE_UART_PRINT
 /****** End Of File *************************************************/

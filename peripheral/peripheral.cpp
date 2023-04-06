@@ -1,21 +1,17 @@
 
 #include "peripheral.hpp"
-#define LOG_MODULE "peripheral"
+
 #include "log.h"
+LOGGER("peripheral")
+namespace wibot::peripheral {
 
-namespace wibot::peripheral
-{
-
-void Peripherals::register_peripheral(const char *peripheralName,
-                                      void *peripheral, void *instance)
-{
-    for (uint32_t i = 0; i < MAX_PERIPHERAL_COUNT; i++)
-    {
+void Peripherals::register_peripheral(const char *peripheralName, void *peripheral,
+                                      void *instance) {
+    for (uint32_t i = 0; i < MAX_PERIPHERAL_COUNT; i++) {
         auto &periph = Peripherals::_peripherals[i];
-        if (periph.peripheral == nullptr || periph.peripheral == peripheral)
-        {
-            periph.peripheral = peripheral;
-            periph.instance = instance;
+        if (periph.peripheral == nullptr || periph.peripheral == peripheral) {
+            periph.peripheral     = peripheral;
+            periph.instance       = instance;
             periph.peripheralName = peripheralName;
             return;
         }
@@ -25,15 +21,11 @@ void Peripherals::register_peripheral(const char *peripheralName,
     return;
 }
 
-void Peripherals::unregister_peripheral(const char *peripheralName,
-                                        void *peripheral)
-{
-    for (uint32_t i = 0; i < MAX_PERIPHERAL_COUNT; i++)
-    {
-        if (Peripherals::_peripherals[i].peripheral == peripheral)
-        {
-            Peripherals::_peripherals[i].peripheral = nullptr;
-            Peripherals::_peripherals[i].instance = nullptr;
+void Peripherals::unregister_peripheral(const char *peripheralName, void *peripheral) {
+    for (uint32_t i = 0; i < MAX_PERIPHERAL_COUNT; i++) {
+        if (Peripherals::_peripherals[i].peripheral == peripheral) {
+            Peripherals::_peripherals[i].peripheral     = nullptr;
+            Peripherals::_peripherals[i].instance       = nullptr;
             Peripherals::_peripherals[i].peripheralName = nullptr;
             return;
         }
@@ -42,12 +34,9 @@ void Peripherals::unregister_peripheral(const char *peripheralName,
     return;
 }
 
-void *Peripherals::get_peripheral(void *instance)
-{
-    for (uint32_t i = 0; i < MAX_PERIPHERAL_COUNT; i++)
-    {
-        if (Peripherals::_peripherals[i].instance == instance)
-        {
+void *Peripherals::get_peripheral(void *instance) {
+    for (uint32_t i = 0; i < MAX_PERIPHERAL_COUNT; i++) {
+        if (Peripherals::_peripherals[i].instance == instance) {
             return Peripherals::_peripherals[i].peripheral;
         }
     }
@@ -56,7 +45,6 @@ void *Peripherals::get_peripheral(void *instance)
     return nullptr;
 }
 
-Peripherals::PeripheralItem Peripherals::_peripherals[MAX_PERIPHERAL_COUNT] = {
-    0};
+Peripherals::PeripheralItem Peripherals::_peripherals[MAX_PERIPHERAL_COUNT] = {0};
 
-} // namespace wibot::peripheral
+}  // namespace wibot::peripheral

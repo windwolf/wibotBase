@@ -11,24 +11,24 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        type: [Debug, Release]
+        os: [ ubuntu-latest, windows-latest ]
+        type: [ Debug, Release ]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      with:
-        submodules: recursive
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
-    - name: arm-none-eabi-gcc
-      uses: ryanwinter/arm-none-eabi-gcc@master
-      with:
-        release: '10-2021.10'
+      - name: arm-none-eabi-gcc
+        uses: ryanwinter/arm-none-eabi-gcc@master
+        with:
+          release: '10-2021.10'
 
-    - name: Install Ninja
-      uses: seanmiddleditch/gha-setup-ninja@v3
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v3
 
-    - name: Build binary
-      run: |
-        cmake -Bbuild -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/arm-gcc-cortex-m4.cmake" -DCMAKE_BUILD_TYPE="${{ matrix.type }}"
-        cmake --build build   
+      - name: Build binary
+        run: |
+          cmake -Bbuild -GNinja -DCMAKE_TOOLCHAIN_FILE="cmake/arm-gcc-cortex-m4.cmake" -DCMAKE_BUILD_TYPE="${{ matrix.type }}"
+          cmake --build build   

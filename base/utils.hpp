@@ -7,19 +7,17 @@
 
 #include "base.hpp"
 
-namespace wibot
-{
+namespace wibot {
 
-	class StopWatch
-	{
-	 public:
-		void start();
-		uint64_t tick();
+class StopWatch {
+   public:
+    void     start();
+    uint64_t tick();
 
-	 private :
-		uint64_t _start_time;
-	};
+   private:
+    uint64_t _start_time;
+};
 
-} // wibot
+}  // namespace wibot
 
-#endif //WWMOTOR_LIBS_WWBASE_BASE_UTILS_HPP_
+#endif  // WWMOTOR_LIBS_WWBASE_BASE_UTILS_HPP_
