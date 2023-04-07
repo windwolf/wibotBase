@@ -40,12 +40,8 @@ class I2cMaster : public Initializable, public Configurable<I2cMasterConfig> {
 
    private:
     I2C_FIELD_DECL
-    union {
-        struct {
-            bool isReadDmaEnabled  : 1;
-            bool isWriteDmaEnabled : 1;
-        };
-        uint32_t value;
+
+    struct {
     } _status;
     WaitHandler* _waitHandler;
     Buffer8      _txBuffer;

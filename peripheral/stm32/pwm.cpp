@@ -1,12 +1,11 @@
 #include "pwm.hpp"
-
-#include "stm32g0xx_ll_tim.h"
+#include "perip_port.hpp"
 
 #ifdef HAL_TIM_MODULE_ENABLED
 
 namespace wibot::peripheral {
 
-Pwm::Pwm(TIM_HandleTypeDef &handle) : _handle(handle){};
+Pwm::Pwm(TIM_HandleTypeDef& handle) : _handle(handle){};
 
 Result Pwm::_init() {
     return Result::OK;
@@ -53,7 +52,7 @@ Result Pwm::channel_enable(PwmChannel channels) {
 Result Pwm::channel_disable(PwmChannel channels) {
     LL_TIM_CC_DisableChannel(_handle.Instance, config.channelsEnable);
     return Result::OK;
-};
+}
 
 }  // namespace wibot::peripheral
 

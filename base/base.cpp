@@ -33,7 +33,7 @@ void Initializable::init() {
     }
     auto rst = _init();
     if (rst != Result::OK) {
-        LOG_E("init failed, error code: 0X%lX", rst);
+        LOG_E("init failed, error code: 0X%lX", static_cast<uint32_t>(rst));
         while (true) {
         }
     }

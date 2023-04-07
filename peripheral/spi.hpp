@@ -33,12 +33,8 @@ class Spi : public Initializable, public Configurable<SpiConfig> {
 
    private:
     SPI_FIELD_DECL
-    union {
-        struct {
-            bool isTxDmaEnabled : 1;
-            bool isRxDmaEnabled : 1;
-        };
-        uint32_t value;
+
+    struct {
     } _status{};
 
     WaitHandler* waitHandler_{};

@@ -4,6 +4,8 @@
 #include "os.hpp"
 #include "pin.hpp"
 
+#ifdef STM32F1xx
+
 namespace wibot::peripheral {
 #define SCL_SET()   _scl.write(PinStatus::Set)
 #define SCL_RESET() _scl.write(PinStatus::Reset)
@@ -175,4 +177,7 @@ Result I2cMaster::write(void* data, uint32_t size, WaitHandler& waitHandler) {
 //         }
 //     }
 // };
+
 }  // namespace wibot::peripheral
+
+#endif

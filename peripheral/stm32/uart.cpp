@@ -1,8 +1,6 @@
 #include "uart.hpp"
 
-#include "peripheral.hpp"
-#include "stm32g4xx_ll_dma.h"
-#include "stm32g4xx_ll_usart.h"
+#include "perip_port.hpp"
 
 #include "log.h"
 LOGGER("uart")
@@ -12,9 +10,15 @@ LOGGER("uart")
 namespace wibot::peripheral {
 
 void UART::_on_write_complete_callback(UART_HandleTypeDef *instance) {
-    UART *perip = (UART *)Peripherals::get_peripheral(instance);
+    auto perip = (UART *)Peripherals::get_peripheral(instance);
     perip->_txCount++;
     auto wh = perip->_writeWaitHandler;
+#ifdef STM32H7xx
+#if PERIPHERAL_UART_READ_DMA_ENABLED
+    perip->_txBuffer.data = nullptr;
+    perip->_txBuffer.size = 0;
+#endif
+#endif
     if (wh != nullptr) {
         perip->_writeWaitHandler = nullptr;
         wh->done_set(perip);
@@ -22,9 +26,17 @@ void UART::_on_write_complete_callback(UART_HandleTypeDef *instance) {
 };
 
 void UART::_on_read_complete_callback(UART_HandleTypeDef *instance) {
-    UART *perip = (UART *)Peripherals::get_peripheral(instance);
+    auto perip = (UART *)Peripherals::get_peripheral(instance);
+#ifdef STM32H7xx
+#if PERIPHERAL_UART_READ_DMA_ENABLED
+    SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data, perip->_rxBuffer.size);
+    perip->_rxBuffer.data = nullptr;
+    perip->_rxBuffer.size = 0;
+#endif
+#endif
     perip->_rxCount++;
     auto wh = perip->_readWaitHandler;
+
     if (wh != nullptr) {
         perip->_readWaitHandler = nullptr;
         wh->done_set(perip);
@@ -32,10 +44,16 @@ void UART::_on_read_complete_callback(UART_HandleTypeDef *instance) {
 };
 
 void UART::_on_circular_data_received_callback(UART_HandleTypeDef *instance, uint16_t pos) {
-    UART *perip  = (UART *)Peripherals::get_peripheral(instance);
-    auto  length = perip->cirRxBuffer_->getLengthByMemIndex(pos, perip->_lastPos);
+    auto perip = (UART *)Peripherals::get_peripheral(instance);
+#ifdef STM32H7xx
+#if PERIPHERAL_UART_READ_DMA_ENABLED
+    SCB_InvalidateDCache_by_Addr((uint8_t *)perip->cirRxBuffer_.getDataPtr(),
+                                 perip->cirRxBuffer_.getMemCapacity());
+#endif
+#endif
+    auto length = perip->cirRxBuffer_->getLengthByMemIndex(pos, perip->_status._lastPos);
     perip->_rxCount++;
-    perip->_lastPos = pos;
+    perip->_status._lastPos = pos;
     perip->cirRxBuffer_->writeVirtual(length);
     auto wh = perip->_readWaitHandler;
     if (wh != nullptr) {
@@ -45,6 +63,24 @@ void UART::_on_circular_data_received_callback(UART_HandleTypeDef *instance, uin
 
 void UART::_on_error_callback(UART_HandleTypeDef *instance) {
     UART *perip = (UART *)Peripherals::get_peripheral(instance);
+#ifdef STM32H7xx
+#if PERIPHERAL_UART_READ_DMA_ENABLED
+    if (perip->cirRxBuffer_ != nullptr) {
+        SCB_InvalidateDCache_by_Addr((uint8_t *)perip->cirRxBuffer_.getDataPtr(),
+                                     perip->cirRxBuffer_.getMemCapacity());
+    }
+    if (perip->_txBuffer.data != nullptr) {
+        SCB_InvalidateDCache_by_Addr(perip->_txBuffer.data, perip->_txBuffer.size);
+        perip->_txBuffer.data = nullptr;
+        perip->_txBuffer.size = 0;
+    }
+    if (perip->_rxBuffer.data != nullptr) {
+        SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data, perip->_rxBuffer.size);
+        perip->_rxBuffer.data = nullptr;
+        perip->_rxBuffer.size = 0;
+    }
+#endif
+#endif
     perip->_errorCount++;
     LOG_E("%s: on error ISR=%lX,err=%lX,uec=%lu", perip->name_, perip->_handle.Instance->ISR,
           HAL_UART_GetError(instance), perip->_errorCount);
@@ -93,13 +129,13 @@ Result UART::read(void *data, uint32_t size, WaitHandler &waitHandler) {
     _readWaitHandler = &waitHandler;
 
 #if PERIPHERAL_UART_READ_DMA_ENABLED
-    _status.isRxDmaEnabled = true;
-    // TODO: if size greater then uint16_t max, should slice the data and
-    //  send in multiple DMA transfers
+#ifdef STM32H7xx
+    _rxBuffer.data = data;
+    _rxBuffer.size = size;
+#endif
     return (Result)HAL_UART_Receive_DMA(&_handle, (uint8_t *)data, (uint16_t)size);
 #endif
 #if PERIPHERAL_UART_READ_IT_ENABLED
-    _status.isRxDmaEnabled = false;
     return (Result)HAL_UART_Receive_IT(&_handle, (uint8_t *)data, (uint16_t)size);
 #endif
 };
@@ -114,13 +150,14 @@ Result UART::write(void *data, uint32_t size, WaitHandler &waitHandler) {
     _writeWaitHandler = &waitHandler;
 
 #if PERIPHERAL_UART_WRITE_DMA_ENABLED
-    _status.isTxDmaEnabled = 1;
-    // TODO: if size greater then uint16_t max, should slice the data and
-    // send in multiple DMA transfers
+#ifdef STM32H7xx
+    _txBuffer.data = data;
+    _txBuffer.size = size;
+    SCB_CleanDCache_by_Addr((uint32_t *)data, size);
+#endif
     return (Result)HAL_UART_Transmit_DMA(&_handle, (uint8_t *)data, (uint16_t)size);
 #endif
 #if PERIPHERAL_UART_WRITE_IT_ENABLED
-    _status.isTxDmaEnabled = 0;
     return (Result)HAL_UART_Transmit_IT(&_handle, (uint8_t *)data, (uint16_t)size);
 #endif
 };
