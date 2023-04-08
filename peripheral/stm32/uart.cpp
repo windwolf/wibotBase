@@ -84,6 +84,7 @@ void UART::_on_error_callback(UART_HandleTypeDef *instance) {
     perip->_errorCount++;
     LOG_E("%s: on error ISR=%lX,err=%lX,uec=%lu", perip->name_, perip->_handle.Instance->ISR,
           HAL_UART_GetError(instance), perip->_errorCount);
+    perip->_status._lastPos = 0;
 
     auto wh = perip->_readWaitHandler;
     if (wh != nullptr) {
@@ -195,6 +196,8 @@ Result UART::stop() {
     rst = (Result)HAL_UART_AbortReceive_IT(&_handle);
     ;
 #endif
+    _status._lastPos = 0;
+
     auto wh = _readWaitHandler;
     if (wh != nullptr) {
         _readWaitHandler = nullptr;
