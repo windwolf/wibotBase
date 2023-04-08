@@ -29,9 +29,9 @@ class Peripherals {
         void*       instance;
     };
 
-    static void  register_peripheral(const char* peripheralName, void* peripheral, void* instance);
-    static void  unregister_peripheral(const char* peripheralName, void* peripheral);
-    static void* get_peripheral(void* instance);
+    static Result register_peripheral(const char* peripheralName, void* peripheral, void* instance);
+    static void   unregister_peripheral(const char* peripheralName, void* peripheral);
+    static void*  get_peripheral(void* instance);
 
    private:
     static PeripheralItem _peripherals[MAX_PERIPHERAL_COUNT];

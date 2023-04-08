@@ -1,6 +1,6 @@
 #include "pin.hpp"
 
-#include "stm32g4xx_ll_gpio.h"
+#include "perip_port.hpp"
 
 namespace wibot::peripheral {
 

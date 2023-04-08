@@ -1,6 +1,5 @@
 #include "misc.hpp"
-
-#include "stm32g4xx_hal.h"
+#include "perip_port.hpp"
 namespace wibot::peripheral {
 
 __STATIC_INLINE uint32_t LL_SYSTICK_IsActiveCounterFlag() {

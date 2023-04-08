@@ -19,6 +19,11 @@ void Spi::_on_write_complete_callback(SPI_HandleTypeDef* instance) {
     if (perip->config.autoDisable) {
         LL_SPI_Disable(instance->Instance);
     }
+#ifdef STM32H7xx
+#if PERIPHERAL_SPI_READ_DMA_ENABLED
+    SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data, perip->_rxBuffer.size);
+#endif
+#endif
     auto wh = perip->waitHandler_;
     if (wh != nullptr) {
         perip->waitHandler_ = nullptr;
@@ -31,6 +36,11 @@ void Spi::_on_read_complete_callback(SPI_HandleTypeDef* instance) {
     if (perip->config.autoDisable) {
         LL_SPI_Disable(instance->Instance);
     }
+#ifdef STM32H7xx
+#if PERIPHERAL_SPI_READ_DMA_ENABLED
+    SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data, perip->_rxBuffer.size);
+#endif
+#endif
     auto wh = perip->waitHandler_;
     if (wh != nullptr) {
         perip->waitHandler_ = nullptr;
@@ -43,6 +53,11 @@ void Spi::_on_write_read_complete_callback(SPI_HandleTypeDef* instance) {
     if (perip->config.autoDisable) {
         LL_SPI_Disable(instance->Instance);
     }
+#ifdef STM32H7xx
+#if PERIPHERAL_SPI_READ_DMA_ENABLED
+    SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data, perip->_rxBuffer.size);
+#endif
+#endif
     auto wh = perip->waitHandler_;
     if (wh != nullptr) {
         perip->waitHandler_ = nullptr;
@@ -55,6 +70,11 @@ void Spi::_on_error_callback(SPI_HandleTypeDef* instance) {
     if (perip->config.autoDisable) {
         LL_SPI_Disable(instance->Instance);
     }
+#ifdef STM32H7xx
+#if PERIPHERAL_SPI_READ_DMA_ENABLED
+    SCB_InvalidateDCache_by_Addr(perip->_rxBuffer.data, perip->_rxBuffer.size);
+#endif
+#endif
     auto wh = perip->waitHandler_;
     if (wh != nullptr) {
         perip->waitHandler_ = nullptr;
@@ -154,6 +174,7 @@ Result Spi::_init() {
     Peripherals::register_peripheral("spi", this, &_handle);
     return Result::OK;
 };
+
 void Spi::_deinit() {
     Peripherals::unregister_peripheral("spi", this);
 };
@@ -166,15 +187,15 @@ Result Spi::read(void* data, uint32_t size, WaitHandler& waitHandler) {
 
     wibot::peripheral::SizeInfo sizeInfo;
     wibot::peripheral::bits_switch(_handle, this->config, size, sizeInfo);
-    if (size < 0) {
-        return Result::GeneralError;
-    }
+
 #if PERIPHERAL_SPI_READ_DMA_ENABLED
-    this->_status.isRxDmaEnabled = true;
+#ifdef STM32H7xx
+    _rxBuffer.data = data;
+    _rxBuffer.size = sizeInfo.sizeInBytes;
+#endif
     return (Result)HAL_SPI_Receive_DMA(&_handle, (uint8_t*)data, sizeInfo.sizeInDMADataWidth);
 #endif
 #if PERIPHERAL_SPI_READ_IT_ENABLED
-    this->_status.isRxDmaEnabled = false;
     return (Result)HAL_SPI_Receive_IT(&_handle, (uint8_t*)data, sizeInfo.sizeInSPIDataWidth);
 #endif
 };
@@ -186,17 +207,17 @@ Result Spi::write(void* data, uint32_t size, WaitHandler& waitHandler) {
 
     wibot::peripheral::SizeInfo sizeInfo;
     wibot::peripheral::bits_switch(_handle, this->config, size, sizeInfo);
-    if (size < 0) {
-        return Result::GeneralError;
-    }
+
 #if PERIPHERAL_SPI_WRITE_DMA_ENABLED
-    this->_status.isTxDmaEnabled = true;
-    // SCB_CleanDCache_by_Addr((uint32_t *)data, sizeInfo.sizeInBytes);
+#ifdef STM32H7xx
+    _txBuffer.data = data;
+    _txBuffer.size = sizeInfo.sizeInBytes;
+    SCB_CleanDCache_by_Addr((uint32_t*)data, sizeInfo.sizeInBytes);
+#endif
     return (Result)HAL_SPI_Transmit_DMA(&_handle, static_cast<uint8_t*>(data),
                                         sizeInfo.sizeInDMADataWidth);
 #endif
 #if PERIPHERAL_SPI_WRITE_IT_ENABLED
-    this->_status.isTxDmaEnabled = false;
     return (Result)HAL_SPI_Transmit_IT(&_handle, static_cast<uint8_t*>(data),
                                        sizeInfo.sizeInSPIDataWidth);
 #endif
@@ -209,18 +230,18 @@ Result Spi::write_read(void* txData, void* rxData, uint32_t size, WaitHandler& w
     waitHandler_ = &waitHandler;
     wibot::peripheral::SizeInfo sizeInfo;
     wibot::peripheral::bits_switch(_handle, this->config, size, sizeInfo);
-    if (size < 0) {
-        return Result::GeneralError;
-    }
+
 #if PERIPHERAL_SPI_WRITE_DMA_ENABLED
-    this->_status.isTxDmaEnabled = true;
-    // SCB_CleanDCache_by_Addr((uint32_t *)txData, byteSize);
+#ifdef STM32H7xx
+    _txBuffer.data = data;
+    _txBuffer.size = size * (to_underlying(_config.dataWidth) - 1);
+    SCB_CleanDCache_by_Addr((uint32_t*)data, size * (to_underlying(_config.dataWidth) - 1));
+#endif
     return (Result)HAL_SPI_TransmitReceive_DMA(&_handle, static_cast<uint8_t*>(txData),
                                                static_cast<uint8_t*>(rxData),
                                                sizeInfo.sizeInDMADataWidth);
 #endif
 #if PERIPHERAL_SPI_WRITE_IT_ENABLED
-    this->_status.isTxDmaEnabled = false;
     return (Result)HAL_SPI_TransmitReceive_IT(&_handle, static_cast<uint8_t*>(txData),
                                               static_cast<uint8_t*>(rxData),
                                               sizeInfo.sizeInSPIDataWidth);
@@ -233,10 +254,9 @@ SpiWithPins::SpiWithPins(SPI_HandleTypeDef& handle, Pin* cs, Pin* rw, Pin* dc)
     : Spi(handle), _handle(handle), _cs(cs), _rw(rw), _dc(dc){};
 
 Result SpiWithPins::_init() {
-    INIT_BEGIN()
-    PTR_INIT_ERROR_CHECK(_cs)
-    PTR_INIT_ERROR_CHECK(_rw)
-    PTR_INIT_ERROR_CHECK(_dc)
+    _cs->init();
+    _rw->init();
+    _dc->init();
     if (_cs) {
         _cs->config.inverse = _pinconfig.csPinHighIsDisable;
     }
@@ -252,14 +272,14 @@ Result SpiWithPins::_init() {
                              &wibot::peripheral::SpiWithPins::_on_read_complete_callback);
     HAL_SPI_RegisterCallback(&_handle, HAL_SPI_ERROR_CB_ID,
                              &wibot::peripheral::Spi::_on_error_callback);
-    Peripherals::register_peripheral("spiwithpin", this, &_handle);
-    INIT_END()
+    return Peripherals::register_peripheral("spiwithpin", this, &_handle);
 };
+
 void SpiWithPins::_deinit() {
     Peripherals::unregister_peripheral("spiwithpin", this);
-    PTR_DEINIT(_cs)
-    PTR_DEINIT(_rw)
-    PTR_DEINIT(_dc)
+    _cs->deinit();
+    _rw->deinit();
+    _dc->deinit();
 };
 
 SpiWithPinsConfig& SpiWithPins::pinconfig_get() {

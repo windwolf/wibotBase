@@ -36,17 +36,16 @@ target_include_directories(${PROJECT_NAME}
         )
 
 # peripheral
-list_source_files(${CMAKE_CURRENT_LIST_DIR}/peripheral/${BSP_PORT} _perip_SOURCE_FILES)
+list_source_files(${CMAKE_CURRENT_LIST_DIR}/peripheral/${HAL_NAME} _PERIP_SOURCE_FILES)
 target_sources(${PROJECT_NAME}
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/peripheral/peripheral.cpp
-        ${_perip_SOURCE_FILES}
+        ${_PERIP_SOURCE_FILES}
         )
 target_include_directories(${PROJECT_NAME}
         PRIVATE
-
         ${CMAKE_CURRENT_LIST_DIR}/peripheral
-        ${CMAKE_CURRENT_LIST_DIR}/peripheral/${BSP_PORT}
+        ${CMAKE_CURRENT_LIST_DIR}/peripheral/${HAL_NAME}
         )
 
 # ############### USE_RTT_PRINT ####################################

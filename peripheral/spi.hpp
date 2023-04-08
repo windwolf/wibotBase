@@ -8,43 +8,36 @@
 namespace wibot::peripheral {
 #define PWM_PER_DECL
 
-union SpiConfig {
-    struct {
-        DataWidth dataWidth   : 2;
-        // bool useTxDma : 1;
-        // bool useRxDma : 1;
-        uint8_t   dummyCycles : 4;
-        // uint8_t txDmaThreshold : 8;
-        // uint8_t rxDmaThreshold : 8;
-        bool      autoDisable : 1 = true;
-        uint32_t              : 8;
-    };
-    uint32_t value;
+struct SpiConfig {
+    DataWidth dataWidth   : 2;
+    // bool useTxDma : 1;
+    // bool useRxDma : 1;
+    uint8_t   dummyCycles : 4;
+    // uint8_t txDmaThreshold : 8;
+    // uint8_t rxDmaThreshold : 8;
+    bool      autoDisable : 1 = true;
+    uint32_t              : 8;
 };
 
 class Spi : public Initializable, public Configurable<SpiConfig> {
    public:
-    Spi(SPI_CTOR_ARG);
-    Result _init() override;
-    void   _deinit() override;
+    explicit Spi(SPI_CTOR_ARG);
 
     Result read(void* data, uint32_t size, WaitHandler& waitHandler);
     Result write(void* data, uint32_t size, WaitHandler& waitHandler);
     Result write_read(void* txData, void* rxData, uint32_t size, WaitHandler& waitHandler);
 
+   protected:
+    Result _init() override;
+    void   _deinit() override;
+
    private:
     SPI_FIELD_DECL
-    union {
-        struct {
-            bool isTxDmaEnabled : 1;
-            bool isRxDmaEnabled : 1;
-        };
-        uint32_t value;
-    } _status;
 
-    WaitHandler* waitHandler_;
-    Buffer8      _txBuffer;
-    Buffer8      _rxBuffer;
+    struct {
+    } _status{};
+
+    WaitHandler* waitHandler_{};
 
    protected:
     static void _on_read_complete_callback(SPI_CALLBACK_ARG);
@@ -68,13 +61,16 @@ union SpiWithPinsConfig {
 class SpiWithPins : public Spi {
    public:
     SpiWithPins(SPI_CTOR_ARG, Pin* cs, Pin* rw, Pin* dc);
-    Result             _init() override;
-    void               _deinit() override;
+
     SpiWithPinsConfig& pinconfig_get();
     Result             read(bool isData, void* data, uint32_t size, WaitHandler& waitHandler);
     Result             write(bool isData, void* data, uint32_t size, WaitHandler& waitHandler);
     Result             session_begin(WaitHandler& waitHandler);
     Result             session_end(WaitHandler& waitHandler);
+
+   protected:
+    Result _init() override;
+    void   _deinit() override;
 
    private:
     SPI_FIELD_DECL

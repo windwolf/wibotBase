@@ -39,14 +39,12 @@ class UART : public Initializable, public Configurable<UARTConfig> {
    private:
     UART_FIELD_DECL
     struct {
-        bool isTxDmaEnabled : 1;
-        bool isRxDmaEnabled : 1;
+        uint16_t _lastPos;
     } _status;
 
     WaitHandler*     _writeWaitHandler;
     WaitHandler*     _readWaitHandler;
     CircularBuffer8* cirRxBuffer_;
-    uint16_t         _lastPos;
     const char*      name_;
 
    protected:

@@ -5,20 +5,20 @@
 LOGGER("peripheral")
 namespace wibot::peripheral {
 
-void Peripherals::register_peripheral(const char *peripheralName, void *peripheral,
-                                      void *instance) {
+Result Peripherals::register_peripheral(const char *peripheralName, void *peripheral,
+                                        void *instance) {
     for (uint32_t i = 0; i < MAX_PERIPHERAL_COUNT; i++) {
         auto &periph = Peripherals::_peripherals[i];
         if (periph.peripheral == nullptr || periph.peripheral == peripheral) {
             periph.peripheral     = peripheral;
             periph.instance       = instance;
             periph.peripheralName = peripheralName;
-            return;
+            return Result::OK;
         }
     }
 
     LOG_E("peripheral count overflow");
-    return;
+    return Result::NoResource;
 }
 
 void Peripherals::unregister_peripheral(const char *peripheralName, void *peripheral) {

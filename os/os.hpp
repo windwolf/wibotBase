@@ -61,6 +61,8 @@ class EventGroup : public Initializable {
    public:
     explicit EventGroup(const char* name);
     ~EventGroup();
+
+   protected:
     Result _init() override;
     void   _deinit() override;
 
@@ -88,8 +90,7 @@ class MessageQueue : public Initializable {
      */
     MessageQueue(const char* name, void* msg_addr, uint32_t msg_size, uint32_t queue_size);
     ~MessageQueue();
-    Result _init() override;
-    void   _deinit() override;
+
     Result send(const void* msg, uint32_t timeout);
     Result receive(void* msg, uint32_t timeout);
     /**
@@ -97,6 +98,10 @@ class MessageQueue : public Initializable {
      * @return
      */
     Result flush();
+
+   protected:
+    Result _init() override;
+    void   _deinit() override;
 
    private:
     MESSAGEQUEUE_TYPEDEF _instance;
