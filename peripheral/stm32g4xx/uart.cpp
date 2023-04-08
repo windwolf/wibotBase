@@ -5,6 +5,7 @@
 #include "stm32g4xx_ll_usart.h"
 
 #include "log.h"
+#include "CircularBuffer.hpp"
 LOGGER("uart")
 
 #ifdef HAL_UART_MODULE_ENABLED
@@ -125,7 +126,7 @@ Result UART::write(void *data, uint32_t size, WaitHandler &waitHandler) {
 #endif
 };
 
-Result UART::start(CircularBuffer<uint8_t> &rxBuffer, WaitHandler &waitHandler) {
+Result UART::start(CircularBuffer8 &rxBuffer, WaitHandler &waitHandler) {
     if (_readWaitHandler != nullptr) {
         return Result::Busy;
     }
