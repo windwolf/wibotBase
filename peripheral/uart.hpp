@@ -42,10 +42,10 @@ class UART : public Initializable, public Configurable<UARTConfig> {
         uint16_t _lastPos;
     } _status;
 
-    WaitHandler*             _writeWaitHandler;
-    WaitHandler*             _readWaitHandler;
-    CircularBuffer<uint8_t>* cirRxBuffer_;
-    const char*              name_;
+    WaitHandler*     _writeWaitHandler;
+    WaitHandler*     _readWaitHandler;
+    CircularBuffer8* cirRxBuffer_;
+    const char*      name_;
 
    protected:
     static void _on_read_complete_callback(UART_CALLBACK_ARG);

@@ -5,6 +5,7 @@
 #include "CircularBuffer.test.hpp"
 
 #include "minunit.h"
+#include "CircularBuffer.hpp"
 LOGGER("cb_test")
 
 static void test1() {

@@ -59,6 +59,13 @@ char* strtrim(char* str, char delimit);
 
 uint32_t fast_log2(uint32_t _val);
 
+#define ASSERT(expr, msg, ...)     \
+    if (!(expr)) {                 \
+        LOG_E(msg, ##__VA_ARGS__); \
+        while (true)               \
+            ;                      \
+    }
+
 // -----------------
 // Initializable
 
