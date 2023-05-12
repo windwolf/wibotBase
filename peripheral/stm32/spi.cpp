@@ -1,8 +1,7 @@
 #include "spi.hpp"
 
 #include "peripheral.hpp"
-#include "stm32g4xx_ll_dma.h"
-#include "stm32g4xx_ll_spi.h"
+
 
 #ifdef HAL_SPI_MODULE_ENABLED
 

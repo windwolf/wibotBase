@@ -11,12 +11,12 @@ uint32_t Utils::tick_get() {
     return wibot::peripheral::Misc::get_tick_ms();
 };
 
-void Thread::sleep(uint32_t ms) {
-    volatile uint32_t start = Utils::tick_get();
-    if (Utils::tick_get() - start < ms) {
-    }
-    return;
-};
+//void Thread::sleep(uint32_t ms) {
+//    volatile uint32_t start = Utils::tick_get();
+//    if (Utils::tick_get() - start < ms) {
+//    }
+//    return;
+//};
 
 Mutex::Mutex(const char* name) : name_(name) {
     _instance = 0;

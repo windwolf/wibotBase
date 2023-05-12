@@ -17,7 +17,14 @@
 
 #ifdef STM32G0xx
 #include "stm32g0xx_hal.h"
+#include "stm32g0xx_ll_adc.h"
 #include "stm32g0xx_ll_tim.h"
+#include "stm32g0xx_ll_gpio.h"
+#include "stm32g0xx_ll_dma.h"
+#include "stm32g0xx_ll_usart.h"
+#include "stm32g0xx_ll_tim.h"
+#include "stm32g0xx_ll_dma.h"
+#include "stm32g0xx_ll_spi.h"
 #endif
 
 #ifdef STM32H7xx

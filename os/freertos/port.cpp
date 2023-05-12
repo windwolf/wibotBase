@@ -10,9 +10,9 @@ uint32_t Utils::tick_get() {
     return osKernelGetTickCount();
 };
 
-void Thread::sleep(uint32_t ms) {
-    osDelay(ms);
-};
+//void Thread::sleep(uint32_t ms) {
+//    osDelay(ms);
+//};
 
 Mutex::Mutex(const char* name) : name_(name){};
 
