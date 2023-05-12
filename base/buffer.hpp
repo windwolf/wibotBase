@@ -1,8 +1,8 @@
 #ifndef __WWBASE_BUFFER_HPP__
 #define __WWBASE_BUFFER_HPP__
 
-#include "base.hpp"
 #include "arch.hpp"
+#include "base.hpp"
 #include "stdint.h"
 
 namespace wibot {
@@ -19,54 +19,87 @@ struct Buffer8 {
         }
     };
 
-    uint8_t getUint8(uint32_t index) const {
-        return data[index];
-    };
-    void setUint8(uint32_t index, uint8_t value) {
-        data[index] = value;
-    };
-    int8_t getInt8(uint32_t index) const {
-        return *PTR_TO_INT8(data + index);
-    };
-    void setInt8(uint32_t index, int8_t value) {
-        data[index] = value;
-    };
-    uint16_t getUint16(uint32_t index, bool littleEndian = true) const {
+    uint8_t getUint8(uint32_t index) const { return data[index]; };
+    void setUint8(uint32_t index, uint8_t value) { data[index] = value; };
+    int8_t getInt8(uint32_t index) const { return *PTR_TO_INT8(data + index); };
+    void setInt8(uint32_t index, int8_t value) { data[index] = value; };
+    uint16_t getUint16(uint32_t index, bool littleEndian = false) const {
         auto v = arch::getUint16(data + index, littleEndian);
         return *PTR_TO_UINT16(&v);
     };
-    void setUint16(uint32_t index, uint16_t value, bool littleEndian = true) {
+    void setUint16(uint32_t index, uint16_t value, bool littleEndian = false) {
         arch::setUint16(data + index, value, littleEndian);
     };
-    int16_t getInt16(uint32_t index, bool littleEndian = true) const {
+    int16_t getInt16(uint32_t index, bool littleEndian = false) const {
         auto v = arch::getUint16(data + index, littleEndian);
         return *PTR_TO_INT16(&v);
     };
-    void setInt16(uint32_t index, int16_t value, bool littleEndian = true) {
+    void setInt16(uint32_t index, int16_t value, bool littleEndian = false) {
         arch::setUint16(data + index, *PTR_TO_UINT16(&value), littleEndian);
     }
 
-    uint32_t getUint32(uint32_t index, bool littleEndian = true) const {
+    uint32_t getUint32(uint32_t index, bool littleEndian = false) const {
         return arch::getUint32(data + index, littleEndian);
     };
-    void setUint32(uint32_t index, uint32_t value, bool littleEndian = true) {
+    void setUint32(uint32_t index, uint32_t value, bool littleEndian = false) {
         arch::setUint32(data + index, value, littleEndian);
     };
 
-    int32_t getInt32(uint32_t index, bool littleEndian = true) const {
+    int32_t getInt32(uint32_t index, bool littleEndian = false) const {
         auto v = arch::getUint32(data + index, littleEndian);
         return *PTR_TO_INT32(&v);
     };
-    void setInt32(uint32_t index, int32_t value, bool littleEndian = true) {
+    void setInt32(uint32_t index, int32_t value, bool littleEndian = false) {
         arch::setUint32(data + index, *PTR_TO_UINT32(&value), littleEndian);
     };
 
-    float getFloat(uint32_t index, bool littleEndian = true) const {
+    float getFloat(uint32_t index, bool littleEndian = false) const {
         auto v = arch::getUint32(data + index, littleEndian);
         return *PTR_TO_FLOAT(&v);
     };
-    void setFloat(uint32_t index, float value, bool littleEndian = true) {
+    void setFloat(uint32_t index, float value, bool littleEndian = false) {
         arch::setUint32(data + index, *PTR_TO_UINT32(&value), littleEndian);
+    };
+};
+
+class Buffer8Setter {
+   private:
+    Buffer8 _buffer;
+    uint32_t _idx;
+
+   public:
+    Buffer8Setter(Buffer8 buffer) : _buffer(buffer), _idx(0) {}
+
+    void reset() { _idx = 0; }
+
+    void setUint8(uint8_t value) {
+        _buffer.setUint8(_idx, value);
+        _idx += 1;
+    };
+    void setInt8(int8_t value) {
+        _buffer.setInt8(_idx, value);
+        _idx += 1;
+    };
+
+    void setUint16(uint16_t value, bool littleEndian = false) {
+        _buffer.setUint16(_idx, value, littleEndian);
+        _idx += 2;
+    };
+    void setInt16(int16_t value, bool littleEndian = false) {
+        _buffer.setInt16(_idx, value, littleEndian);
+        _idx += 2;
+    };
+    void setUint32(uint32_t value, bool littleEndian = false) {
+        _buffer.setUint32(_idx, value, littleEndian);
+        _idx += 4;
+    };
+    void setInt32(int32_t value, bool littleEndian = false) {
+        _buffer.setInt32(_idx, value, littleEndian);
+        _idx += 4;
+    };
+    void setFloat(float value, bool littleEndian = false) {
+        _buffer.setFloat(_idx, value, littleEndian);
+        _idx += 4;
     };
 };
 
@@ -82,7 +115,7 @@ struct Buffer8 {
 struct Buffer16 {
    public:
     uint16_t* data;
-    uint32_t  size;
+    uint32_t size;
 
    public:
     void clear() {
@@ -105,7 +138,7 @@ struct Buffer16 {
 struct Buffer32 {
    public:
     uint32_t* data;
-    uint32_t  size;
+    uint32_t size;
 
    public:
     void clear() {

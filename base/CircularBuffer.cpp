@@ -3,6 +3,7 @@
 //
 
 #include "CircularBuffer.hpp"
+
 #include "log.h"
 LOGGER("cb")
 
@@ -15,7 +16,7 @@ uint32_t wibot::CircularBuffer<TE>::peek(TE *data, uint32_t start, uint32_t leng
     if (length > size - start) {
         length = size - start;
     }
-    auto read_mem_index       = WRAP_MEM_INDEX(_read + start);
+    auto read_mem_index = WRAP_MEM_INDEX(_read + start);
     auto roomFromReadToBotton = _capacity - read_mem_index;
     if (length <= roomFromReadToBotton) {
         memcpy(data, _buffer + read_mem_index, length * sizeof(TE));
@@ -31,7 +32,7 @@ uint32_t wibot::CircularBuffer<TE>::read(TE *data, uint32_t length) {
     if (length > size) {
         length = size;
     }
-    auto read_mem_index       = WRAP_MEM_INDEX(_read);
+    auto read_mem_index = WRAP_MEM_INDEX(_read);
     auto roomFromReadToBotton = _capacity - read_mem_index;
     if (length <= roomFromReadToBotton) {
         memcpy(data, _buffer + read_mem_index, length * sizeof(TE));
@@ -44,11 +45,11 @@ uint32_t wibot::CircularBuffer<TE>::read(TE *data, uint32_t length) {
 }
 template <typename TE>
 bool wibot::CircularBuffer<TE>::readVirtual(uint32_t length) {
-    auto size     = getSize();
+    auto size = getSize();
     auto overflow = false;
     if (length > size) {
         overflow = true;
-        length   = size;
+        length = size;
     }
     _read = WRAP_LOGIC_INDEX(_read + length);
     if (overflow) {
@@ -58,7 +59,7 @@ bool wibot::CircularBuffer<TE>::readVirtual(uint32_t length) {
 }
 template <typename TE>
 bool wibot::CircularBuffer<TE>::writeVirtual(uint32_t length) {
-    auto space    = getSpace();
+    auto space = getSpace();
     auto overflow = false;
     if (length > space) {
         if (length > _capacity) {
@@ -75,7 +76,7 @@ bool wibot::CircularBuffer<TE>::writeVirtual(uint32_t length) {
 template <typename TE>
 uint32_t wibot::CircularBuffer<TE>::write(TE *data, uint32_t length, bool allowCover) {
     auto overflow = false;
-    auto space    = getSpace();
+    auto space = getSpace();
     if (length > space) {
         if (allowCover) {
             if (length > _capacity) {
@@ -88,7 +89,7 @@ uint32_t wibot::CircularBuffer<TE>::write(TE *data, uint32_t length, bool allowC
         }
     } else {
     }
-    auto write_mem_index       = WRAP_MEM_INDEX(_write);
+    auto write_mem_index = WRAP_MEM_INDEX(_write);
     auto roomFromWriteToBotton = _capacity - write_mem_index;
     if (length <= roomFromWriteToBotton) {
         memcpy(_buffer + write_mem_index, data, length * sizeof(TE));
@@ -108,10 +109,9 @@ uint32_t wibot::CircularBuffer<TE>::write(TE *data, uint32_t length, bool allowC
 template <typename TE>
 wibot::CircularBuffer<TE>::CircularBuffer(TE *buffer, uint32_t capacity)
     : _buffer(buffer), _capacity(capacity) {
-    ASSERT(((capacity - 1) ^ capacity) == ((capacity - 1) | capacity),
-           "Buffer size MUST be power of 2!");
+    ASSERT(!((capacity - 1) & capacity), "Buffer size MUST be power of 2!");
     _write = 0;
-    _read  = 0;
+    _read = 0;
 }
 
 template class wibot::CircularBuffer<uint8_t>;

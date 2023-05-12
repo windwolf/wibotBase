@@ -2,16 +2,16 @@
 // Created by zhouj on 2023/3/29.
 //
 
-#ifndef WWMOTOR_LIBS_WWBASE_BASE_CIRCULARBUFFER_HPP_
-#define WWMOTOR_LIBS_WWBASE_BASE_CIRCULARBUFFER_HPP_
+#ifndef WWMOTOR_LIBS_WWBASE_BASE_CIRCULAR_BUFFER_HPP_
+#define WWMOTOR_LIBS_WWBASE_BASE_CIRCULAR_BUFFER_HPP_
 
 #include <algorithm>
 
 #include "base.hpp"
 #include "stdint.h"
 
-#define WRAP_LOGIC_INDEX(a) ((a) & (2 * _capacity - 1))
-#define WRAP_MEM_INDEX(a)   ((a) & (_capacity - 1))
+#define WRAP_LOGIC_INDEX(a) ((a) & ((_capacity << 1) - 1))
+#define WRAP_MEM_INDEX(a) ((a) & (_capacity - 1))
 
 namespace wibot {
 /**
@@ -21,7 +21,7 @@ namespace wibot {
 template <typename TE>
 class CircularBuffer {
    private:
-    TE      *_buffer;
+    TE *_buffer;
     uint32_t _capacity;
     uint32_t _write;
     uint32_t _read;
@@ -35,34 +35,20 @@ class CircularBuffer {
      */
     CircularBuffer(TE *buffer, uint32_t capacity);
     ;
-    uint32_t getCapacity() {
-        return _capacity;
-    };
-    uint32_t getMemCapacity() {
-        return _capacity * sizeof(TE);
-    };
-    uint32_t getDataWidth() {
-        return sizeof(TE);
-    };
+    uint32_t getCapacity() { return _capacity; };
+    uint32_t getMemCapacity() { return _capacity * sizeof(TE); };
+    uint32_t getDataWidth() { return sizeof(TE); };
 
-    bool isFull() {
-        return _read == (_write ^ _capacity);
-    };
+    bool isFull() { return _read == (_write ^ _capacity); };
 
-    bool isEmpty() {
-        return _write == _read;
-    };
+    bool isEmpty() { return _write == _read; };
 
-    uint32_t getSize() {
-        return (_write - _read) & ((_capacity << 1) - 1);
-    };
+    uint32_t getSize() { return (_write - _read) & ((_capacity << 1) - 1); };
 
-    uint32_t getSpace() {
-        return _capacity - getSize();
-    };
+    uint32_t getSpace() { return _capacity - getSize(); };
 
     /**
-     * Wirte data into buffer
+     * Write data into buffer
      * @param data Data to be written.
      * @param length Length of data to be written.
      * @param allowCover Allow cover the data in buffer if the buffer is full.
@@ -93,12 +79,12 @@ class CircularBuffer {
      * Read data from buffer. If buffer has enough
      * @param data
      * @param length
-     * @return Actual length of data readed.
+     * @return Actual length of data read.
      */
     uint32_t read(TE *data, uint32_t length);
 
     /**
-     * @brief Forward the read index after the data is readed from the buffer by
+     * @brief Forward the read index after the data is read from the buffer by
      * the external device such as DMA.
      * @note User code should handle the concurrency issue, if the start index
      * is pushed over the end index.
@@ -110,10 +96,10 @@ class CircularBuffer {
     /**
      * @brief Read data from buffer without changing the read index.
      *
-     * @param data A buffer to store the data readed.
-     * @param start The start index of data to be readed.
-     * @param length The length of data to be readed.
-     * @return The actual length of data has been readed.
+     * @param data A buffer to store the data read.
+     * @param start The start index of data to be read.
+     * @param length The length of data to be read.
+     * @return The actual length of data has been read.
      */
     uint32_t peek(TE *data, uint32_t start = 0, uint32_t length = 1);
     ;
@@ -137,21 +123,15 @@ class CircularBuffer {
 
     Result clear() {
         _write = 0;
-        _read  = 0;
+        _read = 0;
         return Result::OK;
     };
 
-    TE *getDataPtr() {
-        return _buffer;
-    };
+    TE *getDataPtr() { return _buffer; };
 
-    TE *getWritePtr() {
-        return &_buffer[WRAP_MEM_INDEX(_write)];
-    };
+    TE *getWritePtr() { return &_buffer[WRAP_MEM_INDEX(_write)]; };
 
-    TE *getReadPtr() {
-        return &_buffer[WRAP_MEM_INDEX(_read)];
-    };
+    TE *getReadPtr() { return &_buffer[WRAP_MEM_INDEX(_read)]; };
 
     /**
      * @brief Get the size of data from read index to the end of the buffer or data.
@@ -163,6 +143,13 @@ class CircularBuffer {
         return min((_write - _read) & ((_capacity << 1) - 1), _capacity - WRAP_MEM_INDEX(_read));
     };
 
+    /**
+     * @brief Get the size of data from write index to the end of the buffer or data.
+     * @note
+     * @param end The end index in memory index space(not logic index space).
+     * @param start The start index in memory index space(not logic index space).
+     * @return
+     */
     uint32_t getLengthByMemIndex(uint32_t end, uint32_t start) {
         return (end - start) & (_capacity - 1);
     }
@@ -172,4 +159,4 @@ using CircularBuffer8 = CircularBuffer<uint8_t>;
 
 }  // namespace wibot
 
-#endif  // WWMOTOR_LIBS_WWBASE_BASE_CIRCULARBUFFER_HPP_
+#endif  // WWMOTOR_LIBS_WWBASE_BASE_CIRCULAR_BUFFER_HPP_

@@ -18,7 +18,7 @@ class Thread {
    public:
     // Thread(const char* name, void (*func)(void*), void* arg, uint32_t priority);
     // void start();
-    static void sleep(uint32_t ms);
+    //    static void sleep(uint32_t ms);
 
    private:
     // uint8_t _stack[stack_size];
