@@ -94,10 +94,10 @@ Result EventGroup::wait(uint32_t flags, uint32_t& actualFlags, EventOptions opti
             };
         }
     }
+    actualFlags = this->_instance;
     if ((rst == Result::OK) && ((options & EventOptions_Clear_Flag) == EventOptions_Clear_Flag)) {
         this->_instance &= ~flags;
     }
-    actualFlags = this->_instance;
     return Result::OK;
 };
 
