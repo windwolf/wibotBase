@@ -257,7 +257,7 @@ Result SpiWithPins::_init() {
     _rw->init();
     _dc->init();
     if (_cs) {
-        _cs->config.inverse = _pinconfig.csPinHighIsDisable;
+        _cs->config.inverse = !_pinconfig.csPinHighIsEanble;
     }
     if (_dc) {
         _dc->config.inverse = _pinconfig.dcPinHighIsCmd;

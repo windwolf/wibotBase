@@ -51,7 +51,7 @@ union SpiWithPinsConfig {
         bool autoCs             : 1;
         bool dcPinHighIsCmd     : 1;
         bool rwPinHighIsWrite   : 1;
-        bool csPinHighIsDisable : 1;
+        bool csPinHighIsEanble : 1;
 
         uint32_t : 28;
     };
