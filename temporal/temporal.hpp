@@ -55,6 +55,9 @@ struct DateTime {
     uint32_t to_number(TemporalUnitType unitType) const;
     bool     equals(const DateTime &other, TemporalUnitType unitType) const;
 };
+
+const DateTime AD0(0, 1, 1, 0, 0, 0);
+
 }  // namespace wibot::temporal
 
 #endif  // __WWBASE_TEMPORAL_HPP__
