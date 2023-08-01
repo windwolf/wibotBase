@@ -2,7 +2,6 @@
 
 #include "peripheral.hpp"
 
-
 #ifdef HAL_SPI_MODULE_ENABLED
 
 namespace wibot::peripheral {
