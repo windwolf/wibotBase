@@ -7,22 +7,34 @@
 
 namespace wibot {
 
+class Buffer8Setter;
+
 struct Buffer8 {
    public:
     uint8_t* data;
     uint32_t size;
 
    public:
+    Buffer8Setter createSetter();
+
     void clear() {
         for (uint32_t i = 0; i < size; i++) {
             data[i] = 0;
         }
     };
 
-    uint8_t getUint8(uint32_t index) const { return data[index]; };
-    void setUint8(uint32_t index, uint8_t value) { data[index] = value; };
-    int8_t getInt8(uint32_t index) const { return *PTR_TO_INT8(data + index); };
-    void setInt8(uint32_t index, int8_t value) { data[index] = value; };
+    uint8_t getUint8(uint32_t index) const {
+        return data[index];
+    };
+    void setUint8(uint32_t index, uint8_t value) {
+        data[index] = value;
+    };
+    int8_t getInt8(uint32_t index) const {
+        return *PTR_TO_INT8(data + index);
+    };
+    void setInt8(uint32_t index, int8_t value) {
+        data[index] = value;
+    };
     uint16_t getUint16(uint32_t index, bool littleEndian = false) const {
         auto v = arch::getUint16(data + index, littleEndian);
         return *PTR_TO_UINT16(&v);
@@ -64,13 +76,16 @@ struct Buffer8 {
 
 class Buffer8Setter {
    private:
-    Buffer8 _buffer;
+    Buffer8& _buffer;
     uint32_t _idx;
 
    public:
-    Buffer8Setter(Buffer8 buffer) : _buffer(buffer), _idx(0) {}
+    Buffer8Setter(Buffer8& buffer) : _buffer(buffer), _idx(0) {
+    }
 
-    void reset() { _idx = 0; }
+    void reset() {
+        _idx = 0;
+    }
 
     void setUint8(uint8_t value) {
         _buffer.setUint8(_idx, value);
@@ -115,7 +130,7 @@ class Buffer8Setter {
 struct Buffer16 {
    public:
     uint16_t* data;
-    uint32_t size;
+    uint32_t  size;
 
    public:
     void clear() {
@@ -138,7 +153,7 @@ struct Buffer16 {
 struct Buffer32 {
    public:
     uint32_t* data;
-    uint32_t size;
+    uint32_t  size;
 
    public:
     void clear() {
