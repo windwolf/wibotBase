@@ -23,7 +23,7 @@ class Adc : public Initializable, public Configurable<AdcConfig> {
     Result _init() override;
     void   _deinit() override;
 
-    // Result read(Buffer32 buffer);
+    Result read(Buffer32 buffer);
     Result start(Buffer32 buffer, WaitHandler& waitHandler);
     Result stop();
 

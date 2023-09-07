@@ -2,7 +2,7 @@
 
 #include "misc.hpp"
 #include "os.hpp"
-
+#include "perip_port.hpp"
 #ifdef HAL_ADC_MODULE_ENABLED
 
 namespace wibot::peripheral {
@@ -39,6 +39,11 @@ Result Adc::start(Buffer32 buffer, WaitHandler& waitHandler) {
 Result Adc::stop() {
     _waitHandler = nullptr;
     return (Result)HAL_ADC_Stop_DMA(&_handle);
+};
+
+Result Adc::read(Buffer32 buffer){
+    HAL_ADC_Start(&_handle);
+    HAL_ADC_GetValue(&_handle);
 };
 
 void Adc::_on_conversion_complete_callback(ADC_HandleTypeDef* instance) {
