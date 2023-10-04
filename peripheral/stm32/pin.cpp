@@ -30,6 +30,13 @@ Result Pin::read(PinStatus& value) {
     return Result::OK;
 };
 
+
+bool Pin::read() {
+    PinStatus sta;
+    read(sta);
+    return sta == PinStatus::Set;
+}
+
 Result Pin::write(PinStatus value) {
     HAL_GPIO_WritePin(&_port, this->_pinMask,
                       (GPIO_PinState)(to_underlying(value) ^ this->config.inverse));
