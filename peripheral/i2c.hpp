@@ -3,6 +3,7 @@
 
 #include "buffer.hpp"
 #include "peripheral.hpp"
+#include "pin.hpp"
 
 namespace wibot::peripheral {
 
@@ -51,6 +52,30 @@ class I2cMaster : public Initializable, public Configurable<I2cMasterConfig> {
     static void  _on_error_callback(I2C_CALLBACK_ARG);
 };
 
-};      // namespace wibot::peripheral
+class SoftI2cMaster : public Initializable, public Configurable<I2cMasterConfig> {
+   public:
+    SoftI2cMaster(Pin& sda, Pin& scl);
+    ~SoftI2cMaster();
+
+    Result read(uint8_t* data, uint32_t size);
+    Result write(uint8_t* data, uint32_t size);
+    Result writeRead(uint8_t* writeData, uint32_t writeSize, uint8_t* readData, uint32_t readSize);
+    Result writeWrite(uint8_t* writeData1, uint32_t writeSize1, uint8_t* writeData2,
+                      uint32_t writeSize2);
+
+   protected:
+    Result _init() override;
+    void   _deinit() override;
+
+   private:
+    Pin&    _sda;
+    Pin&    _scl;
+    uint8_t _delayUs;
+    Result  _header(bool isRead);
+    Result  _readData(uint8_t* data, uint32_t size);
+    Result  _writeData(uint8_t* data, uint32_t size);
+};
+
+};  // namespace wibot::peripheral
 
 #endif  // __WWDEVICE_PERIPHERAL_I2C_HPP__
