@@ -31,7 +31,7 @@ extern "C" {
 #include "stdio.h"
 #include "string.h"
 
-#define LOGGER(name) [[maybe_unused]] static const char* LOG_NAME__ = name;
+#define LOGGER(name) static constexpr const char* LOG_NAME__ = name;
 
 #define LOG(NAME, LEVEL, COLOR, FMT, ...) \
     printf(COLOR "[" LEVEL "] [%s] " FMT "\r\n", LOG_NAME__, ##__VA_ARGS__)
