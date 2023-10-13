@@ -83,8 +83,8 @@ void UART::_on_error_callback(UART_HandleTypeDef *instance) {
 #endif
 #endif
     perip->_errorCount++;
-    LOG_E("%s: on error ISR=%lX,err=%lX,uec=%lu", perip->name_, perip->_handle.Instance->ISR,
-          HAL_UART_GetError(instance), perip->_errorCount);
+    //    LOG_E("%s: on error ISR=%lX,err=%lX,uec=%lu", perip->name_, perip->_handle.Instance->ISR,
+    //          HAL_UART_GetError(instance), perip->_errorCount);
     perip->_status._lastPos = 0;
 
     auto wh = perip->_readWaitHandler;
