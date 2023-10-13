@@ -65,10 +65,10 @@
 #define RTC_FIELD_DECL   RTC_HandleTypeDef & _handle;
 #define RTC_CALLBACK_ARG RTC_HandleTypeDef *handle
 #else
-#define ADC_PER_DECL
-#define ADC_CTOR_ARG     uint32_t dummy
-#define ADC_FIELD_DECL   uint32_t dummy;
-#define ADC_CALLBACK_ARG uint32_t dummy
+#define RTC_PER_DECL
+#define RTC_CTOR_ARG     uint32_t dummy
+#define RTC_FIELD_DECL   uint32_t dummy;
+#define RTC_CALLBACK_ARG uint32_t dummy
 #endif  // HAL_RTC_MODULE_ENABLED
 
 /********** ADC **************************/
