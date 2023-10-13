@@ -35,8 +35,8 @@ class Pin : public Initializable, public Configurable<PinConfig> {
     Pin(PIN_CTOR_ARG, uint16_t pinMask);
 
     Result read(PinStatus &value);
+    bool read();
     Result write(PinStatus value);
-
     Result toggle();
     Result mode_set(PinMode mode);
 

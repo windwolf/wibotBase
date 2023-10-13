@@ -18,7 +18,7 @@ class Crc8Validator : Validator<uint8_t> {
     void reset() override;
     void calculate(uint8_t* data, uint32_t length) override;
     bool validate(uint8_t* sum) override;
-
+    uint8_t get();
    private:
     uint8_t poly_;
     uint8_t init_;

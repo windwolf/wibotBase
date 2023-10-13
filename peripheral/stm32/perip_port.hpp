@@ -3,7 +3,12 @@
 
 #ifdef STM32F1xx
 #include "stm32f1xx_hal.h"
+#include "stm32f1xx_ll_adc.h"
 #include "stm32f1xx_ll_tim.h"
+#include "stm32f1xx_ll_gpio.h"
+#include "stm32f1xx_ll_dma.h"
+#include "stm32f1xx_ll_usart.h"
+#include "stm32f1xx_ll_spi.h"
 #endif
 
 #ifdef STM32G4xx
@@ -13,6 +18,7 @@
 #include "stm32g4xx_ll_gpio.h"
 #include "stm32g4xx_ll_dma.h"
 #include "stm32g4xx_ll_usart.h"
+#include "stm32g4xx_ll_spi.h"
 #endif
 
 #ifdef STM32G0xx
@@ -22,14 +28,17 @@
 #include "stm32g0xx_ll_gpio.h"
 #include "stm32g0xx_ll_dma.h"
 #include "stm32g0xx_ll_usart.h"
-#include "stm32g0xx_ll_tim.h"
-#include "stm32g0xx_ll_dma.h"
 #include "stm32g0xx_ll_spi.h"
 #endif
 
 #ifdef STM32H7xx
 #include "stm32h7xx_hal.h"
+#include "stm32h7xx_ll_adc.h"
 #include "stm32h7xx_ll_tim.h"
+#include "stm32h7xx_ll_gpio.h"
+#include "stm32h7xx_ll_dma.h"
+#include "stm32h7xx_ll_usart.h"
+#include "stm32h7xx_ll_spi.h"
 #endif
 
 /********** ADC **************************/
@@ -45,6 +54,22 @@
 #define ADC_FIELD_DECL   uint32_t dummy;
 #define ADC_CALLBACK_ARG uint32_t dummy
 #endif  // HAL_ADC_MODULE_ENABLED
+
+/********** ADC **************************/
+
+/********** RTC **************************/
+
+#ifdef HAL_RTC_MODULE_ENABLED
+#define RTC_PER_DECL
+#define RTC_CTOR_ARG     RTC_HandleTypeDef &handle
+#define RTC_FIELD_DECL   RTC_HandleTypeDef & _handle;
+#define RTC_CALLBACK_ARG RTC_HandleTypeDef *handle
+#else
+#define ADC_PER_DECL
+#define ADC_CTOR_ARG     uint32_t dummy
+#define ADC_FIELD_DECL   uint32_t dummy;
+#define ADC_CALLBACK_ARG uint32_t dummy
+#endif  // HAL_RTC_MODULE_ENABLED
 
 /********** ADC **************************/
 

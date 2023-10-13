@@ -36,6 +36,9 @@ bool Crc8Validator::validate(uint8_t* sum) {
     }
     return s == (crc_ ^ xorout_);
 }
+uint8_t Crc8Validator::get() {
+    return crc_ ^ xorout_;
+}
 //    void Crc8::init_table()
 //    {
 //        for (uint16_t i = 0; i < 256; i++)

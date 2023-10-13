@@ -12,24 +12,30 @@ Result Pin::_init() {
 void Pin::_deinit(){};
 
 Result Pin::read(PinStatus& value) {
-    PinStatus rst;
-    rst   = static_cast<PinStatus>(HAL_GPIO_ReadPin(&_port, this->_pinMask));
-    value = static_cast<PinStatus>(to_underlying(rst) ^ this->config.inverse);
+    PinStatus curr = static_cast<PinStatus>(HAL_GPIO_ReadPin(&_port, this->_pinMask));
     if (config.enable_debounce) {
-        if (rst != last_buffered_status_) {
-            last_buffered_status_ = rst;
+        if (curr != last_buffered_status_) {
+            last_buffered_status_ = curr;
             last_debounce_time_   = HAL_GetTick();
+
         } else {
             if (HAL_GetTick() - last_debounce_time_ > this->config.debounce_time) {
-                last_output_status_ = rst;
+                last_output_status_ = static_cast<PinStatus>(to_underlying(last_buffered_status_) ^ this->config.inverse);
             }
         }
         value = last_output_status_;
     } else {
-        value = rst;
+        value = static_cast<PinStatus>(to_underlying(curr) ^ this->config.inverse);
     }
     return Result::OK;
 };
+
+
+bool Pin::read() {
+    PinStatus sta;
+    read(sta);
+    return sta == PinStatus::Set;
+}
 
 Result Pin::write(PinStatus value) {
     HAL_GPIO_WritePin(&_port, this->_pinMask,
